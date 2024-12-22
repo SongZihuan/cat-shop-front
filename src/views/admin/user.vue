@@ -204,7 +204,13 @@ const goPassword = () => {
 
             <div class="user_info_box">
               <el-text class="user_info_text">
-                收获总次数：{{ user.totalShouHuo >= 0 ? user.totalShouHuo : 0 }} 次
+                收货总次数：{{ user.totalShouHuo >= 0 ? user.totalShouHuo : 0 }} 次
+              </el-text>
+            </div>
+
+            <div class="user_info_box">
+              <el-text class="user_info_text">
+                总评价次数：{{ user.totalPingJia >= 0 ? user.totalPingJia : 0 }} 次
               </el-text>
             </div>
 

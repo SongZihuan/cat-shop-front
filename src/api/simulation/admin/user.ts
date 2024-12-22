@@ -21,6 +21,7 @@ export function apiAdminGetUserInfo(id: number): Result<AdminUserWithoutPre> {
                 totalGood: 20,
                 totalJian: 45,
                 totalShouHuo: 25,
+                totalPingJia: 25,
             } as AdminUserWithoutPre
         },
         status: 200,
@@ -78,6 +79,7 @@ export function apiAdminGetUserLst(page: number, pagesize: number, phone?: strin
             totalGood: 20,
             totalJian: 45,
             totalShouHuo: 25,
+            totalPingJia: 25,
         } as AdminUserWithoutPre)
     }
 

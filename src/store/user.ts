@@ -35,6 +35,7 @@ export interface UserWithoutPre extends UserBase, UserAvatar{
     totalGood: number
     totalJian: number
     totalShouHuo: number
+    totalPingJia: number
 }
 
 export interface UserPre {
@@ -176,7 +177,7 @@ const useUserStore = defineStore("userStore", () => {
         const configStore = useConfigStore()
         return apiGetSelfInfo().then((res) => {
             user.value = res.data.data
-            user.value.goodPre = (user.value.totalGood / user.value.totalShouHuo) * 100
+            user.value.goodPre = (user.value.totalGood / user.value.totalPingJia) * 100
             user.value.pricePre = user.value.totalPrice / user.value.totalBuy
         }).then(() => {
             if (!user.value.name) {

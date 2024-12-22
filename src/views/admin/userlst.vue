@@ -99,6 +99,7 @@ const toInfo = (id: number) => {
         <el-table-column prop="totalBuy" label="总购物次数" />
         <el-table-column prop="totalGood" label="总购买件数" />
         <el-table-column prop="totalShouHuo" label="总收货次数" />
+        <el-table-column prop="totalPingJia" label="总评价次数" />
         <el-table-column label="平均消费金额" >
           <template #default="{ row }">
             ￥{{ (row.pricePre / 100).toFixed(2) }}

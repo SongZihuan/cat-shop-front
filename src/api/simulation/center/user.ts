@@ -63,6 +63,7 @@ export function apiGetSelfInfo(): Result<UserWithoutPre> {
                 totalGood: 20,
                 totalJian: 45,
                 totalShouHuo: 25,
+                totalPingJia: 25,
             } as UserWithoutPre
         },
         status: 200,

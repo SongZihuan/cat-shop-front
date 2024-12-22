@@ -222,7 +222,13 @@ import {ElNotification, ElMessage, UploadFile} from "element-plus"
 
               <div class="user_info_box">
                 <el-text class="user_info_text">
-                  收获总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
+                  收货总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
+                </el-text>
+              </div>
+
+              <div class="user_info_box">
+                <el-text class="user_info_text">
+                  总评价次数：{{ userStore.user.totalPingJia >= 0 ? userStore.user.totalPingJia : 0 }} 次
                 </el-text>
               </div>
 

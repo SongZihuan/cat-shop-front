@@ -57,6 +57,7 @@ export interface AdminUserWithoutPre extends AdminUserId, AdminUserBase, AdminUs
     totalGood: number
     totalJian: number
     totalShouHuo: number
+    totalPingJia: number
 }
 
 export interface AdminUserPre {
@@ -83,7 +84,7 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
         return apiAdminGetUserInfo(id).then((res) => {
             const user = res.data.data as AdminUser
 
-            user.goodPre = (user.totalGood / user.totalShouHuo) * 100
+            user.goodPre = (user.totalGood / user.totalPingJia) * 100
             user.pricePre = user.totalPrice / user.totalBuy
 
             if (!user.name) {
@@ -119,7 +120,7 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
 
         return apiAdminGetUserLst(page, pagesize, phone, name, status).then((res) => {
             res.data.data.list && res.data.data.list.forEach((user: AdminUser) => {
-                user.goodPre = (user.totalGood / user.totalShouHuo) * 100
+                user.goodPre = (user.totalGood / user.totalPingJia) * 100
                 user.pricePre = user.totalPrice / user.totalBuy
 
                 if (!user.name) {
