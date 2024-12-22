@@ -57,7 +57,13 @@ const checkWeChat = computed(() => {
   }
   return ub.value.wechat.length <= 40
 })
-const allCheck = computed(() => checkWeChat.value && codeCheck.value && checkName.value && checkEmail.value && hasChange.value)
+const checkLocation = computed(() => {
+  if (!ub.value.location) {
+    return true
+  }
+  return ub.value.location.length <= 150
+})
+const allCheck = computed(() => checkLocation.value && checkWeChat.value && codeCheck.value && checkName.value && checkEmail.value && hasChange.value)
 
 const update = () => {
   ElMessageBox.confirm('您是否确定更新你的用户信息', '提示', {
@@ -157,11 +163,15 @@ const update = () => {
           </el-alert>
         </div>
         <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到邮箱（40字以内）！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的邮箱（40字以内）！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!checkWeChat" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到微信（40字以内）！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的微信（40字以内）！" :closable="false" type="warning" center show-icon>
+          </el-alert>
+        </div>
+        <div v-if="!checkLocation" class="tip_box" style="display: flex; justify-content: center">
+          <el-alert title="请输入正确的地址（150字以内）！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">

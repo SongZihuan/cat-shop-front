@@ -1161,11 +1161,11 @@ const shenQingAndAcceptTuiHuo = () => {
           </el-alert>
         </div>
         <div v-if="!changeUserPhoneCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到手机号！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!changeUserEmailCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到邮箱！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!changeUserCheckLocation" class="tip_box" style="display: flex; justify-content: center">
@@ -1253,11 +1253,11 @@ const shenQingAndAcceptTuiHuo = () => {
           </el-alert>
         </div>
         <div v-if="!changeShopPhoneCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到手机号！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!changeShopEmailCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到邮箱！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!changeShopCheckLocation" class="tip_box" style="display: flex; justify-content: center">

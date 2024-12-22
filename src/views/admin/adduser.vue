@@ -142,7 +142,7 @@ const update = () => {
           </el-alert>
         </div>
         <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到手机号！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">

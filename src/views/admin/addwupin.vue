@@ -472,7 +472,7 @@ const openEdit = () => {
               </el-alert>
             </div>
             <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
-              <el-alert title="请输入正确到邮箱！" :closable="false" type="warning" center show-icon>
+              <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
               </el-alert>
             </div>
             <div v-if="!checkPiv" class="tip_box" style="display: flex; justify-content: center">
