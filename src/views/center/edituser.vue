@@ -49,9 +49,15 @@ const checkEmail = computed(() => {
   if (!ub.value.email) {
     return true
   }
-  return isEmail(ub.value.email)
+  return isEmail(ub.value.email) && ub.value.email.length <= 40
 })
-const allCheck = computed(() => codeCheck.value && checkName.value && checkEmail.value && hasChange.value)
+const checkWeChat = computed(() => {
+  if (!ub.value.wechat) {
+    return true
+  }
+  return ub.value.wechat.length <= 40
+})
+const allCheck = computed(() => checkWeChat.value && codeCheck.value && checkName.value && checkEmail.value && hasChange.value)
 
 const update = () => {
   ElMessageBox.confirm('您是否确定更新你的用户信息', '提示', {
@@ -151,7 +157,11 @@ const update = () => {
           </el-alert>
         </div>
         <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确到邮箱！" :closable="false" type="warning" center show-icon>
+          <el-alert title="请输入正确到邮箱（40字以内）！" :closable="false" type="warning" center show-icon>
+          </el-alert>
+        </div>
+        <div v-if="!checkWeChat" class="tip_box" style="display: flex; justify-content: center">
+          <el-alert title="请输入正确到微信（40字以内）！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
         <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
