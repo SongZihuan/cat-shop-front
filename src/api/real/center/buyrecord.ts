@@ -32,6 +32,7 @@ export interface BuyRecord {
     fahuotime: number
     shouhuotime: number
     pingjiatime: number
+    tuihuoshenqingtime: number
     dengjituihuotime: number
     querentuihuotime: number
     tuohuotime: number
@@ -89,6 +90,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
             fahuotime: 1734024269,
             shouhuotime: 1734024269,
             pingjiatime: 1734024269,
+            tuihuoshenqingtime: 1734024269,
             dengjituihuotime: 1734024269,
             querentuihuotime: 1734024269,
             tuohuotime: 1734024269,
@@ -172,6 +174,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                 fahuotime: 1734024269,
                 shouhuotime: 1734024269,
                 pingjiatime: 1734024269,
+                tuihuoshenqingtime: 1734024269,
                 dengjituihuotime: 1734024269,
                 querentuihuotime: 1734024269,
                 tuohuotime: 1734024269,
@@ -266,6 +269,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
             fahuotime: 1734024269,
             shouhuotime: 1734024269,
             pingjiatime: 1734024269,
+            tuihuoshenqingtime: 1734024269,
             dengjituihuotime: 1734024269,
             querentuihuotime: 1734024269,
             tuohuotime: 1734024269,

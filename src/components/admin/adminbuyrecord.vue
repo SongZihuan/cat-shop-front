@@ -639,7 +639,7 @@ const shenQingAndAcceptTuiHuo = () => {
             <el-badge :value="record.wupin.tag" style="margin-top: 10px">
               <el-text class="wupin_name" @click="onGoWupin"> {{ record.wupin.name }} </el-text>
             </el-badge>
-            <el-text v-if="record.wupin.classId !== -1 && record.wupin.classOf" class="wupin_class_name">
+            <el-text v-if="record.wupin.classid !== 0 && record.wupin.classOf" class="wupin_class_name">
               商品来源：
               <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ record.wupin.classOf.name }} > </el-text>
             </el-text>
@@ -769,9 +769,14 @@ const shenQingAndAcceptTuiHuo = () => {
               评价：{{ record.isgood ? "好评" : "不予置评" }}
             </el-text>
           </div>
-          <div v-if="[7, 8, 9, 10, 11].some((i) => i == record.status)">
+          <div v-if="[7, 8, 9, 11].some((i) => i == record.status)">
             <el-text>
               申请退货时间：{{ formatDate(record.dengjituihuotime) }}
+            </el-text>
+          </div>
+          <div v-if="[8, 9, 11].some((i) => i == record.status)">
+            <el-text>
+              退货登记时间：{{ formatDate(record.tuihuoshenqingtime) }}
             </el-text>
           </div>
           <div v-if="[8, 9, 10, 11].some((i) => i == record.status)">

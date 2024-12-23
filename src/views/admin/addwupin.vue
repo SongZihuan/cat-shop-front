@@ -177,6 +177,7 @@ const add = () => {
           wechat: "",
           location: "",
           isHot: false,
+          isShow: true,
         }
         realPrice.value = "0.00"
         hotPrice.value = ""

@@ -26,6 +26,7 @@ const ub = ref({
   password: "",
   location: "",
   status: 1,
+  type: 1,
   wechat: "",
   email: "",
 } as NewUserData)
@@ -55,6 +56,7 @@ const update = () => {
         password: "",
         location: "",
         status: 1,
+        type: 1,
         wechat: "",
         email: "",
       }

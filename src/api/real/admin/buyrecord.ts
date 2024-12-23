@@ -33,6 +33,7 @@ export interface AdminBuyRecord {
     fahuotime: number
     shouhuotime: number
     pingjiatime: number
+    tuihuoshenqingtime: number
     dengjituihuotime: number
     querentuihuotime: number
     tuohuotime: number
@@ -88,6 +89,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
             fahuotime: 1734024269,
             shouhuotime: 1734024269,
             pingjiatime: 1734024269,
+            tuihuoshenqingtime: 1734024269,
             dengjituihuotime: 1734024269,
             querentuihuotime: 1734024269,
             tuohuotime: 1734024269,
@@ -188,6 +190,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
             fahuotime: 1734024269,
             shouhuotime: 1734024269,
             pingjiatime: 1734024269,
+            tuihuoshenqingtime: 1734024269,
             dengjituihuotime: 1734024269,
             querentuihuotime: 1734024269,
             tuohuotime: 1734024269,
@@ -275,6 +278,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
                 fahuotime: 1734024269,
                 shouhuotime: 1734024269,
                 pingjiatime: 1734024269,
+                tuihuoshenqingtime: 1734024269,
                 dengjituihuotime: 1734024269,
                 querentuihuotime: 1734024269,
                 tuohuotime: 1734024269,

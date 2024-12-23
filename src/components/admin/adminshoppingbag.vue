@@ -96,7 +96,7 @@ if (num.value < 0) {
               <el-badge  class="title" :value="record.wupin.tag" style="margin-top: 10px">
                 <el-text class="wupin_name" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
               </el-badge>
-              <el-text v-if="record.wupin.classId !== -1 && record.wupin.classOf" class="title wupin_class_name">
+              <el-text v-if="record.wupin.classid !== 0 && record.wupin.classOf" class="title wupin_class_name">
                 商品来源：
                 <el-text class="title wupin_class_name_btn" @click="onClassClick"> {{ record.wupin.classOf.name }} > </el-text>
               </el-text>

@@ -164,7 +164,7 @@
             <el-badge :value="wupin.tag" style="margin-top: 10px">
               <el-text class="wupin_name"> {{ wupin.name }} </el-text>
             </el-badge>
-            <el-text v-if="wupin.classId !== -1 && wupin.classOf" class="wupin_class_name">
+            <el-text v-if="wupin.classid !== 0 && wupin.classOf" class="wupin_class_name">
               商品来源：
               <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ wupin.classOf.name }} > </el-text>
             </el-text>
