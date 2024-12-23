@@ -12,7 +12,11 @@ export interface AdminHotWupin {
     isHot: boolean
 }
 
-export interface AdminWupinBase extends AdminHotWupin {
+export interface AdminHShowWupin {
+    isShow: boolean
+}
+
+export interface AdminWupinBase extends AdminHotWupin, AdminHShowWupin {
     name: string
     pic: string
     classid: number

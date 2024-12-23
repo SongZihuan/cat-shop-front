@@ -2,6 +2,7 @@ import {Result} from "@/utils/request"
 import wupinPic from "@/assets/images/tmp.jpg"
 import {Wupin} from "@/store/hotwupin"
 import {LocationForUser} from "#/center/pay"
+import {AdminWupin} from "@/api/real/admin/wupin";
 
 export const AdminBuyRecordStatus = {
     1: "已下单，支付代确认",
@@ -44,7 +45,7 @@ export interface AdminBuyRecord {
     isgood: boolean
     user: LocationForUser
     shop: LocationForUser
-    wupin: Wupin
+    wupin: AdminWupin
 }
 
 type AdminBuyRecordLstByPage = {
@@ -105,6 +106,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 classOf: {
                     id: 1,
                     name: "分类1",
+                    show: true,
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -117,6 +119,8 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                isHot: false,
+                isShow: true,
             },
             user: {
                 name: "用户",
@@ -202,6 +206,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 classOf: {
                     id: 1,
                     name: "分类1",
+                    show: true,
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -214,6 +219,8 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                isHot: false,
+                isShow: true,
             },
             user: {
                 name: "用户",

@@ -96,6 +96,7 @@ const onChangeWupin = () => {
         wechat: wupin.value.wechat,
         location: wupin.value.location,
         isHot: wupin.value.isHot,
+        isShow: wupin.value.isShow,
       }
 
       defaultClass.value = wupin.value.classOf
@@ -154,6 +155,7 @@ const form = ref({
   wechat: "",
   location: "",
   isHot: false,
+  isShow: true,
 } as AdminWupinBase)
 
 const hotPrice = ref("")
@@ -501,6 +503,12 @@ const selectMsg = computed(() => {
                 <el-text>是否热门</el-text>
               </template>
               <el-checkbox v-model="form.isHot" label=""/>
+            </el-form-item>
+            <el-form-item>
+              <template #label>
+                <el-text>是否销售</el-text>
+              </template>
+              <el-checkbox v-model="form.isShow" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>

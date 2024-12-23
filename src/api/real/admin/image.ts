@@ -3,15 +3,15 @@ import {config} from "@/utils/request"
 export function apiAdminPostUploadImageUrl() {
     const baseUrl = (config.baseURL || "/api") as string
     if (baseUrl.endsWith("/")) {
-        return baseUrl + "api/v1/admin/image/img"
+        return baseUrl + "v1/secret/admin/file/upload/image"
     }
-    return baseUrl + "/api/v1/admin/image/img"
+    return baseUrl + "/v1/secret/admin/file/upload/image"
 }
 
 export function apiAdminPostUploadVideoUrl() {
     const baseUrl = (config.baseURL || "/api") as string
     if (baseUrl.endsWith("/")) {
-        return baseUrl + "/v1/sr/ad/fu/vio"
+        return baseUrl + "v1/secret/admin/file/upload/video"
     }
-    return baseUrl + "/v1/sr/ad/fu/vio"
+    return baseUrl + "/v1/secret/admin/file/upload/video"
 }
