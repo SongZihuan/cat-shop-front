@@ -181,7 +181,13 @@ const useUserStore = defineStore("userStore", () => {
             user.value.pricePre = user.value.totalPrice / user.value.totalBuy
         }).then(() => {
             if (!user.value.name) {
-                user.value.name = "新用户"
+                if (user.value.type === 2) {
+                    user.value.name = "管理员"
+                } else if (user.value.type === 3) {
+                    user.value.name = "根管理员"
+                } else {
+                    user.value.name = "新用户"
+                }
             }
 
             if (!user.value.avatar) {

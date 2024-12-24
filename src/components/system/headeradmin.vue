@@ -19,11 +19,6 @@ const goHome = () => {
   })
 }
 
-const goKefu = () => {
-  router.push({
-    path: "/system/kefu"
-  })
-}
 </script>
 
 <template>
@@ -48,22 +43,12 @@ const goKefu = () => {
 
       <template #content>
         <el-text class="subtitle">
-          {{ title }} - {{ configStore.config?.subname }}
+          {{ title }}
         </el-text>
       </template>
 
       <template #extra>
         <div style="display: flex">
-          <el-text class="extrainfo gokefu" @click="goKefu">
-            <el-icon><Service /></el-icon>
-            {{ configStore.config?.service }}
-          </el-text>
-
-          <el-text class="extrainfo gokefu" style="margin-right: 40px" @click="goKefu">
-            <el-icon><Microphone /></el-icon>
-             {{ configStore.config?.hotline }}
-          </el-text>
-
           <UserTitleAdmin class="extrainfo"></UserTitleAdmin>
         </div>
       </template>

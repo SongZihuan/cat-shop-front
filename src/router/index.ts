@@ -354,6 +354,28 @@ const routes: RouteRecordRaw[] = [
           rootAdmin: true,
         },
       },
+      {
+        path: "httpserver",
+        redirect: "/admin/httpserver/stop"
+      },
+      {
+        path: 'httpserver/stop',
+        component: () => import('@/views/admin/httpserver.vue'),
+        meta: {
+          title: '关闭后端Http服务',
+          rootAdmin: true,
+          subtitle: "关闭后端Http服务",
+        },
+      },
+      {
+        path: 'httpserver/restart',
+        component: () => import('@/views/admin/httpserver.vue'),
+        meta: {
+          title: '重启后端Http服务',
+          rootAdmin: true,
+          subtitle: '重启后端Http服务',
+        },
+      },
     ]
   },
   {

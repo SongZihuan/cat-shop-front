@@ -7,6 +7,7 @@ import {
     apiAdminPostUpdateInfo, apiAdminPostUpdatePassword, apiAdminPostUpdatePhone, NewUserData
 } from "#/admin/user";
 import {sha256} from "@/utils/encrypt"
+import {apiAdminRestartServer, apiAdminStopServer} from "@/api/simulation/admin/httpserver";
 
 export const AdminUserType = {
     1: "用户",
@@ -218,6 +219,38 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
         })
     }
 
+    const restartServer = async (password: string, secret: string) => {
+        if (!isRootAdmin()) {
+            return
+        }
+
+        const configStore = useConfigStore()
+        const passwordHash = await sha256((`${configStore.config?.passwordfronthash}::${password}>>`))
+
+        return apiAdminRestartServer(passwordHash, secret).then((res) => {
+            if (!res.data.data.success) {
+                return Promise.reject("重启成功")
+            }
+            return Promise.resolve()
+        })
+    }
+
+    const stopServer = async (password: string, secret: string) => {
+        if (!isRootAdmin()) {
+            return
+        }
+
+        const configStore = useConfigStore()
+        const passwordHash = await sha256((`${configStore.config?.passwordfronthash}::${password}>>`))
+
+        return apiAdminStopServer(passwordHash, secret).then((res) => {
+            if (!res.data.data.success) {
+                return Promise.reject("重启成功")
+            }
+            return Promise.resolve()
+        })
+    }
+
     return {
         getUser,
         getUserLst,
@@ -226,6 +259,8 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
         editPassword,
         editPhone,
         newUser,
+        restartServer,
+        stopServer,
     }
 })
 

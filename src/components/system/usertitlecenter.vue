@@ -126,7 +126,7 @@ const logout = () => {
         <el-text class="user_name_text custom-dropdown">
           <el-icon v-if="userStore.user.type === 1"><User /></el-icon>
           <el-icon v-else><HomeFilled /></el-icon>
-          {{ userStore.user?.name }} - {{ maskPhoneNumber(userStore.user?.phone) }}
+          {{ userStore.user?.name || "新用户" }} - {{ maskPhoneNumber(userStore.user?.phone) || "000-0000-0000" }}
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>

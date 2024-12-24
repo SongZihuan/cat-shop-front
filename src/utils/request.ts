@@ -38,7 +38,14 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response: AxiosResponse) => {
     if (response.status === 200) {
-      if (response.data.code >= 1) {// 公共错误
+      if (response.data.code === 0) {// 正常
+          const newToken = response.headers["X-Token"]
+          if (newToken && getXtoken()) {
+              setXtoken(newToken)
+          }
+
+          return Promise.resolve(response)
+      } else if (response.data.code >= 1) {// 公共错误
           if (response.data.code === 1) {
               ElMessageBox.alert(response.data.msg || "您遇到了未知的错误", '提示', {
                   confirmButtonText: '好的',
@@ -78,13 +85,28 @@ service.interceptors.response.use(
                   confirmButtonText: '好的',
                   callback: () => {},
               })
-          } else if (response.data.code === 5) {
+          } else if (response.data.code === 5 || response.data.code === 6) {
               // 静默
 
               // ElMessageBox.alert('非测试模式，无法访问API。', '提示', {
               //     confirmButtonText: '好的',
               //     callback: () => {},
               // })
+          } else if (response.data.code === 7) {
+              ElMessageBox.alert('请求失败。', '提示', {
+                  confirmButtonText: '好的',
+                  callback: () => {},
+              })
+          } else if (response.data.code === 8) {
+              ElMessageBox.alert('操作的指定用户不存在。', '提示', {
+                  confirmButtonText: '好的',
+                  callback: () => {},
+              })
+          } else if (response.data.code === 9) {
+              ElMessageBox.alert('无权限操作指定用户。', '提示', {
+                  confirmButtonText: '好的',
+                  callback: () => {},
+              })
           }
           return Promise.reject(response)
       } else if (response.data.code <= 1) {// 针对性错误
@@ -93,13 +115,6 @@ service.interceptors.response.use(
               callback: () => {},
           })
           return Promise.reject(response)
-      } else if (response.data.code === 0) {// 正常
-          const newToken = response.headers["X-Token"]
-          if (newToken && getXtoken()) {
-              setXtoken(newToken)
-          }
-
-          return Promise.resolve(response)
       }
       return Promise.reject(response)
     }

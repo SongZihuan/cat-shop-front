@@ -2,7 +2,6 @@
 import useUserStore, { isLogin, hasLoad } from "@/store/user"
 import useConfigStore from "@/store/config"
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {maskPhoneNumber} from "@/utils/str"
 
 const configStore = useConfigStore()
 const userStore = useUserStore()
@@ -33,18 +32,6 @@ const toAdmin = () => {
 
   router.push({
     "path": "/admin/user",
-  })
-}
-
-const toOrderLst = () => {
-  router.push({
-    "path": "/center/buyrecordlist",
-  })
-}
-
-const toGowuche = () => {
-  router.push({
-    "path": "/center/shoppingbag",
   })
 }
 
@@ -126,7 +113,7 @@ const logout = () => {
         <el-text class="user_name_text custom-dropdown">
           <el-icon v-if="userStore.user.type === 1"><User /></el-icon>
           <el-icon v-else><HomeFilled /></el-icon>
-          {{ userStore.user?.name }} - {{ maskPhoneNumber(userStore.user?.phone) }}
+          {{ userStore.user?.name || "管理员" }} - {{ userStore.user?.phone || "000-0000-0000" }}
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>
@@ -137,10 +124,6 @@ const logout = () => {
             <el-dropdown-item @click="toHome" ><el-text class="drop_item">主页</el-text></el-dropdown-item>
             <el-dropdown-item @click="toCenter" ><el-text class="drop_item">我的中心</el-text></el-dropdown-item>
             <el-dropdown-item v-if="userStore.user.type !== 1" @click="toAdmin"><el-text class="drop_item">管理后台</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toOrderLst"><el-text class="drop_item">我的购物记录</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toGowuche"><el-text class="drop_item">我的购物车</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toKefu"><el-text class="drop_item">我的客服</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toAboutUs"><el-text class="drop_item">关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
             <el-dropdown-item @click="logout" ><el-text class="drop_item">退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>
         </template>

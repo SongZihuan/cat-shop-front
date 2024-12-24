@@ -254,13 +254,21 @@ const toXieYiEdit = () => {
   pushTo(router, route, "/admin/xieyi/edit")
 }
 
+const toStopHttpServer = () => {
+  pushTo(router, route, "/admin/httpserver/stop")
+}
+
+const toRestartHttpServer = () => {
+  pushTo(router, route, "/admin/httpserver/restart")
+}
+
 const defaultOpeneds = ref([
   "user", "user/list",
   "class", "class/list",
   "wupin", "wupin/list",
   "buyrecord", "buyrecord/list",
   "config", "config/list",
-  "xieyi",
+  "xieyi", "httpserver"
 ])
 
 </script>
@@ -376,8 +384,19 @@ const defaultOpeneds = ref([
             <template #title>
               <el-text>用户协议管理</el-text>
             </template>
-            <el-menu-item index="xieyi/show" @click="toXieYiShow">查看用户协议</el-menu-item>
-            <el-menu-item index="xieyi/edit" @click="toXieYiEdit">编辑用户协议</el-menu-item>
+            <el-menu-item index="xieyi/show" :disabled="!isRootAdmin()" @click="toXieYiShow">查看用户协议</el-menu-item>
+            <el-menu-item index="xieyi/edit" :disabled="!isRootAdmin()" @click="toXieYiEdit">编辑用户协议</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu
+              index="httpserver"
+              :disabled="!isRootAdmin()"
+          >
+            <template #title>
+              <el-text>后端Http服务管理</el-text>
+            </template>
+            <el-menu-item index="httpserver/stop" :disabled="!isRootAdmin()" @click="toStopHttpServer">关闭</el-menu-item>
+            <el-menu-item index="httpserver/restart" :disabled="!isRootAdmin()" @click="toRestartHttpServer">重启</el-menu-item>
           </el-sub-menu>
         </el-menu>
       </el-scrollbar>
