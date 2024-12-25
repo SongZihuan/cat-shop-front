@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import useAdminUserStore, {AdminUser, AdminUserBase, AdminUserType, GetAdminUserStatus} from "@/store/admin/user"
+import useAdminUserStore, {
+  AdminUser,
+  AdminUserBase,
+  RootAdminUserType, RootAdminUserStatus
+} from "@/store/admin/user"
 import pushTo from "@/views/admin/router_push"
 import {isAdmin, isRootAdmin} from "@/store/admin"
 import {isEmail} from "@/utils/str"
@@ -97,8 +101,8 @@ const hasChange = computed(() => {
   return ub.value.type !== user.value?.type && ub.value.name !== user.value?.name || ub.value.location !== user.value?.location || ub.value.status !== user.value?.status || ub.value.wechat !== user.value?.wechat || ub.value.email !== user.value?.email
 })
 
-const userStatusLst = ref(GetAdminUserStatus() as { [key: number]: string })
-const userTypeLst = ref(AdminUserType as { [key: number]: string })
+const userStatusLst = ref(RootAdminUserStatus as { [key: number]: string })
+const userTypeLst = ref(RootAdminUserType as { [key: number]: string })
 
 const deleteCheck = computed(() => !(user.value && user.value.status === 3 && ub.value.status !== 3))
 const rootAdminCheck = computed(() => !(user.value && user.value.type === 3 && ub.value.status !== 1))
@@ -216,6 +220,7 @@ const update = () => {
                 :key="i"
                 :label="item"
                 :value="Number(i).valueOf()"
+                :disabled="(Number(i).valueOf() === 3 && !isRootAdmin()) || (Number(i).valueOf() !== 3 && (user && user.status === 3))"
             />
           </el-select>
         </el-form-item>
@@ -233,6 +238,7 @@ const update = () => {
                 :key="i"
                 :label="item"
                 :value="Number(i).valueOf()"
+                :disabled="Number(i).valueOf() === 3"
             />
           </el-select>
         </el-form-item>

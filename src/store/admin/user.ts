@@ -12,7 +12,6 @@ import {apiAdminRestartServer, apiAdminStopServer} from "@/api/simulation/admin/
 export const AdminUserType = {
     1: "用户",
     2: "管理员",
-    3: "根管理员",
 }
 
 export const AdminUserStatus = {
@@ -20,18 +19,14 @@ export const AdminUserStatus = {
     2: "冻结",
 }
 
+export const RootAdminUserType = {
+    ...AdminUserType,
+    3: "根管理员",
+}
+
 export const RootAdminUserStatus = {
     ...AdminUserStatus,
     3: "删除",// 理论上不会有
-}
-
-export const GetAdminUserStatus = (): {[status: number]: string} => {
-    if (isRootAdmin()) {
-        return RootAdminUserStatus
-    } else if (isAdmin()) {
-        return AdminUserStatus
-    }
-    return {}
 }
 
 export interface AdminUserId {
@@ -96,11 +91,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                 user.avatar = configStore.config?.avatar
             }
 
-            if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.type)) {
+            if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.type)) {
                 user.type = 1
             }
 
-            if (!Object.keys(GetAdminUserStatus()).some((v) => Number(v).valueOf() === user.status)) {
+            if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
                 user.status = 1
             }
 
@@ -132,11 +127,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                     user.avatar = configStore.config?.avatar
                 }
 
-                if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.type)) {
+                if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.type)) {
                     user.type = 1
                 }
 
-                if (!Object.keys(GetAdminUserStatus()).some((v) => Number(v).valueOf() === user.status)) {
+                if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
                     user.status = 1
                 }
 
