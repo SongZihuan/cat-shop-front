@@ -139,11 +139,11 @@ const goPassword = () => {
           <div style="margin-top: 20px" class="user_info_box">
             <div class="user_info_btn">
               <el-button-group>
-                <el-button type="success" @click="goEdit">
+                <el-button type="success" :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())" @click="goEdit">
                   <el-icon><Edit /></el-icon>
                   编辑用户
                 </el-button>
-                <el-button type="danger" :disabled="!isRootAdmin()" @click="goPassword">
+                <el-button type="danger" :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())" @click="goPassword">
                   <el-icon><EditPen /></el-icon>
                   修改密码
                 </el-button>
@@ -161,6 +161,7 @@ const goPassword = () => {
                   :on-exceed="handleExceed"
                   :show-file-list="false"
                   :on-change="updateAvatar"
+                  :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())"
               >
                 <el-tooltip
                     effect="dark"
