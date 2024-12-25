@@ -6,7 +6,7 @@ import { Result} from "@/utils/request"
 export interface WupinLst {
     list: Wupin[]
     total: number
-    pagemax: number
+    maxpage: number
 }
 
 export const apiGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<WupinLst> => {

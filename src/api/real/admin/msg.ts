@@ -10,6 +10,7 @@ export interface AdminMsg {
 type AdminMsgLst = {
     total: number
     list: AdminMsg[]
+    maxpage: number
 }
 
 export function apiAdminGetUserMsg(userId: number, page: number, pagesize: number): Result<AdminMsgLst> {

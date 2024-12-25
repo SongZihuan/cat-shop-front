@@ -26,7 +26,7 @@ const changePage = async () => {
 
   await apiGetSearchWupin(data.value?.search || "", data.value?.select || [], currentPage.value, 20).then((res) => {
     wupinlst.value = res.data.data.list
-    pagemax.value = res.data.data.pagemax
+    pagemax.value = res.data.data.maxpage
   })
 }
 
