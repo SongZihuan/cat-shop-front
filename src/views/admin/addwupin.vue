@@ -9,7 +9,7 @@ import '@wangeditor/editor/dist/css/style.css'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { IToolbarConfig } from '@wangeditor/editor'
 import { IEditorConfig } from '@wangeditor/editor'
-import {apiAdminPostUploadImageUrl, apiAdminPostUploadVideoUrl} from "#/admin/image"
+import {apiAdminPostUploadImageUrl, apiAdminPostUploadVideoUrl} from "@/api/simulation/admin/file"
 import {getXtoken} from "@/store/user"
 import { UploadFile } from "element-plus"
 

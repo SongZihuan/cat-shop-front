@@ -5,7 +5,8 @@ import useUserStore, {isLogin} from "@/store/user"
 import { ElMessageBox } from "element-plus"
 
 export const config = {
-    baseURL: import.meta.env.VITE_API_BASE || '/api'
+    baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+    resourceURL: import.meta.env.VITE_RESOURCE_BASE_URL || '/file',
 }
 
 const service: AxiosInstance = axios.create(config)
