@@ -246,7 +246,7 @@ const toConfigLst = () => {
   pushTo(router, route, "/admin/config/list")
 }
 
-const toXieYiShow = () => {
+const toXieYisHot = () => {
   pushTo(router, route, "/admin/xieyi/show")
 }
 
@@ -384,7 +384,7 @@ const defaultOpeneds = ref([
             <template #title>
               <el-text>用户协议管理</el-text>
             </template>
-            <el-menu-item index="xieyi/show" :disabled="!isRootAdmin()" @click="toXieYiShow">查看用户协议</el-menu-item>
+            <el-menu-item index="xieyi/show" :disabled="!isRootAdmin()" @click="toXieYisHot">查看用户协议</el-menu-item>
             <el-menu-item index="xieyi/edit" :disabled="!isRootAdmin()" @click="toXieYiEdit">编辑用户协议</el-menu-item>
           </el-sub-menu>
 

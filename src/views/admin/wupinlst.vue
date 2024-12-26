@@ -114,8 +114,14 @@ const toInfo = (wupinId: number) => {
         <el-table-column prop="buygood" label="好评统计" />
         <el-table-column label="是否热门" >
           <template #default="{ row }">
-            <span v-if="row.isHow"> 热门 </span>
+            <span v-if="row.isHot"> 热门 </span>
             <span v-else> 非热门 </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否出售" >
+          <template #default="{ row }">
+            <span v-if="row.isShow"> 出售 </span>
+            <span v-else> 不出售 </span>
           </template>
         </el-table-column>
         <el-table-column label="详情" >

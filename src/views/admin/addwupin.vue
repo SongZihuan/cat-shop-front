@@ -93,6 +93,7 @@ const form = ref({
   wechat: "",
   location: "",
   isHot: false,
+  isShow: true,
 } as AdminWupinBase)
 
 const resetClassId = () => {
@@ -106,7 +107,7 @@ const realPrice = ref("0.00")
 
 const checkPiv = computed(() => newPic.value !== null)
 const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-const checkClassId = computed(() => form.value.classid !== 0)
+const checkClassId = computed(() => form.value.classid > 0)// 可以选择1
 const checkHotPrice = computed(() => {
   if (!hotPrice.value) {
     return true
@@ -430,6 +431,12 @@ const openEdit = () => {
                 <el-text>是否热门</el-text>
               </template>
               <el-checkbox v-model="form.isHot" label=""/>
+            </el-form-item>
+            <el-form-item>
+              <template #label>
+                <el-text>是否出售</el-text>
+              </template>
+              <el-checkbox v-model="form.isShow" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>

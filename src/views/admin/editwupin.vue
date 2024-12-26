@@ -175,6 +175,7 @@ const hasChange = computed(() => {
       form.value.wechat !== wupin.value?.wechat ||
       form.value.location !== wupin.value?.location ||
       form.value.isHot !== wupin.value?.isHot ||
+      form.value.isShow !== wupin.value?.isShow ||
       newPic.value !== null
 })
 

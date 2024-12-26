@@ -42,14 +42,14 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
             id: page * pagesize + i + 1,
             userid: userId,
             wupinid: 1,
-            classid: 1,
+            classid: 2,
             num: 2,
             time: 1734024269,
             wupin: {
                 id: 1,
                 name: `物品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 1,
+                classid: 2,
                 classOf: {
                     id: 1,
                     name: "分类1",
