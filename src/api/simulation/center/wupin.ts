@@ -51,6 +51,10 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
+        buyprice: 1000,
+        buypingjia: 30,
+        buyjian: 15,
+        hot: false,
     } as Wupin
     return Promise.resolve({
         data: {

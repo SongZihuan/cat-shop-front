@@ -47,6 +47,7 @@ export interface BuyRecord {
     shop: LocationForUser
     wupin: Wupin
     nowwupin: Wupin
+    down: boolean
 }
 
 export type BuyRecordLstByPage = {
@@ -123,9 +124,7 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -151,9 +150,7 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             user: {
@@ -172,6 +169,7 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
@@ -256,9 +254,7 @@ export function apiGetBuyRecordByPage(page: number, pagesize: number, status: nu
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -284,9 +280,7 @@ export function apiGetBuyRecordByPage(page: number, pagesize: number, status: nu
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             user: {
@@ -305,6 +299,7 @@ export function apiGetBuyRecordByPage(page: number, pagesize: number, status: nu
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
@@ -389,9 +384,7 @@ export function apiGetUserBuyRecordByPage(userId: number, page: number, pagesize
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -417,9 +410,7 @@ export function apiGetUserBuyRecordByPage(userId: number, page: number, pagesize
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
                 hot: true,
             },
             user: {
@@ -438,6 +429,7 @@ export function apiGetUserBuyRecordByPage(userId: number, page: number, pagesize
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
@@ -510,10 +502,35 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
                     buyprice: 1000,
                     buypingjia: 10,
                     buyjian: 10,
-                    show: true,
-                    classShow: true,
-                    classDown: false,
                     hot: true,
+                    down: false,
+                } as Wupin,
+                nowwupin: {
+                    id: 1,
+                    name: "商品",
+                    pic: wupinPic,
+                    classid: 2,
+                    classOf: {
+                        id: 2,
+                        name: "商品分类",
+                    },
+                    tag: "火爆",
+                    hotPrice: 9999,
+                    realPrice: 19999,
+                    info: "hhhhhh",
+                    ren: "宋子桓",
+                    phone: "17322061610",
+                    wechat: "abcd",
+                    email: "songzihuan@song-zh.com",
+                    location: "广东广州",
+                    buytotal: 100,
+                    buydaohuo: 95,
+                    buygood: 90,
+                    buyprice: 1000,
+                    buypingjia: 10,
+                    buyjian: 10,
+                    hot: true,
+                    down: false,
                 } as Wupin,
                 user: {
                     name: "用户",

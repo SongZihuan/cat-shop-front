@@ -71,10 +71,9 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
                 buyprice: 999,
                 buypingjia: 20,
                 buyjian: 10,
-                show: true,
+                down: false,
                 hot: false,
-                classShow: true,
-                classDown: false,
+                show: true,
             },
             down: false,
         })

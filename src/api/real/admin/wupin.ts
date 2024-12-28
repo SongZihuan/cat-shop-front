@@ -12,11 +12,11 @@ export interface AdminHotWupin {
     hot: boolean
 }
 
-export interface AdminHShowWupin {
+export interface AdminShowWupin {
     show: boolean
 }
 
-export interface AdminWupinBase extends AdminHotWupin, AdminHShowWupin {
+export interface AdminWupinBase extends AdminHotWupin, AdminShowWupin {
     name: string,
     pic: string
     classid: number
@@ -53,11 +53,13 @@ export interface AdminWupinBaseWithClassShow extends AdminWupinBase, AdminClassF
 
 export interface AdminWupinBaseWithClass extends AdminWupinBase {
     classOf: AdminClass
-    classShow: boolean
-    classDown: boolean
 }
 
-export interface AdminWupinWithInfo extends AdminWupinBaseWithClass {
+export interface AdminWupinWithDown {
+    down: boolean
+}
+
+export interface AdminWupinWithInfo extends AdminWupinBaseWithClass, AdminWupinWithDown {
     buytotal: number
     buydaohuo: number
     buygood: number
@@ -123,9 +125,8 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
         buypingjia: 10,
         buyjian: 10,
         show: true,
-        classShow: true,
-        classDown: false,
         hot: true,
+        down: false,
     } as AdminWupin
     return Promise.resolve({
         data: {
@@ -218,9 +219,7 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
             buypingjia: 10,
             buyjian: 10,
             hot: i % 2 == 0,
-            show: true,
-            classShow: i %3 == 0,
-            classDown: false,
+            down: false,
         } as AdminWupin)
     }
 

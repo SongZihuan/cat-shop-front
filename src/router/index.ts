@@ -246,10 +246,6 @@ const routes: RouteRecordRaw[] = [
         redirect: "/admin/user/buy/wupin/sale"
       },
       {
-        path: "user/buy/wupin/sale,",
-        redirect: "/admin/user/buy/wupin/sale"
-      },
-      {
         path: 'user/buy/wupin/sale',
         component: () => import('@/views/admin/recordwupin.vue'),
         meta: {

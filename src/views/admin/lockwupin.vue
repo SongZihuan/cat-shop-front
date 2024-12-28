@@ -98,10 +98,9 @@
     })
   }
 
-  const num = ref(record.value && record.value.num || 0)
-  if (num.value < 0) {
-    num.value = 0
-  }
+  const num = computed(() => {
+    return record.value && record.value.num > 0 ? record.value.num : 1
+  })
 
   const onClickBag = () => {
     record.value && apiAdminPostAddToShoppingBag(record.value.userid, record.value.wupin.id, num.value).then((res) => {
@@ -129,7 +128,7 @@
 </script>
 
 <template>
-  <div v-if="wupin" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
+  <div v-if="record && wupin" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
     <el-card style="display: flex; max-width: 90%; justify-content: center; margin-top: 10px">
       <div style="display: inline-block; width: 15vw; height: 70vh; margin-right: 20px; margin-left: 20px">
         <el-scrollbar height="70vh">
@@ -206,7 +205,7 @@
       <div style="display: inline-block; width: 50vw; height: 70vh; margin-right: 20px; margin-left: 20px">
         <el-scrollbar height="70vh">
           <div style="padding-right: 5px">
-            <el-badge :value="wupin.tag" style="margin-top: 10px">
+            <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
               <el-text class="wupin_name"> {{ wupin.name }} </el-text>
             </el-badge>
             <el-text v-if="wupin.classid > 1 && wupin.classOf" class="wupin_class_name">
@@ -272,18 +271,18 @@
                 </el-text>
               </div>
             </div>
-            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 20vh">
-              <div style="display: flex">
-                <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+            <div style="display: flex; justify-content: left">
+              <div class="btn_box" style="display: flex">
+                <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item" :disabled="record.down">
                   <template #suffix>
                     <span> 件 </span>
                   </template>
                 </el-input-number>
-                <el-button class="buy_item" size="large" @click="onClickBag">
+                <el-button class="buy_item" size="large" :disabled="record.down" @click="onClickBag">
                   <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重新加入加入购物车
                 </el-button>
               </div>
-              <div style="display: flex">
+              <div class="btn_box" style="display: flex">
                 <el-tooltip
                     effect="dark"
                     content="只有用户能为自己购买"
@@ -296,8 +295,8 @@
                   </el-button>
                 </el-tooltip>
               </div>
-              <div style="display: flex">
-                <el-button type="primary" size="large" plain @click="onBackToBuyRecord">
+              <div class="btn_box" style="display: flex" @click="onBackToBuyRecord">
+                <el-button type="primary" size="large" plain>
                   返回订单
                 </el-button>
               </div>
@@ -319,7 +318,7 @@
     <el-text>请注意，本页面为历史保存页面，旨在保存用户购买商品时，售卖页面的历史信息。</el-text>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary">
+        <el-button type="primary" @click="dialogVisible = false">
           确定
         </el-button>
       </div>
@@ -328,6 +327,10 @@
 </template>
 
 <style scoped lang="scss">
+  .btn_box {
+    margin-right: 5px;
+  }
+
   .wupin_name {
     display: inline-block;
     font-size: 1.8vw;

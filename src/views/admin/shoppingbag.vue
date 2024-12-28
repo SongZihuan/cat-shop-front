@@ -12,7 +12,7 @@ if (!isAdmin()) {
   router.push({
     path: "/system/error",
     query: {
-      msg: "页面错误1"
+      msg: "页面错误"
     }
   })
 }
@@ -40,11 +40,9 @@ const onChangeUser = () => {
       onChange()
     }, () => {
       toBack()
-      console.log("AAAA")
     })
   } else {
     toBack()
-    console.log("BBBB")
   }
 }
 

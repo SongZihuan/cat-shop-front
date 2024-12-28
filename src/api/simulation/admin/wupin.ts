@@ -33,14 +33,19 @@ export interface AdminWupinBase extends AdminHotWupin, AdminHShowWupin {
 
 export interface AdminWupinBaseWithClass extends AdminWupinBase {
     classOf: AdminClass
-    classShow: boolean
-    classDown: boolean
 }
 
-export interface AdminWupinWithInfo extends AdminWupinBaseWithClass {
+export interface AdminWupinWithDown {
+    down: boolean
+}
+
+export interface AdminWupinWithInfo extends AdminWupinBaseWithClass, AdminWupinWithDown {
     buytotal: number
     buydaohuo: number
     buygood: number
+    buyprice: number
+    buypingjia: number
+    buyjian: number
 }
 
 export interface AdminWupin extends AdminWupinID, AdminWupinWithInfo { }

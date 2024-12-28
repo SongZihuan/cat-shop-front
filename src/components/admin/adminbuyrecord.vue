@@ -61,28 +61,44 @@ const onClassClick = () => {
 }
 
 const onGoWupinConfirm = () => {
-  ElMessageBox.confirm(
-      `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
-      '温馨提示',
-      {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-  ).then(() => {
-    onGoWupin()
-  })
+  if (!record.value) {
+    // NO-THING-TO-DO
+  } else if (record.value.down) {
+    ElMessageBox.confirm(
+        `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
+        '温馨提示',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+    ).then(() => {
+      onGoWupin()
+    })
+  } else {
+    ElMessageBox.confirm(
+        `是否确认前往商品 ${record.value.wupin.name} 的售卖页面（商品已经下架）？`,
+        '温馨提示',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+    ).then(() => {
+      onGoWupin()
+    })
+  }
 }
 
 const onGoWupin = () => {
-  pushTo(router, route, "/admin/user/list/wupin", {
-    wupinId: record.value.wupin.id,
+  pushTo(router, route, "/admin/user/buy/wupin/sale", {
+    recordId: record.value.id,
   })
 }
 
 const onGoLockWupin = () => {
-  pushTo(router, route, "/admin/user/list/lockwupin", {
-    wupinId: record.value.wupin.id,
+  pushTo(router, route, "/admin/user/buy/wupin/lock", {
+    recordId: record.value.id,
   })
 }
 
@@ -642,7 +658,7 @@ const onXiangQing = () => {
       <template #header>
         <div style="display: flow-root">
           <div style="float: left">
-            <el-badge :value="record.wupin.tag" style="margin-top: 10px">
+            <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
               <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
             </el-badge>
             <el-text v-if="record.wupin.classid > 1 && record.wupin.classOf" class="wupin_class_name">
@@ -654,8 +670,9 @@ const onXiangQing = () => {
               <el-button v-if="xiangqing" type="success" @click="onXiangQing">
                 查看详情
               </el-button>
-              <el-button type="success" @click="onGoWupin">
-                查看商品售卖页
+              <el-button type="success"  @click="onGoWupin">
+                <span v-if="record.down">查看商品售卖页（已经下架）</span>
+                <span v-else>查看商品售卖页</span>
               </el-button>
               <el-tooltip
                   effect="dark"
@@ -723,8 +740,16 @@ const onXiangQing = () => {
       <div style="display: flex; justify-content: left">
         <div>
           <div>
+            <el-text v-if="record.down">
+              销售情况：商品下架啦
+            </el-text>
+            <el-text v-else>
+              销售情况：正常销售中
+            </el-text>
+          </div>
+          <div>
             <el-text>
-              当前状态：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
+              购物状态：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
             </el-text>
           </div>
           <div>

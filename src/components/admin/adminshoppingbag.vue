@@ -32,13 +32,13 @@ const totalPrice = computed(() => {
 })
 
 const onClassClick = () => {
-  record.value.wupin.classid > 1 && pushTo(router, route, "/admin/class/list/info", {
+  record.value.wupin.classid > 1 && pushTo(router, route, "/admin/class/info", {
     classId: record.value.wupin.classid.toString(),
   })
 }
 
 const onWupinClick = () => {
-  pushTo(router, route, "/admin/wupin/list/info", {
+  pushTo(router, route, "/admin/wupin/info", {
     wupinId: record.value.wupin.id.toString(),
   })
 }
@@ -93,7 +93,7 @@ if (num.value < 0) {
         <div class="header">
           <div style="display: flow-root">
             <div style="display:block; float: left">
-              <el-badge  class="title" :value="record.down ? '已下架' : record.wupin.tag" style="margin-top: 10px">
+              <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
                 <el-text class="wupin_name" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
               </el-badge>
               <el-text v-if="record.wupin.classid > 0 && record.wupin.classOf" class="title wupin_class_name">
@@ -212,12 +212,12 @@ if (num.value < 0) {
           <el-divider direction="vertical" style="height: 20vh; border-width: 1px; margin-left: 15px; margin-right: 15px"></el-divider>
           <div style="display: flex; flex-direction: column; justify-content: space-between; height: 20vh">
             <div style="display: flex">
-              <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+              <el-input-number v-model="num" :disabled="record.down" @click="onClickBag" :min="0" :max="99" size="large" class="buy_item">
                 <template #suffix>
                   <span> 件 </span>
                 </template>
               </el-input-number>
-              <el-button class="buy_item" size="large" @click="onClickBag">
+              <el-button class="buy_item" size="large" :disabled="record.down" @click="onClickBag">
                 <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重设用户购物车
               </el-button>
             </div>

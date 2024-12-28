@@ -90,6 +90,12 @@
         <el-scrollbar height="70vh">
           <div style="padding-right: 5px">
             <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 100%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+            <div v-if="wupin.down" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Location /></el-icon>
+                特别说明：商品已下架
+              </el-text>
+            </div>
             <div v-if="wupin.ren" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Microphone /></el-icon>

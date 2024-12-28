@@ -233,11 +233,11 @@ const downClass = () => {
           <el-button v-else type="success" plain size="large" @click="startShow">
             打开显示
           </el-button>
-          <el-button v-if="classObj.down" type="danger" plain size="large" @click="downClass">
+          <el-button v-if="!classObj.down" type="success" plain size="large" @click="downClass">
             下架商品
           </el-button>
-          <el-button v-else type="success" plain size="large" @click="upClass">
-            重新商家
+          <el-button v-else type="danger" plain size="large" @click="upClass">
+            重新上架
           </el-button>
         </el-button-group>
       </template>

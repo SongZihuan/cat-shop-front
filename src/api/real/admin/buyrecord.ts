@@ -47,6 +47,7 @@ export interface AdminBuyRecord {
     shop: LocationForUser
     wupin: AdminWupin
     nowwupin: AdminWupin
+    down: boolean
 }
 
 type AdminBuyRecordLstByPage = {
@@ -125,10 +126,9 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 buyprice: 999,
                 buypingjia: 20,
                 buyjian: 10,
-                classShow: true,
-                classDown: false,
                 hot: false,
                 show: true,
+                down: false,
             },
             nowwupin: {
                 id: 1,
@@ -155,9 +155,8 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 buyprice: 999,
                 buypingjia: 20,
                 buyjian: 10,
-                classShow: true,
-                classDown: false,
                 hot: false,
+                down: false,
                 show: true,
             },
             user: {
@@ -176,6 +175,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
@@ -263,9 +263,8 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 buypingjia: 20,
                 buyjian: 10,
                 hot: false,
+                down: false,
                 show: true,
-                classShow: true,
-                classDown: false,
             },
             nowwupin: {
                 id: 1,
@@ -294,8 +293,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 buyjian: 10,
                 hot: false,
                 show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
             },
             user: {
                 name: "用户",
@@ -313,6 +311,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 

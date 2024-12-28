@@ -29,7 +29,7 @@
 </script>
 
 <template>
-  <el-card class="WupinItem">
+  <el-card v-if="item && !item.down" class="WupinItem">
     <template #header>
       <el-text class="WupinTitle">
         {{ item.name }} 
@@ -45,7 +45,10 @@
     </div>
     <template #footer>
       <div style="display: flow-root">
-        <el-text v-if="facePrice == 0" class="hotprice">
+        <el-text v-if="item.down" class="hotprice">
+          停止销售
+        </el-text>
+        <el-text v-else-if="facePrice == 0" class="hotprice">
           免费抢购
         </el-text>
         <el-text v-if="facePrice < realPrice" class="hotprice">
@@ -69,6 +72,7 @@
       </div>
     </template>
   </el-card>
+  <div v-else></div>
 </template>
 
 <style scoped lang="scss">

@@ -47,6 +47,7 @@ export interface BuyRecord {
     shop: LocationForUser
     nowwupin: Wupin
     wupin: Wupin
+    down: boolean
 }
 
 type BuyRecordLst = {
@@ -125,10 +126,8 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 buyprice: 2000,
                 buypingjia: 30,
                 buyjian: 20,
-                classShow: true,
-                classDown: false,
-                show: true,
-                hot: true,
+                hot: false,
+                down: false,
             },
             nowwupin: {
                 id: 1,
@@ -153,10 +152,8 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 buyprice: 2000,
                 buypingjia: 30,
                 buyjian: 20,
-                classShow: true,
-                classDown: false,
-                show: true,
-                hot: true,
+                hot: false,
+                down: false,
             },
             user: {
                 name: "用户",
@@ -174,6 +171,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
@@ -242,6 +240,11 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     buytotal: 100,
                     buydaohuo: 95,
                     buygood: 90,
+                    buyprice: 1000,
+                    buypingjia: 30,
+                    buyjian: 15,
+                    hot: false,
+                    down: false,
                 } as Wupin,
                 nowwupin: {
                     id: 1,
@@ -264,6 +267,11 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     buytotal: 100,
                     buydaohuo: 95,
                     buygood: 90,
+                    buyprice: 1000,
+                    buypingjia: 30,
+                    buyjian: 15,
+                    hot: false,
+                    down: false,
                 } as Wupin,
                 user: {
                     name: "用户",
@@ -358,13 +366,11 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
-                buyprice: 999,
-                buypingjia: 20,
-                buyjian: 10,
+                buyprice: 1000,
+                buypingjia: 30,
+                buyjian: 15,
                 hot: false,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
             },
             nowwupin: {
                 id: 1,
@@ -386,13 +392,11 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
-                buyprice: 999,
-                buypingjia: 20,
-                buyjian: 10,
+                buyprice: 1000,
+                buypingjia: 30,
+                buyjian: 15,
                 hot: false,
-                show: true,
-                classShow: true,
-                classDown: false,
+                down: false,
             },
             user: {
                 name: "用户",
@@ -410,6 +414,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 email: "1234",
                 remark: "1234,"
             },
+            down: false,
         })
     }
 
