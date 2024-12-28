@@ -226,7 +226,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     classid: 2,
                     classOf: {
                         id: 2,
-                        name: "商品分类",
+                        name: "商品分类2",
                     },
                     tag: "火爆",
                     hotPrice: 9999,
@@ -253,7 +253,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     classid: 2,
                     classOf: {
                         id: 2,
-                        name: "商品分类",
+                        name: "商品分类2",
                     },
                     tag: "火爆",
                     hotPrice: 9999,

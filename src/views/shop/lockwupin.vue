@@ -53,17 +53,15 @@
     return getTotalPrice(wupin.value?.hotPrice, wupin.value?.realPrice, num.value)
   })
 
-  const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0) ? wupin.value.buytotal : 0)
   const totalDaoHuo = computed(() => (wupin.value && wupin.value.buydaohuo >= 0) ? wupin.value.buydaohuo : 0)
-  const totalBuyGood = computed(() => {
-    const g = (wupin.value && wupin.value.buygood >= 0) ? wupin.value.buygood : 0
-    if (g > totalDaoHuo.value) {
-      return totalDaoHuo.value
-    }
-    return g
-  })
+  const totalAllUserPrice = computed(() => (wupin.value && wupin.value.buyprice >= 0) ? wupin.value.buyprice : 0)
+  const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0) ? wupin.value.buytotal : 0)
+  const totalPingJia = computed(() => (wupin.value && wupin.value.buypingjia >= 0) ? wupin.value.buypingjia : 0)
+  const totalBuyGood = computed(() => (wupin.value && wupin.value.buygood >= 0) ? wupin.value.buygood : 0)
 
-  const goodBuyPre = computed(() => (totalBuyGood.value / totalDaoHuo.value) * 100)
+  const daohuoPre = computed(() => (totalDaoHuo.value / totalBuy.value) * 100)
+  const pingjiaPre = computed(() => (totalPingJia.value / totalDaoHuo.value) * 100)
+  const goodBuyPre = computed(() => (totalBuyGood.value / totalPingJia.value) * 100)
   const goodBuyMsg = computed(() => {
     if (goodBuyPre.value >= 85) {
       return "好评如潮"
@@ -79,6 +77,15 @@
   const dialogVisible = ref(false)
   const openTips = () => {
     dialogVisible.value = true
+  }
+
+  const backToRecord = () => {
+    record.value && router.push({
+      path: "/center/buyrecord",
+      query: {
+        id: record.value.id,
+      }
+    })
   }
 
 </script>
@@ -148,6 +155,30 @@
 
             <div class="wupin_buy_total_box">
               <el-text class="wupin_buy_total_text">
+                <el-icon><Money /></el-icon>
+                总消费金额：
+                ￥{{ (totalAllUserPrice / 100).toFixed(2) }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                <el-icon><Goblet /></el-icon>
+                购买到货率：
+                {{ daohuoPre.toFixed(2) }}%
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                <el-icon><Goblet /></el-icon>
+                购买评价率：
+                {{ pingjiaPre.toFixed(2) }}%
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
                 <el-icon><Goblet /></el-icon>
                 购买好评率：
                 <el-badge :value="goodBuyMsg">
@@ -161,19 +192,31 @@
       <div style="display: inline-block; width: 50vw; height: 70vh; margin-right: 20px; margin-left: 20px">
         <el-scrollbar height="70vh">
           <div style="padding-right: 5px">
-            <el-badge :value="wupin.tag" style="margin-top: 10px">
-              <el-text class="wupin_name"> {{ wupin.name }} </el-text>
-            </el-badge>
-            <el-text v-if="wupin.classid > 1 && wupin.classOf" class="wupin_class_name">
-              商品来源：
-              <el-text class="wupin_class_name_btn"> {{ wupin.classOf.name }} > </el-text>
-            </el-text>
+            <div style="display: flow-root">
+              <div style="float: left">
+                <el-badge :value="wupin.tag" style="margin-top: 10px">
+                  <el-text class="wupin_name"> {{ wupin.name }} </el-text>
+                </el-badge>
+              </div>
+              <div style="float: right">
+                <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
+                  <el-button size="large" class="class_btn" disabled>
+                    商品分类： {{ wupin.classOf.name }}
+                  </el-button>
+                </div>
+                <div v-else>
+                  <el-button size="large" class="class_btn" disabled>
+                    商品暂无分类
+                  </el-button>
+                </div>
+              </div>
+            </div>
             <div class="price_box">
               <div v-if="facePrice == 0">
                 <el-text class="wupin_hot_price">
                   <el-icon><BellFilled /></el-icon>
                   价格：免费抢购
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_else_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }}
                   </el-text>
                 </el-text>
@@ -182,7 +225,7 @@
                 <el-text class="wupin_hot_price">
                   <el-icon><GobletSquareFull /></el-icon>
                   促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_else_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                   <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
@@ -195,7 +238,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_else_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                 </el-text>
@@ -211,7 +254,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_else_real_price_line_through">
                     原价：免费送
                   </el-text>
                 </el-text>
@@ -221,19 +264,21 @@
                 <el-text class="wupin_real_price">
                   <el-icon><Shop /></el-icon>
                   售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_else_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                 </el-text>
               </div>
             </div>
             <div style="display: flex; justify-content: left">
-              <el-button class="buy_item" size="large" disabled>
-                <el-icon style="margin-right: 3px" ><Money /></el-icon> 立即购买 <span v-if="num >= 1"> （实际价格：{{ totalPrice > 0 ? "￥" + totalPrice.toFixed(2) : "免费" }}） </span>
-              </el-button>
-              <el-button v-if="record && record.id" class="buy_item" size="large">
-                返回订单
-              </el-button>
+              <el-button-group>
+                <el-button class="buy_item" size="large" disabled>
+                  <el-icon style="margin-right: 3px" ><Money /></el-icon> 立即购买 <span v-if="num >= 1"> （总价：{{ totalPrice > 0 ? "￥" + totalPrice.toFixed(2) : "免费" }}） </span>
+                </el-button>
+                <el-button v-if="record && record.id" class="buy_item" size="large" @click="backToRecord">
+                  返回订单
+                </el-button>
+              </el-button-group>
             </div>
             <div id="info_box" class="info_box">
               <div v-html="wupin.info"></div>
@@ -253,7 +298,7 @@
     <el-text>请注意，本页面为历史保存页面，旨在保存用户购买商品时，售卖页面的历史信息。</el-text>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary">
+        <el-button type="primary" @click="dialogVisible = false">
           确定
         </el-button>
       </div>
@@ -335,6 +380,9 @@
     margin-left: 5px;
     color: black;
     font-size: 0.7vw;
+  }
+
+  .wupin_else_real_price_line_through {
     text-decoration: line-through;
   }
 
@@ -351,21 +399,17 @@
     font-size: 0.6vw;
   }
 
-  .wupin_info_box {
-    margin-top: 1px;
-    margin-bottom: 1px;
-  }
-
   .wupin_buy_total_text {
     font-size: 0.6vw;
   }
 
-  .wupin_buy_total_box {
-    margin-top: 1px;
-    margin-bottom: 1px;
-  }
   #info_box * {
     all: initial;
     width: 100%;
+  }
+
+  .wupin_info_box, .wupin_buy_total_box {
+    margin-top: 1px;
+    margin-bottom: 3px;
   }
 </style>

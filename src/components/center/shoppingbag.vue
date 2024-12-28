@@ -2,7 +2,7 @@
 import {apiPostAddToShoppingBag, ShopRecord} from "#/center/shoppingbag"
 import {formatDate} from "@/utils/time"
 import {getFacePrice, getRealPrice, getTotalPrice} from "@/utils/price"
-import {ElNotification} from "element-plus"
+import {ElNotification, ElMessageBox} from "element-plus"
 import { ElMessage } from "element-plus"
 
 const props = defineProps({
@@ -44,7 +44,7 @@ const onClassClick = () => {
 const onWupinClick = () => {
   if (!record.value) {
     // NOT-THING-TO-DO
-  } else if (record.down) {
+  } else if (record.value.down) {
     ElMessageBox.alert('商品暂时下架啦，搜同款看看吧！', '下架通知', {
       confirmButtonText: 'OK',
     })
@@ -270,7 +270,7 @@ const buy = () => {
               <el-button v-else class="buy_item" size="large" :disabled="num <= 0" @click="buy">
                 <el-icon style="margin-right: 3px"><Money /></el-icon>
                 立即购买
-                <el-text v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </el-text>
+                <el-text v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </el-text>
               </el-button>
             </div>
           </div>

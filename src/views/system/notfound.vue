@@ -36,7 +36,7 @@ onUnmounted(() => {
           title="页面不存在"
       >
         <template #sub-title>
-          <div>
+          <div class="info_box">
             <el-text>
               您访问的页面不存在。
             </el-text>

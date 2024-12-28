@@ -230,7 +230,7 @@ if (num.value < 0) {
                 <el-button class="buy_item" size="large" disabled>
                   <el-icon style="margin-right: 3px"><Money /></el-icon>
                   立即购买
-                  <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                  <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
                 </el-button>
               </el-tooltip>
             </div>

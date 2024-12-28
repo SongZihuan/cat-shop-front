@@ -283,6 +283,11 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 </template>
 
 <style scoped lang="scss">
+  .user_info_box {
+    margin-top: 1px;
+    margin-bottom: 3px;
+  }
+
   .user_name {
     display: inline-block;
     font-size: 1.8vw;

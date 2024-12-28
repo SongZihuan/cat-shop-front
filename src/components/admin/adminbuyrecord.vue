@@ -747,27 +747,27 @@ const onXiangQing = () => {
               销售情况：正常销售中
             </el-text>
           </div>
-          <div>
+          <div class="info_box">
             <el-text>
               购物状态：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
             </el-text>
           </div>
-          <div>
+          <div class="info_box">
             <el-text>
               购买数量：{{ record.num }} 件
             </el-text>
           </div>
-          <div>
+          <div class="info_box">
             <el-text>
               付款金额：￥{{ ((record.totalPrice / 100).toFixed(2)) }}
             </el-text>
           </div>
-          <div>
+          <div class="info_box">
             <el-text>
               商品单价：￥{{ ((record.price / 100).toFixed(2)) }}
             </el-text>
           </div>
-          <div>
+          <div class="info_box">
             <el-text>
               下单时间：{{ formatDate(record.time) }}
             </el-text>

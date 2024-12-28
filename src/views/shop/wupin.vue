@@ -22,7 +22,7 @@
   const wupin = ref(null as Wupin | null)
   apiGetWupin(wupinId.value as number).then((res) => {
     wupin.value = res.data.data
-    if (wupin.value && wupin.value.id === 0) {
+    if (!wupin.value || wupin.value.id === 0 || wupin.value.down) {
       router.push({
         path: "/system/error",
         query: {
@@ -105,13 +105,6 @@
     }
 
     byn.value.open(wupin.value, num.value)
-  }
-
-  const toClass = () => {
-    wupin.value && router.push("/shop/search", {
-      search: "",
-      select: [wupin.value.classid],
-    })
   }
 
 </script>
@@ -213,6 +206,25 @@
               </el-text>
             </div>
           </div>
+          <div style="display: flow-root">
+            <div style="float: left">
+              <el-badge :value="wupin.tag" style="margin-top: 10px">
+                <el-text class="wupin_name"> {{ wupin.name }} </el-text>
+              </el-badge>
+            </div>
+            <div style="float: right">
+              <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
+                <el-button size="large" class="class_btn" disabled>
+                  商品分类： {{ wupin.classOf.name }}
+                </el-button>
+              </div>
+              <div v-else>
+                <el-button size="large" class="class_btn" disabled>
+                  商品暂无分类
+                </el-button>
+              </div>
+            </div>
+          </div>
         </el-scrollbar>
       </div>
       <div style="display: inline-block; width: 50vw; height: 70vh; margin-right: 20px; margin-left: 20px">
@@ -225,7 +237,7 @@
                 </el-badge>
               </div>
               <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1" style="float: right">
-                <el-button size="large" class="class_btn" @click="toClass">
+                <el-button size="large" class="class_btn" disabled>
                   商品分类： {{ wupin.classOf.name }}
                 </el-button>
               </div>
@@ -309,7 +321,7 @@
                   <el-button class="buy_item" size="large" @click="buy">
                     <el-icon style="margin-right: 3px"><Money /></el-icon>
                     立即购买
-                    <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                    <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
                   </el-button>
                 </el-button-group>
               </div>

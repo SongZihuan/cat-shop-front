@@ -135,7 +135,7 @@ const logout = () => {
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="toHome"><el-text>主页</el-text></el-dropdown-item>
-            <el-dropdown-item @tclick="toCenter"><el-text>我的中心</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toCenter"><el-text>我的中心</el-text></el-dropdown-item>
             <el-dropdown-item v-if="userStore.user.type !== 1" @cclick="toAdmin" @click="toAdmin"><el-text>管理后台</el-text></el-dropdown-item>
             <el-dropdown-item @click="toBuyRecord"><el-text>我的购物记录</el-text></el-dropdown-item>
             <el-dropdown-item @click="toBag"><el-text>我的购物车</el-text></el-dropdown-item>
