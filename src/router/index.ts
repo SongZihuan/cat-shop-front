@@ -543,6 +543,15 @@ const routes: RouteRecordRaw[] = [
           test: true,
         }
       },
+      {
+        path: ":catchAll(.*)",
+        redirect: {
+          path: "/system/error",
+          query: {
+            msg: "非法访问测试页面测试",
+          }
+        }
+      },
     ]
   },
   {
@@ -570,6 +579,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'error',
+        name: "error",
         component: () => import('@/views/system/error.vue'),
         meta: {
           title: '错误',
@@ -586,6 +596,10 @@ const routes: RouteRecordRaw[] = [
         }
       },
     ]
+  },
+  {
+    path: "/error",
+    redirect: "/system/error",
   },
   {
     path: '/:catchAll(.*)',

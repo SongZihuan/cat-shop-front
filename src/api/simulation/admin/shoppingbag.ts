@@ -10,6 +10,7 @@ export interface AdminShopRecord {
     num: number
     time: number
     wupin: AdminWupin
+    down: boolean
 }
 
 type AdminShopRecordLst = {
@@ -75,6 +76,7 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
                 hot: false,
                 show: true,
             },
+            down: false,
         })
     }
 

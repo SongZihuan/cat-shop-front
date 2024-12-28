@@ -23,7 +23,7 @@ const onChangeClass = () => {
   classId.value = Number(route.query?.classId).valueOf() || 0
   classObj.value = null
 
-  if (classId.value) {
+  if (classId.value && classId.value > 1) {
     apiAdminGetClass(classId.value).then((res) => {
       classObj.value = res.data.data as AdminClass
     }, () => {

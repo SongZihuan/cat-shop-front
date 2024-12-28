@@ -3,13 +3,14 @@ import useAdminUserStore, {AdminUser, AdminUserStatus, AdminUserType} from "@/st
 import useConfigStore from "@/store/config"
 import {isAdmin} from "@/store/admin"
 import { ElMessage } from "element-plus"
+import pushTo from "@/views/admin/router_push";
 
 const route = useRoute()
 const router = useRouter()
 
 if (!isAdmin()) {
   router.push({
-    path: "error",
+    path: "/system/error",
     query: {
       msg: "页面错误"
     }
@@ -56,11 +57,8 @@ const openAvatar = (avatar: string) => {
 }
 
 const toInfo = (id: number) => {
-  router.push({
-    path: "/admin/user/list/info",
-    query: {
-      userId: id,
-    }
+  pushTo(router, route, "/admin/user/info", {
+    userId: id,
   })
 }
 

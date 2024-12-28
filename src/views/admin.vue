@@ -6,13 +6,14 @@ import {AdminWupin, apiAdminGetWupin} from "#/admin/wupin"
 import {AdminClass, apiAdminGetClass} from "#/admin/class"
 import {AdminBuyRecord as AdminBuyRecordData, apiAdminGetBuyRecordInfo} from "#/admin/buyrecord"
 import {MenuItemRegistered} from "element-plus"
+import pushTo from "@/views/admin/router_push";
 
 const router = useRouter()
 const route = useRoute()
 
 if (!isAdmin()) {
   router.push({
-    path: "error",
+    path: "/system/error",
     query: {
       msg: "页面错误"
     }
@@ -161,12 +162,8 @@ const defaultOpeneds = ref([
 
 const onClick = (event: MenuItemRegistered) => {
   const path = basePath + "/" + (event.index || "admin/user/list")
-  router.push({
-    path: path,
-  })
+  pushTo(router, route, path)
 }
-
-console.log("GGBond")
 
 </script>
 

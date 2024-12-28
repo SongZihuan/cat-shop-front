@@ -93,7 +93,7 @@ if (num.value < 0) {
         <div class="header">
           <div style="display: flow-root">
             <div style="display:block; float: left">
-              <el-badge  class="title" :value="record.wupin.tag" style="margin-top: 10px">
+              <el-badge  class="title" :value="record.down ? '已下架' : record.wupin.tag" style="margin-top: 10px">
                 <el-text class="wupin_name" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
               </el-badge>
               <el-text v-if="record.wupin.classid > 0 && record.wupin.classOf" class="title wupin_class_name">

@@ -11,7 +11,7 @@ const route = useRoute()
 
 if (!isAdmin()) {
   router.push({
-    path: "error",
+    path: "/system/error",
     query: {
       msg: "页面错误"
     }
@@ -266,6 +266,11 @@ const hasPermission = computed(() => {
 </template>
 
 <style scoped lang="scss">
+.user_info_box {
+  margin-bottom: 5px;
+  font-size: 0.7vw;
+}
+
 .user_name {
   display: inline-block;
   font-size: 1.8vw;

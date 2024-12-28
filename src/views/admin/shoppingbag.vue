@@ -3,15 +3,16 @@ import AdminShoppingbag from "@/components/admin/adminshoppingbag.vue"
 import {isAdmin} from "@/store/admin"
 import useAdminUserStore, {AdminUser} from "@/store/admin/user"
 import {AdminShopRecord, apiAdminGetUserShoppingRecord} from "#/admin/shoppingbag"
+import pushTo from "@/views/admin/router_push";
 
 const router = useRouter()
 const route = useRoute()
 
 if (!isAdmin()) {
   router.push({
-    path: "error",
+    path: "/system/error",
     query: {
-      msg: "页面错误"
+      msg: "页面错误1"
     }
   })
 }
@@ -29,26 +30,30 @@ if (page.value < 1) {
 }
 const shoppingbagLst = ref([] as AdminShopRecord[])
 
-if (userId.value) {
-  userAdminStore.getUser(userId.value).then((res) => {
-    user.value = res as AdminUser
-    onChange()
-  }, () => {
-    router.push({
-      path: "/system/error",
-      query: {
-        msg: "页面错误"
-      }
+const onChangeUser = () => {
+  userId.value = Number(route.query?.userId).valueOf() || 0
+  user.value = null
+
+  if (userId.value) {
+    userAdminStore.getUser(userId.value).then((res) => {
+      user.value = res as AdminUser
+      onChange()
+    }, () => {
+      toBack()
+      console.log("AAAA")
     })
-  })
-} else {
-  router.push({
-    path: "/system/error",
-    query: {
-      msg: "页面错误"
-    }
-  })
+  } else {
+    toBack()
+    console.log("BBBB")
+  }
 }
+
+const toBack = () => {
+  pushTo(router, route, "/admin/user/list")
+}
+
+watch(() => route.query?.userId, onChangeUser)
+onChangeUser()
 
 const onChange = () => {
   user.value && apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {

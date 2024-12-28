@@ -9,7 +9,7 @@ const router = useRouter()
 
 if (!isAdmin()) {
   router.push({
-    path: "error",
+    path: "/system/error",
     query: {
       msg: "页面错误"
     }
