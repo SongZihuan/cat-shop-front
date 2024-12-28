@@ -19,7 +19,8 @@ const useClassStore = defineStore("classStore", () => {
     const updateInfo = () => {
         return apiGetClassLst().then((res) => {
             classLst.value = res.data.data.list as Class[]
-            classLst.value = classLst.value.filter((item) => item.id > 1 && item.show && !item.down)
+            classLst.value = classLst.value.filter((item) => item.id !== 1)
+            console.log("classLst.value", classLst.value)
             return classLst.value
         })
     }

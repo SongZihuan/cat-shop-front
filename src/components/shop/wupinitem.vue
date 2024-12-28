@@ -74,10 +74,7 @@
 
 <style scoped lang="scss">
 .WupinItem {
-  display: inline;
-  margin: 3px 3px 3px 3px;
-  max-width: 30vw;
-  min-width: 15vw;
+  width: calc(25% - 20px);
   max-height: 50wh;
   min-height: 30wh;
 }

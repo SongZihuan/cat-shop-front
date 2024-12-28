@@ -16,7 +16,7 @@ const backTimer = () => {
     return
   }
 
-  backSec.value -= backSec.value
+  backSec.value -= 1
   timeoutID = setTimeout(backTimer, 1000)
 }
 backTimer()

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 
 import {asString} from "@/utils/str";
-import {clearCaches} from "@typescript-eslint/parser";
 
 const route = useRoute()
 const router = useRouter()
@@ -24,7 +23,7 @@ const backTimer = () => {
     return
   }
 
-  backSec.value -= backSec.value
+  backSec.value -= 1
   timeoutID = setTimeout(backTimer, 1000)
 }
 backTimer()

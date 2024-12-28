@@ -7,7 +7,7 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
     const classStore = useClassStore()
     classStore.getLst()
 
-    const classId = 1
+    const classId = 2
     let classOf = classStore.findClass(classId) as Class
     if (!classOf) {
         classOf = {
@@ -23,8 +23,8 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
         classid: classId,
         classOf: classOf,
         tag: "爆卖！",
-        hotPrice: 19999,
-        realPrice: 19999,
+        hotPrice: 1999,
+        realPrice: 1999,
         info: "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
             "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
             "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
@@ -50,9 +50,9 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
         wechat: "12345",
         buytotal: 100,
         buydaohuo: 95,
-        buygood: 90,
+        buygood: 85,
         buyprice: 1000,
-        buypingjia: 30,
+        buypingjia: 90,
         buyjian: 15,
         hot: false,
     } as Wupin

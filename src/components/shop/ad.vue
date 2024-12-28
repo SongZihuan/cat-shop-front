@@ -77,7 +77,7 @@ const onClickAD = () => {
 #ad_box {
   display: flex;
   justify-content: center;
-  min-width: 45vw;
+  min-width: 100%;
   cursor: pointer;
 }
 
