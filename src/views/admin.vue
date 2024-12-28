@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import useAdminUserStore from "@/store/admin/user"
 import { AdminUser } from "@/store/admin/user"
-import pushTo from "@/views/admin/router_push"
 import {isAdmin, isRootAdmin} from "@/store/admin"
 import {AdminWupin, apiAdminGetWupin} from "#/admin/wupin"
 import {AdminClass, apiAdminGetClass} from "#/admin/class"
 import {AdminBuyRecord as AdminBuyRecordData, apiAdminGetBuyRecordInfo} from "#/admin/buyrecord"
+import {MenuItemRegistered} from "element-plus"
 
 const router = useRouter()
 const route = useRoute()
@@ -20,9 +20,11 @@ if (!isAdmin()) {
 }
 
 const active = ref("")
+const pathPointer = "admin"
+const basePath = "/" + pathPointer
 
 const changePage = () => {
-  if (!route.path.startsWith("/admin")) {
+  if (!route.path.startsWith(basePath)) {
     router.push({
       path: "/system/error",
       query: {
@@ -33,7 +35,7 @@ const changePage = () => {
 
   const routePath = (route.meta.vpath || route.path || "/") as string
   const pathLst = routePath.split("/")
-  if (pathLst.length <= 2 || pathLst[0] !== "" || pathLst[1] !== "admin") {
+  if (pathLst.length < 2 || pathLst[0] !== "" || pathLst[1] !== pathPointer) {
     router.push({
       path: "/system/error",
       query: {
@@ -42,20 +44,7 @@ const changePage = () => {
     })
   }
 
-  const m1Index = ref(pathLst.length >= 3 ? pathLst[2] : "")
-  if (m1Index.value) {
-    active.value = m1Index.value
-  }
-
-  const m2Index = ref(pathLst.length >= 4 ? pathLst[2] + "/" + pathLst[3] : "")
-  if (m2Index.value) {
-    active.value = m2Index.value
-  }
-
-  const m3Index = ref(pathLst.length >= 5 ? pathLst[2] + "/" + pathLst[3] + "/" + pathLst[4] : "")
-  if (m3Index.value) {
-    active.value = m3Index.value
-  }
+  active.value = routePath.slice(routePath.length, routePath.length)
 }
 
 watch(() => route.path, changePage)
@@ -162,114 +151,22 @@ const onChangeRecord = () => {
 watch(() => route.query?.recordId, onChangeRecord)
 onChangeRecord()
 
-const toUserList = () => {
-  pushTo(router, route, "/admin/user/list")
-}
-
-const toUserInfo = () => {
-  pushTo(router, route, "/admin/user/list/info")
-}
-
-const toUserEdit = () => {
-  pushTo(router, route, "/admin/user/list/edit")
-}
-
-const toUserPassword = () => {
-  pushTo(router, route, "/admin/user/list/password")
-}
-
-const toUserPhone = () => {
-  pushTo(router, route, "/admin/user/list/phone")
-}
-
-const toBuyRecordLst = () => {
-  pushTo(router, route, "/admin/user/list/buyrecordlst")
-}
-
-const toShoppingBag = () => {
-  pushTo(router, route, "/admin/user/list/shoppingbag")
-}
-
-const toOneUserMsg = () => {
-  pushTo(router, route, "/admin/user/list/msg")
-}
-
-const toAddUser = () => {
-  pushTo(router, route, "/admin/user/add")
-}
-
-const toMsg = () => {
-  pushTo(router, route, "/admin/user/msg")
-}
-
-const toClassLst = () => {
-  pushTo(router, route, "/admin/class/list")
-}
-
-const toClassInfo = () => {
-  pushTo(router, route, "/admin/class/list/info")
-}
-
-const toClassEdit = () => {
-  pushTo(router, route, "/admin/class/list/edit")
-}
-
-const toAddClass = () => {
-  pushTo(router, route, "/admin/class/add")
-}
-
-const toWupinLst = () => {
-  pushTo(router, route, "/admin/wupin/list")
-}
-
-const toWupinInfo = () => {
-  pushTo(router, route, "/admin/wupin/list/info")
-}
-
-const toWupinEdit = () => {
-  pushTo(router, route, "/admin/wupin/list/edit")
-}
-
-const toAddWupin = () => {
-  pushTo(router, route, "/admin/wupin/add")
-}
-
-const toAllBuyRecordLst = () => {
-  pushTo(router, route, "/admin/buyrecord/list")
-}
-
-const toAllBuyRecordInfo = () => {
-  pushTo(router, route, "/admin/buyrecord/list/info")
-}
-
-const toConfigLst = () => {
-  pushTo(router, route, "/admin/config/list")
-}
-
-const toXieYisHot = () => {
-  pushTo(router, route, "/admin/xieyi/show")
-}
-
-const toXieYiEdit = () => {
-  pushTo(router, route, "/admin/xieyi/edit")
-}
-
-const toStopHttpServer = () => {
-  pushTo(router, route, "/admin/httpserver/stop")
-}
-
-const toRestartHttpServer = () => {
-  pushTo(router, route, "/admin/httpserver/restart")
-}
-
 const defaultOpeneds = ref([
-  "user", "user/list",
-  "class", "class/list",
-  "wupin", "wupin/list",
-  "buyrecord", "buyrecord/list",
-  "config", "config/list",
-  "xieyi", "httpserver"
+  "user", "user/buy", "user/nuy/wupin", "user/edit",
+  "user/bag", "user/other",
+  "class", "wupin", "buyrecord",
+  "xieyi", "bconfig",
+  "config", "config/list", "config/httpserver"
 ])
+
+const onClick = (event: MenuItemRegistered) => {
+  const path = basePath + "/" + (event.index || "admin/user/list")
+  router.push({
+    path: path,
+  })
+}
+
+console.log("GGBond")
 
 </script>
 
@@ -281,123 +178,111 @@ const defaultOpeneds = ref([
             :default-active="active"
             :default-openeds='defaultOpeneds'
         >
-          <el-sub-menu
-              index="user"
-          >
+          <el-sub-menu index="user">
             <template #title>
-              <el-text>用户管理</el-text>
+              用户管理
             </template>
-            <el-sub-menu index="user/list">
+            <el-menu-item index="user/list" @click="onClick">用户列表</el-menu-item>
+            <el-menu-item index="user/info" :disabled="!user" @click="onClick">用户详情</el-menu-item>
+            <el-sub-menu index="user/edit">
               <template #title>
-                用户列表
+                编辑用户
               </template>
-              <el-menu-item index="user/list" @click="toUserList">用户列表</el-menu-item>
-              <el-menu-item index="user/list/info" :disabled="!user" @click="toUserInfo">用户详情</el-menu-item>
-              <el-menu-item index="user/list/edit" :disabled="!user || !userPermissions" @click="toUserEdit">编辑用户</el-menu-item>
-              <el-menu-item index="user/list/password" :disabled="!user || !userPermissions" @click="toUserPassword">编辑用户密码</el-menu-item>
-              <el-menu-item index="user/list/phone" :disabled="!user || !userPermissions" @click="toUserPhone">编辑用户手机号</el-menu-item>
-              <el-menu-item index="user/list/buyrecordlst" :disabled="!user" @click="toBuyRecordLst">用户订单列表</el-menu-item>
-              <el-menu-item index="user/list/shoppingbag" :disabled="!user" @click="toShoppingBag">用户购物车列表</el-menu-item>
-              <el-menu-item index="user/list/msg" :disabled="!user" @click="toOneUserMsg">用户留言</el-menu-item>
+              <el-menu-item index="user/edit/info" :disabled="!user || !userPermissions" @click="onClick">编辑用户</el-menu-item>
+              <el-menu-item index="user/edit/password" :disabled="!user || !isRootAdmin() || !userPermissions" @click="onClick">编辑用户密码</el-menu-item>
+              <el-menu-item index="user/edit/phone" :disabled="!user || !isRootAdmin() || !userPermissions" @click="onClick">编辑用户手机号</el-menu-item>
             </el-sub-menu>
-            <el-menu-item index="user/add" @click="toAddUser">添加用户</el-menu-item>
-            <el-menu-item index="user/msg" @click="toMsg">用户留言列表</el-menu-item>
+            <el-menu-item index="user/msg" :disabled="!user" @click="onClick">用户留言</el-menu-item>
+
+            <el-sub-menu index="user/buy">
+              <template #title>
+                用户订单
+              </template>
+              <el-menu-item index="user/buy/list" :disabled="!user" @click="onClick">用户订单列表</el-menu-item>
+              <el-menu-item index="user/buy/info" :disabled="!user || !recordId" @click="onClick">用户订单详情</el-menu-item>
+
+              <el-sub-menu index="user/buy/wupin">
+                <template #title>
+                  商品
+                </template>
+                <el-menu-item index="user/buy/wupin/sale" :disabled="!user || !record" @click="onClick">用户订单商品详情</el-menu-item>
+                <el-menu-item index="user/buy/wupin/lock" :disabled="!user || !record" @click="onClick">用户订单商品详情存档页面</el-menu-item>
+              </el-sub-menu>
+            </el-sub-menu>
           </el-sub-menu>
 
-          <el-sub-menu
-              index="class"
-          >
+          <el-sub-menu index="user/bag">
             <template #title>
-              <el-text>类别管理</el-text>
+              购物车
             </template>
-            <el-sub-menu
-                index="class/list"
-            >
-              <template #title>
-                <el-text>类别列表</el-text>
-              </template>
-              <el-menu-item index="class/list" @click="toClassLst">类别列表</el-menu-item>
-              <el-menu-item index="class/list/info" :disabled="!classObj" @click="toClassInfo">类别详情</el-menu-item>
-              <el-menu-item index="class/list/edit" :disabled="!classObj" @click="toClassEdit">类别编辑</el-menu-item>
-            </el-sub-menu>
-            <el-menu-item index="class/add" @click="toAddClass">添加类别</el-menu-item>
+            <el-menu-item index="user/bag/list" :disabled="!user" @click="onClick">用户购物车列表</el-menu-item>
           </el-sub-menu>
 
-          <el-sub-menu
-              index="wupin"
-          >
+          <el-sub-menu index="user/other">
+            <template #title>
+              其他操作
+            </template>
+            <el-menu-item index="user/other/add" @click="onClick">添加用户</el-menu-item>
+            <el-menu-item index="user/other/msg" @click="onClick">用户留言列表</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu index="class">
+            <template #title>
+              <el-text>商品分类管理</el-text>
+            </template>
+            <el-menu-item index="class/list" @click="onClick">商品分类列表</el-menu-item>
+            <el-menu-item index="class/info" :disabled="!classObj" @click="onClick">商品分类详情</el-menu-item>
+            <el-menu-item index="class/edit" :disabled="!classObj" @click="onClick">商品分类编辑</el-menu-item>
+            <el-menu-item index="class/add" @click="onClick">添加商品分类</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu index="wupin">
             <template #title>
               <el-text>商品管理</el-text>
             </template>
-            <el-sub-menu
-                index="wupin/list"
-            >
-              <template #title>
-                <el-text>商品管理</el-text>
-              </template>
-              <el-menu-item index="wupin/list" @click="toWupinLst">商品列表</el-menu-item>
-              <el-menu-item index="wupin/list/info" :disabled="!wupin" @click="toWupinInfo">商品详情</el-menu-item>
-              <el-menu-item index="wupin/list/edit" :disabled="!wupin" @click="toWupinEdit">商品编辑</el-menu-item>
-            </el-sub-menu>
-            <el-menu-item index="wupin/add" @click="toAddWupin">添加商品</el-menu-item>
+            <el-menu-item index="wupin/list" @click="onClick">商品列表</el-menu-item>
+            <el-menu-item index="wupin/info" :disabled="!wupin" @click="onClick">商品详情</el-menu-item>
+            <el-menu-item index="wupin/edit" :disabled="!wupin" @click="onClick">商品编辑</el-menu-item>
+            <el-menu-item index="wupin/add" @click="onClick">添加商品</el-menu-item>
           </el-sub-menu>
 
-          <el-sub-menu
-              index="buyrecord"
-          >
+          <el-sub-menu index="buyrecord">
             <template #title>
               <el-text>订单管理</el-text>
             </template>
-            <el-sub-menu
-                index="buyrecord/list"
-            >
+            <el-menu-item index="buyrecord/list" @click="onClick">订单列表</el-menu-item>
+            <el-menu-item index="buyrecord/info" :disabled="!record" @click="onClick">订单详情</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu index="xieyi">
+            <template #title>
+              <el-text>用户协议</el-text>
+            </template>
+            <el-menu-item index="xieyi/show" :disabled="!isRootAdmin()" @click="onClick">查看用户协议</el-menu-item>
+            <el-menu-item index="xieyi/edit" :disabled="!isRootAdmin()" @click="onClick">编辑用户协议</el-menu-item>
+          </el-sub-menu>
+
+          <el-sub-menu index="config">
+            <template #title>
+              <el-text>系统配置</el-text>
+            </template>
+
+            <el-sub-menu index="config/list">
               <template #title>
-                <el-text>订单列表</el-text>
+                <el-text>系统配置管理</el-text>
               </template>
-              <el-menu-item index="buyrecord/list" @click="toAllBuyRecordLst">订单列表</el-menu-item>
-              <el-menu-item index="buyrecord/list/info" :disabled="!record" @click="toAllBuyRecordInfo">订单详情</el-menu-item>
+              <el-menu-item index="config/list" :disabled="!isRootAdmin()" @click="onClick">注册表</el-menu-item>
+            </el-sub-menu>
+
+            <el-sub-menu index="config/httpserver">
+              <template #title>
+                <el-text>后端Http服务管理</el-text>
+              </template>
+              <el-menu-item index="config/httpserver/stop" :disabled="!isRootAdmin()" @click="onClick">关闭</el-menu-item>
+              <el-menu-item index="config/httpserver/restart" :disabled="!isRootAdmin()" @click="onClick">重启</el-menu-item>
             </el-sub-menu>
           </el-sub-menu>
 
-          <el-sub-menu
-              index="config"
-              :disabled="!isRootAdmin()"
-          >
-            <template #title>
-              <el-text>配置项管理</el-text>
-            </template>
-            <el-sub-menu
-                index="config/list"
-                :disabled="!isRootAdmin()"
-            >
-              <template #title>
-                <el-text>配置项列表</el-text>
-              </template>
-              <el-menu-item index="config/list" :disabled="!isRootAdmin()" @click="toConfigLst">配置项列表编辑</el-menu-item>
-            </el-sub-menu>
-          </el-sub-menu>
-
-          <el-sub-menu
-              index="xieyi"
-              :disabled="!isRootAdmin()"
-          >
-            <template #title>
-              <el-text>用户协议管理</el-text>
-            </template>
-            <el-menu-item index="xieyi/show" :disabled="!isRootAdmin()" @click="toXieYisHot">查看用户协议</el-menu-item>
-            <el-menu-item index="xieyi/edit" :disabled="!isRootAdmin()" @click="toXieYiEdit">编辑用户协议</el-menu-item>
-          </el-sub-menu>
-
-          <el-sub-menu
-              index="httpserver"
-              :disabled="!isRootAdmin()"
-          >
-            <template #title>
-              <el-text>后端Http服务管理</el-text>
-            </template>
-            <el-menu-item index="httpserver/stop" :disabled="!isRootAdmin()" @click="toStopHttpServer">关闭</el-menu-item>
-            <el-menu-item index="httpserver/restart" :disabled="!isRootAdmin()" @click="toRestartHttpServer">重启</el-menu-item>
-          </el-sub-menu>
         </el-menu>
       </el-scrollbar>
     </el-aside>

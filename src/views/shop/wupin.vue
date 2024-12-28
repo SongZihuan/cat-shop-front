@@ -14,7 +14,7 @@
     router.push({
       path: '/error',
       query: {
-        msg: "找不到物品",
+        msg: "找不到商品",
       }
     })
   }
@@ -26,22 +26,10 @@
     router.push({
       path: '/error',
       query: {
-        msg: "找不到物品",
+        msg: "找不到商品",
       }
     })
   })
-
-  const onClassClick = () => {
-    wupin.value && wupin.value.classid > 1 && router.push({
-      path: "/shop/search",
-      query: {
-        "info": JSON.stringify({
-          select: [wupin.value && wupin.value.classid],
-          search: "",
-        })
-      }
-    })
-  }
 
   const num = ref(1)
   const realPrice = computed(() => {
@@ -72,9 +60,9 @@
       return "部分好评"
     } else if (goodBuyPre.value >= 30) {
       return "好评甚少"
-    } else {
-      return "谨慎购买"
     }
+
+    return "谨慎购买"
   })
 
   const onClickBag = () => {
@@ -197,7 +185,7 @@
             </el-badge>
             <el-text v-if="wupin.classid > 1 && wupin.classOf" class="wupin_class_name">
               商品来源：
-              <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ wupin.classOf.name }} > </el-text>
+              <el-text class="wupin_class_name_btn"> {{ wupin.classOf.name }} > </el-text>
             </el-text>
             <div class="price_box">
               <div v-if="facePrice == 0">
@@ -259,18 +247,24 @@
               </div>
             </div>
 
-            <div style="display: flex; justify-content: left">
-              <el-input-number v-model="num" :min="1" :max="99" size="large" class="buy_item" style="margin-left: 0px">
-                <template #suffix>
-                  <span> 件 </span>
-                </template>
-              </el-input-number>
-              <el-button class="buy_item" size="large" @click="onClickBag">
-                <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入购物车
-              </el-button>
-              <el-button class="buy_item" size="large" :disabled="num <= 0" @click="buy">
-                <el-icon style="margin-right: 3px"><Money /></el-icon> 立即购买 <span v-if="num >= 1"> （实际价格：{{ totalPrice > 0 ? "￥" + totalPrice.toFixed(2) : "免费" }}） </span>
-              </el-button>
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 20vh">
+              <div style="display: flex">
+                <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+                  <template #suffix>
+                    <span> 件 </span>
+                  </template>
+                </el-input-number>
+                <el-button class="buy_item" size="large" @click="onClickBag">
+                  <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入购物车
+                </el-button>
+              </div>
+              <div style="display: flex">
+                <el-button class="buy_item" size="large" @click="buy">
+                  <el-icon style="margin-right: 3px"><Money /></el-icon>
+                  立即购买
+                  <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                </el-button>
+              </div>
             </div>
             <div id="info_box" class="info_box">
               <div v-html="wupin.info"></div>

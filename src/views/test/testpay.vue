@@ -122,7 +122,7 @@ import {
         </el-text>
       </template>
       <template #extra>
-        <el-button type="danger" size="large" @click="goRedirect">
+        <el-button type="danger" size="large">
           返回
           （{{ backSec > 5 ? 5 : backSec }}s）
         </el-button>
@@ -144,7 +144,7 @@ import {
         </el-text>
       </template>
       <template #extra>
-        <el-button type="success" size="large" @click="goRedirect">
+        <el-button type="success" size="large">
           返回
           （{{ backSec > 5 ? 5 : backSec }}s）
         </el-button>

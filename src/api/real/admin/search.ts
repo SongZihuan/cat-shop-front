@@ -1,33 +1,49 @@
-import {Result} from "@/utils/request"
 import {Wupin} from "@/store/hotwupin"
-import useClassStore, {Class} from "@/store/class"
 import WupinPic from "@/assets/images/tmp.jpg"
+import useClassStore from "@/store/class"
+import { Result} from "@/utils/request"
+import {AdminWupin} from "#/admin/wupin";
 
-export interface HotWupinLst {
-    list: Wupin[],
-    total: number,
+export interface AdminWupinLst {
+    list: AdminWupin[]
+    total: number
+    maxcount: number
 }
 
-export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
-    const classStore = useClassStore()
-    const wupinLst = [] as Wupin[]
+export const apiAdminGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<AdminWupin> => {
+    let classId = 1
+    let classOf = {
+        id: 1,
+        name: "商品分类",
+    }
 
-    for (let i = 0; i < 50; i++) {
-        let cl = {
-            id: 1,
-            name: "商品分类1",
-        } as Class
+    if (pagesize <= 0 || pagesize > 20) {
+        return Promise.reject()
+    }
 
-        if (classStore.classLst.length > 0) {
-            cl = classStore.classLst[Math.floor(Math.random() * classStore.classLst.length)]
+    if (select.length !== 0) {
+        const classStore = useClassStore()
+        const cl = classStore.findClass(select[0])
+
+        if (cl) {
+            classId = cl.id
+            classOf = cl
+        }
+    }
+
+    const maxcount = 50
+    const wupinlst = ref([] as Wupin[])
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
+        if (wupinlst.value.length >= pagesize) {
+            break
         }
 
-        wupinLst.push({
+        wupinlst.value.push({
             id: i + 1,
-            name: "商品" + " - " + (i + 1),
+            name: "商品" + search + " - " + (i + 1),
             pic: WupinPic,
-            classid: cl.id,
-            classOf: cl,
+            classid: classId,
+            classOf: classOf,
             tag: "爆卖！",
             hotPrice: 9999,
             realPrice: 19999,
@@ -59,14 +75,17 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
             buygood: 90,
         } as Wupin)
     }
-    return Promise.resolve({
-        data: {
-            code: 0,
+    return Promise.resolve(
+        {
             data: {
-                total: wupinLst.length,
-                list: wupinLst,
+                code: 0,
+                data: {
+                    list: wupinlst.value,
+                    total: wupinlst.value.length,
+                    maxcount: maxcount,
+                }
             },
-        },
-        status: 200,
-    })
+            status: 200
+        }
+    )
 }

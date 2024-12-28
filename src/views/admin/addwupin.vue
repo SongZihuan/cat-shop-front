@@ -73,7 +73,7 @@ const classLstPagesize = ref(20)
 
 const onClassLstChange = () => {
   apiAdminGetClassLst(classLstPage.value, classLstPagesize.value).then((res) => {
-    classLstMaxPage.value = res.data.data.maxpage
+    classLstMaxPage.value = res.data.data.maxcount
     classLst.value = res.data.data.list
   })
 }
@@ -92,8 +92,8 @@ const form = ref({
   email: "",
   wechat: "",
   location: "",
-  isHot: false,
-  isShow: true,
+  hot: false,
+  show: true,
 } as AdminWupinBase)
 
 const resetClassId = () => {
@@ -177,8 +177,8 @@ const add = () => {
           email: "",
           wechat: "",
           location: "",
-          isHot: false,
-          isShow: true,
+          hot: false,
+          show: true,
         }
         realPrice.value = "0.00"
         hotPrice.value = ""
@@ -430,13 +430,13 @@ const openEdit = () => {
               <template #label>
                 <el-text>是否热门</el-text>
               </template>
-              <el-checkbox v-model="form.isHot" label=""/>
+              <el-checkbox v-model="form.hot" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>
                 <el-text>是否出售</el-text>
               </template>
-              <el-checkbox v-model="form.isShow" label=""/>
+              <el-checkbox v-model="form.show" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>
@@ -460,7 +460,7 @@ const openEdit = () => {
               </el-alert>
             </div>
             <div v-if="!checkClassId" class="tip_box" style="display: flex; justify-content: center">
-              <el-alert title="请选择正确的分类！" :closable="false" type="warning" center show-icon>
+              <el-alert title="请选择正确商品分类！" :closable="false" type="warning" center show-icon>
               </el-alert>
             </div>
             <div v-if="!checkHotPrice" class="tip_box" style="display: flex; justify-content: center">
@@ -544,7 +544,7 @@ const openEdit = () => {
     </Clear>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="success" @click="showEdit = false">
+        <el-button type="success">
           确定
         </el-button>
       </div>

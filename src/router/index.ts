@@ -37,10 +37,30 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
+        path: 'wupin/list',
+        redirect: "/shop/search"
+      },
+      {
         path: 'wupin',
         component: () => import('@/views/shop/wupin.vue'),
         meta: {
-          title: '商品',
+          title: '商品售卖页面',
+          wechat: true,
+        }
+      },
+      {
+        path: 'wupin/record',
+        component: () => import('@/views/shop/recordwupin.vue'),
+        meta: {
+          title: '商品售卖页面',
+          wechat: true,
+        }
+      },
+      {
+        path: 'wupin/lock',
+        component: () => import('@/views/shop/lockwupin.vue'),
+        meta: {
+          title: '商品存档页面',
           wechat: true,
         }
       },
@@ -109,7 +129,7 @@ const routes: RouteRecordRaw[] = [
         path: 'buyrecord',
         component: () => import('@/views/center/buyrecord.vue'),
         meta: {
-          title: '消费详情',
+          title: '消费商品详情页面',
           xauth: true,
           wechat: true,
         }
@@ -134,11 +154,15 @@ const routes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '',
-        redirect: '/admin/user/lst',
+        path: 'home',
+        redirect: '/admin/user/list',
       },
       {
-        path: 'home',
+        path: 'index',
+        redirect: '/admin/user/list',
+      },
+      {
+        path: '',
         redirect: '/admin/user/list',
       },
       {
@@ -154,7 +178,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/list/info',
+        path: 'user/info',
         component: () => import('@/views/admin/user.vue'),
         meta: {
           title: '用户详情',
@@ -162,7 +186,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/list/edit',
+        path: 'user/edit',
+        redirect: "/admin/user/edit/info"
+      },
+      {
+        path: 'user/edit/info',
         component: () => import('@/views/admin/edituser.vue'),
         meta: {
           title: '编辑用户',
@@ -170,23 +198,35 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/list/password',
+        path: 'user/edit/password',
         component: () => import('@/views/admin/editpassword.vue'),
         meta: {
-          title: '编辑密码',
-          admin: true
+          title: '编辑用户密码',
+          admin: true,
         },
       },
       {
-        path: 'user/list/phone',
+        path: 'user/edit/phone',
         component: () => import('@/views/admin/editphone.vue'),
         meta: {
-          title: '编辑手机号',
-          admin: true
+          title: '编辑用户手机号',
+          admin: true,
         },
       },
       {
-        path: 'user/list/buyrecordlst',
+        path: 'user/msg',
+        component: () => import('@/views/admin/usermsg.vue'),
+        meta: {
+          title: '查看樱花留言',
+          admin: true,
+        },
+      },
+      {
+        path: 'user/buy',
+        redirect: "/admin/user/buy/list"
+      },
+      {
+        path: 'user/buy/list',
         component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
           title: '用户订单列表',
@@ -194,16 +234,43 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/list/buyrecord',
+        path: 'user/buy/info',
         component: () => import('@/views/admin/buyrecord.vue'),
         meta: {
-          title: '用户订单列表',
+          title: '用户订单详情',
           admin: true,
-          vpath: "/admin/user/list/buyrecordlst"
         },
       },
       {
-        path: 'user/list/shoppingbag',
+        path: 'user/buy/wupin',
+        redirect: "/admin/user/buy/wupin/sale"
+      },
+      {
+        path: "user/buy/wupin/sale,",
+        redirect: "/admin/user/buy/wupin/sale"
+      },
+      {
+        path: 'user/buy/wupin/sale',
+        component: () => import('@/views/admin/recordwupin.vue'),
+        meta: {
+          title: '查看商品售卖详情',
+          admin: true,
+        },
+      },
+      {
+        path: 'user/buy/wupin/lock',
+        component: () => import('@/views/admin/lockwupin.vue'),
+        meta: {
+          title: '用户订单档案商品详情',
+          admin: true,
+        },
+      },
+      {
+        path: 'user/bag',
+        redirect: "/admin/user/bag/list"
+      },
+      {
+        path: 'user/bag/list',
         component: () => import('@/views/admin/shoppingbag.vue'),
         meta: {
           title: '用户购物车列表',
@@ -211,15 +278,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/list/msg',
-        component: () => import('@/views/admin/usermsg.vue'),
-        meta: {
-          title: '用户留言',
-          admin: true,
-        },
+        path: 'user/other',
+        redirect: "/admin/user/other/add"
       },
       {
-        path: 'user/add',
+        path: 'user/other/add',
         component: () => import('@/views/admin/adduser.vue'),
         meta: {
           title: '添加用户',
@@ -227,38 +290,38 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user/msg',
+        path: 'user/other/msg',
         component: () => import('@/views/admin/msg.vue'),
         meta: {
-          title: '用户留言列表',
+          title: '全部用户留言',
           admin: true,
         },
       },
       {
-        path: 'class',
+        path: "class",
         redirect: "/admin/class/list"
       },
       {
         path: 'class/list',
         component: () => import('@/views/admin/classlst.vue'),
         meta: {
-          title: '类别列表',
+          title: '商品分类列表',
           admin: true,
         },
       },
       {
-        path: 'class/list/info',
+        path: 'class/info',
         component: () => import('@/views/admin/class.vue'),
         meta: {
-          title: '类别详情',
+          title: '商品分类列表',
           admin: true,
         },
       },
       {
-        path: 'class/list/edit',
+        path: 'class/edit',
         component: () => import('@/views/admin/editclass.vue'),
         meta: {
-          title: '类别编辑',
+          title: '商品分类列表',
           admin: true,
         },
       },
@@ -266,8 +329,83 @@ const routes: RouteRecordRaw[] = [
         path: 'class/add',
         component: () => import('@/views/admin/addclass.vue'),
         meta: {
-          title: '新增类别',
+          title: '商品分类列表',
           admin: true,
+        },
+      },
+      {
+        path: 'buyrecord',
+        redirect: "/admin/buyrecord/list"
+      },
+      {
+        path: 'buyrecord/list',
+        component: () => import('@/views/admin/buyrecordlst.vue'),
+        meta: {
+          title: '购买记录列表',
+          admin: true,
+        },
+      },
+      {
+        path: 'buyrecord/info',
+        component: () => import('@/views/admin/buyrecord.vue'),
+        meta: {
+          title: '购买记录详情',
+          admin: true,
+        },
+      },
+      {
+        path: 'xieyi',
+        redirect: "/admin/xieyi/show"
+      },
+      {
+        path: 'xieyi/show',
+        component: () => import('@/views/admin/xieyi.vue'),
+        meta: {
+          title: '用户协议',
+          admin: true,
+        },
+      },
+      {
+        path: 'xieyi/edit',
+        component: () => import('@/views/admin/editxieyi.vue'),
+        meta: {
+          title: '用户协议修改',
+          admin: true,
+        },
+      },
+      {
+        path: 'config',
+        redirect: "/admin/config/"
+      },
+      {
+        path: 'config/list',
+        component: () => import('@/views/admin/configlst.vue'),
+        meta: {
+          title: '配置注册表',
+          admin: true,
+        },
+      },{
+        path: 'config/httpserver',
+        component: () => import('@/views/admin/configlst.vue'),
+        meta: {
+          title: '服务prize',
+          admin: true,
+        },
+      },{
+        path: 'config/httpserver/stop',
+        component: () => import('@/views/admin/httpserver.vue'),
+        meta: {
+          title: '服务prize',
+          admin: true,
+          subtitle: "关闭后端Http服务",
+        },
+      },{
+        path: 'config/httpserver/start',
+        component: () => import('@/views/admin/httpserver.vue'),
+        meta: {
+          title: '服务prize',
+          admin: true,
+          subtitle: "重启后端Http服务",
         },
       },
       {
@@ -283,7 +421,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'wupin/list/info',
+        path: 'wupin/info',
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '商品详情',
@@ -291,7 +429,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'wupin/list/edit',
+        path: 'wupin/edit',
         component: () => import('@/views/admin/editwupin.vue'),
         meta: {
           title: '商品编辑',
@@ -319,19 +457,11 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'buyrecord/list/info',
+        path: 'buyrecord/info',
         component: () => import('@/views/admin/allbuyrecord.vue'),
         meta: {
           title: '订单列表',
           admin: true,
-        },
-      },
-      {
-        path: 'config/list',
-        component: () => import('@/views/admin/configlst.vue'),
-        meta: {
-          title: '配置项列表',
-          rootAdmin: true,
         },
       },
       {
@@ -355,11 +485,23 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: "httpserver",
+        path: "config",
+        redirect: "/admin/config/list"
+      },
+      {
+        path: 'config/list',
+        component: () => import('@/views/admin/configlst.vue'),
+        meta: {
+          title: '配置项列表',
+          rootAdmin: true,
+        },
+      },
+      {
+        path: "config/httpserver",
         redirect: "/admin/httpserver/stop"
       },
       {
-        path: 'httpserver/stop',
+        path: 'config/httpserver/stop',
         component: () => import('@/views/admin/httpserver.vue'),
         meta: {
           title: '关闭后端Http服务',
@@ -368,7 +510,7 @@ const routes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'httpserver/restart',
+        path: 'config/httpserver/restart',
         component: () => import('@/views/admin/httpserver.vue'),
         meta: {
           title: '重启后端Http服务',

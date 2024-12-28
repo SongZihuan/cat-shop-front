@@ -12,13 +12,13 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
     if (!classOf) {
         classOf = {
             id: classId,
-            name: "分类" + classOf,
+            name: "商品分类" + classOf,
         }
     }
 
     const wupin = {
         id: id,
-        name: "物品" + id,
+        name: "商品" + id,
         pic: WupinPic,
         classid: classId,
         classOf: classOf,
@@ -51,6 +51,13 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
+        buyprice: 1000,
+        buypingjia: 10,
+        buyjian: 10,
+        show: true,
+        classShow: true,
+        classDown: false,
+        hot: true,
     } as Wupin
     return Promise.resolve({
         data: {

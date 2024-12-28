@@ -11,7 +11,7 @@
   const router = useRouter()
   const classStore = useClassStore()
 
-  const onClick = () => {
+  const onClickClass = () => {
     router.push({
       path: "/shop/search",
       query: {
@@ -26,7 +26,7 @@
 
 <template>
   <div>
-    <el-button class="classItem" size="large" text @click="onClick">
+    <el-button class="classItem" size="large" text @click="onClickClass">
       <el-text tag="ins">
         {{ item.name }}
       </el-text>

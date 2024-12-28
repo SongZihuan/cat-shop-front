@@ -41,6 +41,7 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
 
     const shopRecordLst = [] as ShopRecord[]
     for (let i = 0; i < limit; i++) {
+        console.log("TAG A", i)
         shopRecordLst.push({
             id: offset + i + 1,
             userid: 1,
@@ -49,13 +50,13 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
             num: 2,
             time: 1734024269,
             wupin: {
-                id: 1,
-                name: "物品",
+                id: i === 3 ? 0 : 1,
+                name: "商品" + i,
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -68,6 +69,13 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                hot: false,
+                show: true,
+                classShow: true,
+                classDown: false,
             },
         })
     }

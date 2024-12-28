@@ -9,15 +9,35 @@ export interface AdminWupinID {
 }
 
 export interface AdminHotWupin {
-    isHot: boolean
+    hot: boolean
 }
 
 export interface AdminHShowWupin {
-    isShow: boolean
+    show: boolean
 }
 
 export interface AdminWupinBase extends AdminHotWupin, AdminHShowWupin {
-    name: string
+    name: string,
+    pic: string
+    classid: number
+    tag?: string
+    hotPrice?: number
+    realPrice: number
+    info: string
+    ren: string
+    phone: string
+    email?: string
+    wechat?: string
+    location: string
+}
+
+export interface AdminClassForWupin {
+    classShow: boolean,
+    classDown: boolean,
+}
+
+export interface AdminWupinBaseWithClassShow extends AdminWupinBase, AdminClassForWupin {
+    name: string,
     pic: string
     classid: number
     tag?: string
@@ -33,12 +53,17 @@ export interface AdminWupinBase extends AdminHotWupin, AdminHShowWupin {
 
 export interface AdminWupinBaseWithClass extends AdminWupinBase {
     classOf: AdminClass
+    classShow: boolean
+    classDown: boolean
 }
 
 export interface AdminWupinWithInfo extends AdminWupinBaseWithClass {
     buytotal: number
     buydaohuo: number
     buygood: number
+    buyprice: number
+    buypingjia: number
+    buyjian: number
 }
 
 export interface AdminWupin extends AdminWupinID, AdminWupinWithInfo { }
@@ -51,8 +76,9 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
     if (!classOf) {
         classOf = {
             id: classId,
-            name: "分类" + classOf,
+            name: "商品分类" + classOf,
             show: true,
+            down: false,
         }
     } else {
         classOf.show = true
@@ -60,7 +86,7 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
 
     const wupin = {
         id: id,
-        name: "物品" + id,
+        name: "商品" + id,
         pic: WupinPic,
         classid: classId,
         classOf: classOf,
@@ -93,7 +119,13 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        isHot: true,
+        buyprice: 1000,
+        buypingjia: 10,
+        buyjian: 10,
+        show: true,
+        classShow: true,
+        classDown: false,
+        hot: true,
     } as AdminWupin
     return Promise.resolve({
         data: {
@@ -105,7 +137,7 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
 }
 
 type AdminWupinLst = {
-    maxpage: number
+    maxcount: number
     total: number
     list: AdminWupin[]
 }
@@ -132,23 +164,24 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
     if (!classOf) {
         classOf = {
             id: classId,
-            name: "分类" + classOf,
+            name: "商品分类" + classOf,
             show: true,
+            down: false,
         }
     } else {
         classOf.show = true
     }
 
-    const pagemax = 121
+    const maxcount = 121
     const wupinLst = ref([] as AdminWupin[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (wupinLst.value.length >= pagesize) {
             break
         }
 
         wupinLst.value.push({
             id: page * pagesize + i + 1,
-            name: "物品" + (page * pagesize + i + 1),
+            name: "商品" + (page * pagesize + i + 1),
             pic: WupinPic,
             classid: classId,
             classOf: classOf,
@@ -181,7 +214,13 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
             buytotal: 100,
             buydaohuo: 95,
             buygood: 90,
-            isHot: i % 2 == 0,
+            buyprice: 1000,
+            buypingjia: 10,
+            buyjian: 10,
+            hot: i % 2 == 0,
+            show: true,
+            classShow: i %3 == 0,
+            classDown: false,
         } as AdminWupin)
     }
 
@@ -189,7 +228,7 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: wupinLst.value.length,
                 list: wupinLst.value,
             },

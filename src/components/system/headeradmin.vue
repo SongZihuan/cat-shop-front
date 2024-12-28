@@ -1,23 +1,12 @@
 <script setup lang="ts">
 import useConfigStore from "@/store/config"
 import UserTitleAdmin from "@/components/system/usertitleadmin.vue"
-import pushTo from "@/views/admin/router_push"
 
-const router = useRouter()
 const route = useRoute()
 
 const title = computed(() => route.meta?.title ? route.meta.title : "")
 const configStore = useConfigStore()
 
-const goAdmin = () => {
-  pushTo(router, route, "/admin/user/list")
-}
-
-const goHome = () => {
-  router.push({
-    path: "/shop/home"
-  })
-}
 
 </script>
 
@@ -27,11 +16,11 @@ const goHome = () => {
       <template #title>
         <div style="display: flex; justify-content: left">
           <div class="title_box">
-            <span @click="goHome">
+            <span>
               <el-icon class="title"><ArrowLeftBold /></el-icon>
               <el-text class="title">{{ configStore.config?.name }}</el-text>
             </span>
-            <span @click="goAdmin">
+            <span>
               <el-avatar class="avatar_logo" :src="configStore.config.logo" fit="fill"></el-avatar>
               <el-text class="title">
                 管理后台

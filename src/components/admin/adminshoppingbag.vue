@@ -119,7 +119,16 @@ if (num.value < 0) {
             <el-scrollbar height="20vh">
               <div style="display: flow-root">
                 <div class="price_box" style="float: left">
-                  <div v-if="facePrice == 0">
+                  <div v-if="record.down">
+                    <el-text class="wupin_hot_price">
+                      商品已下架
+                      <br>
+                      <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
+                        原价：￥{{ (realPrice / 100).toFixed(2) }}
+                      </el-text>
+                    </el-text>
+                  </div>
+                  <div v-else-if="facePrice == 0">
                     <el-text class="wupin_hot_price">
                       现在：免费抢购
                       <br>
@@ -212,17 +221,19 @@ if (num.value < 0) {
                 <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重设用户购物车
               </el-button>
             </div>
-            <el-tooltip
-                effect="dark"
-                content="只有用户能为自己购买"
-                placement="bottom"
-            >
-              <el-button class="buy_item" size="large" disabled>
-                <el-icon style="margin-right: 3px"><Money /></el-icon>
-                立即购买
-                <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
-              </el-button>
-            </el-tooltip>
+            <div style="display: flex">
+              <el-tooltip
+                  effect="dark"
+                  content="只有用户能为自己购买"
+                  placement="bottom"
+              >
+                <el-button class="buy_item" size="large" disabled>
+                  <el-icon style="margin-right: 3px"><Money /></el-icon>
+                  立即购买
+                  <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                </el-button>
+              </el-tooltip>
+            </div>
           </div>
         </div>
       </div>

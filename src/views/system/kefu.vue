@@ -92,7 +92,7 @@ const onSendMsg = () => {
                   提交
                 </el-button>
               </el-tooltip>
-              <el-button v-else type="primary" @click="onSendMsg" :disabled="!sendok">
+              <el-button v-else type="primary" @click="onSendMsg">
                 提交
               </el-button>
             </div>

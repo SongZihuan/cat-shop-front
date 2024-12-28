@@ -242,11 +242,13 @@ const buy = () => {
                 <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重新加入加入购物车
               </el-button>
             </div>
-            <el-button class="buy_item" size="large" :disabled="num <= 0" @click="buy">
-              <el-icon style="margin-right: 3px"><Money /></el-icon>
-              立即购买
-              <el-text v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </el-text>
-            </el-button>
+            <div style="display: flex">
+              <el-button class="buy_item" size="large" :disabled="num <= 0" @click="buy">
+                <el-icon style="margin-right: 3px"><Money /></el-icon>
+                立即购买
+                <el-text v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </el-text>
+              </el-button>
+            </div>
           </div>
         </div>
       </div>

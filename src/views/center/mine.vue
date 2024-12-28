@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import useUserStore, {isLogin, hasLoad, UserType} from "@/store/user"
+import useUserStore, {isLogin, hasLoad, UserTypeList} from "@/store/user"
   import {Edit} from "@element-plus/icons-vue"
-  import {BuyRecord, apiGetUserBuyRecordLst} from "#/center/buyrecord"
+  import {BuyRecord} from "#/center/buyrecord"
   import Buyrecord from "@/components/center/buyrecord.vue"
 import {ElNotification, ElMessage, UploadFile} from "element-plus"
   import { genFileId } from 'element-plus'
   import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
   const route = useRoute()
   const router = useRouter()
@@ -35,7 +36,7 @@ import {ElNotification, ElMessage, UploadFile} from "element-plus"
         kehutag.value = "普通客户"
       }
     } else {
-      kehutag.value = UserType[userStore.user.type] || "普通客户"
+      kehutag.value = UserTypeList[userStore.user.type] || "普通客户"
     }
   })
 

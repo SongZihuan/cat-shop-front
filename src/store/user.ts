@@ -10,7 +10,7 @@ import {
     apiPostUpdateSelfPassword
 } from "#/center/user"
 
-export const UserType = {
+export const UserTypeList = {
     1: "",//无显示
     2: "管理员",
     3: "根管理员",
@@ -39,6 +39,7 @@ export interface UserWithoutPre extends UserBase, UserAvatar{
 }
 
 export interface UserPre {
+    pingjiaPre: number
     goodPre: number
     pricePre: number
 }
@@ -177,6 +178,7 @@ const useUserStore = defineStore("userStore", () => {
         const configStore = useConfigStore()
         return apiGetSelfInfo().then((res) => {
             user.value = res.data.data
+            user.value.pingjiaPre = (user.value.totalPingJia / user.value.totalBuy) * 100
             user.value.goodPre = (user.value.totalGood / user.value.totalPingJia) * 100
             user.value.pricePre = user.value.totalPrice / user.value.totalBuy
         }).then(() => {
@@ -194,7 +196,7 @@ const useUserStore = defineStore("userStore", () => {
                 user.value.avatar = configStore.config?.avatar
             }
 
-            if (!Object.keys(UserType).some((v) => Number(v).valueOf() === user.value.type)) {
+            if (!Object.keys(UserTypeList).some((v) => Number(v).valueOf() === user.value.type)) {
                 user.value.type = 1
             }
             return user.value

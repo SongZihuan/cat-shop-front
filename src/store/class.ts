@@ -8,7 +8,7 @@ export interface Class {
 const useClassStore = defineStore("classStore", () => {
     const classLst = ref([] as Class[])
     const allClass = ref({
-        id: -1,
+        id: 0,
         name: "全部",
     } as Class)
 

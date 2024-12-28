@@ -2,7 +2,7 @@
 import pushTo from "@/views/admin/router_push"
 import {
   AdminClass,
-  apiAdminGetClass,
+  apiAdminGetClass, apiAdminPostChangeClassDown,
   apiAdminPostChangeClassName,
   apiAdminPostChangeClassShow
 } from "#/admin/class";
@@ -89,7 +89,7 @@ const changeName = () => {
 
 const startShow = () => {
   classObj.value && ElMessageBox.confirm(
-      `是否开启类别 ${classObj.value.name} 的显示功能？`,
+      `是否开启商品分类 ${classObj.value.name} 的显示功能？`,
       '操作提示',
       {
         confirmButtonText: '确认',
@@ -116,7 +116,7 @@ const startShow = () => {
 
 const stopShow = () => {
   classObj.value && ElMessageBox.confirm(
-      `是否关闭类别 ${classObj.value.name} 的显示功能？`,
+      `是否关闭商品分类 ${classObj.value.name} 的显示功能？`,
       '操作提示',
       {
         confirmButtonText: '确认',
@@ -141,6 +141,59 @@ const stopShow = () => {
   })
 }
 
+const upClass = () => {
+  classObj.value && ElMessageBox.confirm(
+      `是确定商品分类 ${classObj.value.name} 上架。`,
+      '操作提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    classObj.value && apiAdminPostChangeClassDown(classObj.value.id, true).then((res) => {
+      if (res.data.data.success) {
+        ElMessage({
+          type: 'success',
+          message: "操作成功",
+        })
+        onChangeClass()
+      } else {
+        ElMessage({
+          type: 'error',
+          message: "操作失败",
+        })
+      }
+    })
+  })
+}
+
+const downClass = () => {
+  classObj.value && ElMessageBox.confirm(
+      `是确定商品分类 ${classObj.value.name} 下架？`,
+      '操作提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    classObj.value && apiAdminPostChangeClassDown(classObj.value.id, false).then((res) => {
+      if (res.data.data.success) {
+        ElMessage({
+          type: 'success',
+          message: "操作成功",
+        })
+        onChangeClass()
+      } else {
+        ElMessage({
+          type: 'error',
+          message: "操作失败",
+        })
+      }
+    })
+  })
+}
 
 </script>
 
@@ -179,6 +232,12 @@ const stopShow = () => {
           </el-button>
           <el-button v-else type="success" plain size="large" @click="startShow">
             打开显示
+          </el-button>
+          <el-button v-if="classObj.down" type="danger" plain size="large" @click="downClass">
+            下架商品
+          </el-button>
+          <el-button v-else type="success" plain size="large" @click="upClass">
+            重新商家
           </el-button>
         </el-button-group>
       </template>

@@ -38,6 +38,7 @@ const onChangeClass = () => {
       form.value = {
         name: classObj.value.name,
         show: classObj.value.show,
+        down: false,
       }
     }, () => {
       toBack()
@@ -53,13 +54,20 @@ onChangeClass()
 const form = ref({
   name: "",
   show: true,
+  down: false,
 } as AdminClassData)
 
+const checkShow = computed(() => {
+  if (form.value.down) {
+    return form.value.show === false
+  }
+  return true
+})
 const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-const allCheck = computed(() => checkName.value)
+const allCheck = computed(() => checkShow.value && checkName.value)
 
 const update = () => {
-  classObj.value && ElMessageBox.confirm('是否确定更新类别', '提示', {
+  classObj.value && ElMessageBox.confirm('是否确定更新商品分类', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
@@ -105,6 +113,14 @@ const update = () => {
           </template>
           <el-checkbox v-model="form.show" label=""/>
         </el-form-item>
+        <el-form-item>
+          <template #label>
+            <el-text>
+              是否下架
+            </el-text>
+          </template>
+          <el-checkbox v-model="form.down" label="" @change="form.down ? (form.show = false) : 0"/>
+        </el-form-item>
       </el-form>
       <div style="display: flex; width: 15vw; justify-content: center">
         <el-button :disabled="!allCheck" @click="update">
@@ -114,6 +130,10 @@ const update = () => {
       <div style="width: 15vw; margin-top: 5px">
         <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
           <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
+          </el-alert>
+        </div>
+        <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+          <el-alert title="下架商品需要取消显示！" :closable="false" type="warning" center show-icon>
           </el-alert>
         </div>
       </div>

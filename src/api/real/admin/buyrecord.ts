@@ -1,8 +1,7 @@
 import {Result} from "@/utils/request"
 import wupinPic from "@/assets/images/tmp.jpg"
-import {Wupin} from "@/store/hotwupin"
 import {LocationForUser} from "#/center/pay"
-import {AdminWupin} from "@/api/real/admin/wupin";
+import {AdminWupin} from "@/api/real/admin/wupin"
 
 export const AdminBuyRecordStatus = {
     1: "已下单，支付代确认",
@@ -47,10 +46,11 @@ export interface AdminBuyRecord {
     user: LocationForUser
     shop: LocationForUser
     wupin: AdminWupin
+    nowwupin: AdminWupin
 }
 
 type AdminBuyRecordLstByPage = {
-    maxpage: number
+    maxcount: number
     total: number
     list: AdminBuyRecord[]
 }
@@ -69,9 +69,9 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const buyRecordLst = ref([] as AdminBuyRecord[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (buyRecordLst.value.length >= pagesize) {
             break
         }
@@ -102,13 +102,14 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
             isgood: true,
             wupin: {
                 id: 1,
-                name: `物品-${page}-${i}`,
+                name: `商品-${page}-${i}`,
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                     show: true,
+                    down: false,
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -121,8 +122,43 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
-                isHot: false,
-                isShow: true,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                classShow: true,
+                classDown: false,
+                hot: false,
+                show: true,
+            },
+            nowwupin: {
+                id: 1,
+                name: `商品-${page}-${i}`,
+                pic: wupinPic,
+                classid: 2,
+                classOf: {
+                    id: 1,
+                    name: "商品分类",
+                    show: true,
+                    down: false,
+                },
+                tag: "火爆",
+                hotPrice: 9999,
+                realPrice: 19999,
+                info: "hhhhhh",
+                ren: "小超市",
+                phone: "17322061610",
+                email: "songzihuan@song-zh.com",
+                location: "广东广州",
+                buytotal: 100,
+                buydaohuo: 95,
+                buygood: 90,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                classShow: true,
+                classDown: false,
+                hot: false,
+                show: true,
             },
             user: {
                 name: "用户",
@@ -147,7 +183,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: buyRecordLst.value.length,
                 list: buyRecordLst.value,
             },
@@ -170,9 +206,9 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const buyRecordLst = ref([] as AdminBuyRecord[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (buyRecordLst.value.length >= pagesize) {
             break
         }
@@ -203,13 +239,14 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
             isgood: true,
             wupin: {
                 id: 1,
-                name: `物品-${page}-${i}`,
+                name: `商品-${page}-${i}`,
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                     show: true,
+                    down: false,
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -222,8 +259,43 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
-                isHot: false,
-                isShow: true,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                hot: false,
+                show: true,
+                classShow: true,
+                classDown: false,
+            },
+            nowwupin: {
+                id: 1,
+                name: `商品-${page}-${i}`,
+                pic: wupinPic,
+                classid: 2,
+                classOf: {
+                    id: 1,
+                    name: "商品分类",
+                    show: true,
+                    down: false,
+                },
+                tag: "火爆",
+                hotPrice: 9999,
+                realPrice: 19999,
+                info: "hhhhhh",
+                ren: "小超市",
+                phone: "17322061610",
+                email: "songzihuan@song-zh.com",
+                location: "广东广州",
+                buytotal: 100,
+                buydaohuo: 95,
+                buygood: 90,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                hot: false,
+                show: true,
+                classShow: true,
+                classDown: false,
             },
             user: {
                 name: "用户",
@@ -248,7 +320,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: buyRecordLst.value.length,
                 list: buyRecordLst.value,
             },
@@ -291,26 +363,60 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
                 isgood: true,
                 wupin: {
                     id: 1,
-                    name: "物品",
+                    name: `商品1`,
                     pic: wupinPic,
                     classid: 2,
                     classOf: {
-                        id: 2,
-                        name: "分类1",
+                        id: 1,
+                        name: "商品分类",
+                        show: true,
+                        down: false,
                     },
                     tag: "火爆",
                     hotPrice: 9999,
                     realPrice: 19999,
                     info: "hhhhhh",
-                    ren: "宋子桓",
+                    ren: "小超市",
                     phone: "17322061610",
-                    wechat: "abcd",
                     email: "songzihuan@song-zh.com",
                     location: "广东广州",
                     buytotal: 100,
                     buydaohuo: 95,
                     buygood: 90,
-                } as Wupin,
+                    buyprice: 999,
+                    buypingjia: 20,
+                    buyjian: 10,
+                    hot: false,
+                    show: true,
+                } as AdminWupin,
+                nowwupin: {
+                    id: 1,
+                    name: `商品1`,
+                    pic: wupinPic,
+                    classid: 2,
+                    classOf: {
+                        id: 1,
+                        name: "商品分类",
+                        show: true,
+                        down: false,
+                    },
+                    tag: "火爆",
+                    hotPrice: 9999,
+                    realPrice: 19999,
+                    info: "hhhhhh",
+                    ren: "小超市",
+                    phone: "17322061610",
+                    email: "songzihuan@song-zh.com",
+                    location: "广东广州",
+                    buytotal: 100,
+                    buydaohuo: 95,
+                    buygood: 90,
+                    buyprice: 999,
+                    buypingjia: 20,
+                    buyjian: 10,
+                    hot: false,
+                    show: true,
+                } as AdminWupin,
                 user: {
                     name: "用户",
                     phone: "17322061610",

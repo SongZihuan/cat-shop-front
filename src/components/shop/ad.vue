@@ -29,7 +29,7 @@ defineExpose({
   height
 })
 
-const onClick = () => {
+const onClickAD = () => {
   if (showAD.value.url) {
     window.open(showAD.value.url)
   } else {
@@ -48,7 +48,7 @@ const onClick = () => {
 </script>
 
 <template>
-  <div v-if="showAD" id="ad_box" @click="onClick">
+  <div v-if="showAD" id="ad_box" @click="onClickAD">
     <div id="ad_text">
       <el-card>
         <template #header>

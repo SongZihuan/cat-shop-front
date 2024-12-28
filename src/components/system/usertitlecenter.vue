@@ -36,13 +36,13 @@ const toAdmin = () => {
   })
 }
 
-const toOrderLst = () => {
+const toBuyRecord = () => {
   router.push({
     "path": "/center/buyrecordlist",
   })
 }
 
-const toGowuche = () => {
+const toBag = () => {
   router.push({
     "path": "/center/shoppingbag",
   })
@@ -130,18 +130,18 @@ const logout = () => {
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>
-          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" @click="toCenter" />
+          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" />
         </el-text>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item @click="toHome" ><el-text class="drop_item">主页</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toCenter" ><el-text class="drop_item">我的中心</el-text></el-dropdown-item>
-            <el-dropdown-item v-if="userStore.user.type !== 1" @click="toAdmin"><el-text class="drop_item">管理后台</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toOrderLst"><el-text class="drop_item">我的购物记录</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toGowuche"><el-text class="drop_item">我的购物车</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toKefu"><el-text class="drop_item">我的客服</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toAboutUs"><el-text class="drop_item">关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
-            <el-dropdown-item @click="logout" ><el-text class="drop_item">退出登录</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toHome"><el-text>主页</el-text></el-dropdown-item>
+            <el-dropdown-item @tclick="toCenter"><el-text>我的中心</el-text></el-dropdown-item>
+            <el-dropdown-item v-if="userStore.user.type !== 1" @cclick="toAdmin" @click="toAdmin"><el-text>管理后台</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toBuyRecord"><el-text>我的购物记录</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toBag"><el-text>我的购物车</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toKefu"><el-text>我的客服</el-text></el-dropdown-item>
+            <el-dropdown-item @clic="toAboutUs"><el-text>关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
+            <el-dropdown-item @click="logout" ><el-text>退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

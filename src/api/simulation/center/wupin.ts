@@ -12,13 +12,13 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
     if (!classOf) {
         classOf = {
             id: classId,
-            name: "分类" + classOf,
+            name: "商品分类" + classOf,
         }
     }
 
     const wupin = {
         id: id,
-        name: "物品" + id,
+        name: "商品" + id,
         pic: WupinPic,
         classid: classId,
         classOf: classOf,

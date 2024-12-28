@@ -1,9 +1,12 @@
 <script setup lang="ts">
   import {Location} from "@element-plus/icons-vue"
-  import {getFacePrice, getRealPrice} from "@/utils/price"
+  import {getFacePrice, getRealPrice, getTotalPrice} from "@/utils/price"
   import {isAdmin} from "@/store/admin"
-  import {AdminWupin, apiAdminGetWupin} from "#/admin/wupin"
+  import {AdminWupin} from "#/admin/wupin"
   import pushTo from "@/views/admin/router_push"
+  import {AdminBuyRecord, apiAdminGetBuyRecordInfo} from "#/admin/buyrecord";
+  import {apiAdminPostAddToShoppingBag} from "#/admin/shoppingbag";
+  import {ElMessage} from "element-plus";
 
   const router = useRouter()
   const route = useRoute()
@@ -21,7 +24,8 @@
     pushTo(router, route, "/admin/wupin/list")
   }
 
-  const wupinId = ref(0)
+  const recordId = ref(0)
+  const record = ref(null as AdminBuyRecord | null)
   const wupin = ref(null as AdminWupin | null)
 
   const realPrice = computed(() => {
@@ -29,6 +33,9 @@
   })
   const facePrice = computed(() => {
     return getFacePrice(wupin.value?.hotPrice, wupin.value?.realPrice)
+  })
+  const totalPrice = computed(() => {
+    return getTotalPrice(wupin.value?.hotPrice, wupin.value?.realPrice, num.value)
   })
 
   const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0) ? wupin.value.buytotal : 0)
@@ -55,12 +62,13 @@
   })
 
   const onChangeWupin = () => {
-    wupinId.value = Number(route.query?.wupinId).valueOf() || 0
+    recordId.value = Number(route.query?.recordId).valueOf() || 0
     wupin.value = null
 
-    if (wupinId.value) {
-      apiAdminGetWupin(wupinId.value).then((res) => {
-        wupin.value = res.data.data as AdminWupin
+    if (recordId.value) {
+      apiAdminGetBuyRecordInfo(recordId.value).then((res) => {
+        record.value = res.data.data as AdminBuyRecord
+        wupin.value = record.value.wupin as AdminWupin
       }, () => {
         toBack()
       })
@@ -69,7 +77,7 @@
     }
   }
 
-  watch(() => route.query?.wupinId, onChangeWupin)
+  watch(() => route.query?.recordId, onChangeWupin)
   onChangeWupin()
 
   const onClassClick = () => {
@@ -81,6 +89,41 @@
   const toEdit = () => {
     wupin.value && pushTo(router, route, "/admin/wupin/edit")
   }
+
+  const onBackToBuyRecord = () => {
+    record.value && pushTo(router, route, "/admin/user/buyrecord", {
+      recordId: record.value.id
+    })
+  }
+
+  const num = ref(record.value && record.value.num || 0)
+  if (num.value < 0) {
+    num.value = 0
+  }
+
+  const onClickBag = () => {
+    record.value && apiAdminPostAddToShoppingBag(record.value.userid, record.value.wupin.id, num.value).then((res) => {
+      if (res.data.data.success) {
+        if (num.value <= 0) {
+          record.value && ElMessage({
+            type: 'success',
+            message: `已经将 ${record.value.wupin.name} 从用户的购物车移出。`,
+          })
+        } else {
+          record.value && ElMessage({
+            type: 'success',
+            message: `已经将 ${num.value}件 ${record.value.wupin.name} 添加到用户的购物车。`,
+          })
+        }
+        onChangeWupin()
+      } else {
+        record.value && ElMessage({
+          type: 'error',
+        })
+      }
+    })
+  }
+
 </script>
 
 <template>
@@ -135,14 +178,6 @@
                 <el-icon><UserFilled /></el-icon>
                 购买人数：
                 {{ totalBuy }}
-              </el-text>
-            </div>
-
-            <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text">
-                <el-icon><IceCream /></el-icon>
-                购买评价人数：
-                {{ totalBuyGood }}
               </el-text>
             </div>
 
@@ -235,10 +270,40 @@
                 </el-text>
               </div>
             </div>
-            <div>
-              <el-button type="primary" size="large" plain @click="toEdit">
-                编辑商品
-              </el-button>
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 20vh">
+              <div style="display: flex">
+                <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+                  <template #suffix>
+                    <span> 件 </span>
+                  </template>
+                </el-input-number>
+                <el-button class="buy_item" size="large" @click="onClickBag">
+                  <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重新加入加入购物车
+                </el-button>
+              </div>
+              <div style="display: flex">
+                <el-tooltip
+                    effect="dark"
+                    content="只有用户能为自己购买"
+                    placement="bottom"
+                >
+                  <el-button class="buy_item" size="large" disabled>
+                    <el-icon style="margin-right: 3px"><Money /></el-icon>
+                    立即购买
+                    <span v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                  </el-button>
+                </el-tooltip>
+              </div>
+              <div style="display: flex" @click="onBackToBuyRecord">
+                <el-button type="primary" size="large" plain>
+                  返回订单
+                </el-button>
+              </div>
+              <div style="display: flex">
+                <el-button type="primary" size="large" plain @click="toEdit">
+                  编辑商品
+                </el-button>
+              </div>
             </div>
             <div id="info_box" class="info_box">
               <div v-html="wupin.info"></div>

@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import useUserStore, { isLogin, hasLoad } from "@/store/user"
-import useConfigStore from "@/store/config"
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 
-const configStore = useConfigStore()
 const userStore = useUserStore()
 
 const router = useRouter()
-const route = useRoute()
 
 const toHome = () => {
   router.push({
@@ -31,71 +28,8 @@ const toAdmin = () => {
   }
 
   router.push({
-    "path": "/admin/user",
+    "path": "/admin/user/list",
   })
-}
-
-const toKefu = () => {
-  router.push({
-    "path": "/system/kefu",
-  })
-}
-
-const toAboutUs = () => {
-  router.push({
-    "path": "/system/aboutus",
-  })
-}
-
-const toLogin = () => {
-  router.push({
-    "path": "/shop/login",
-    "query": {
-      "redirect": encodeURIComponent(route.fullPath),
-    },
-  })
-}
-
-const toNewLogin = () => {
-  if (route.meta.xauth && route.meta.xauth === true && !isLogin()) {
-    router.push({
-      path: "/shop/login",
-      query: {
-        redirect: encodeURIComponent(route.fullPath)
-      }
-    })
-  }
-}
-
-const toRegirster = () => {
-  router.push({
-    "path": "/shop/regirster",
-    "query": {
-      "redirect": encodeURIComponent(route.fullPath),
-    },
-  })
-}
-
-const logout = () => {
-  if (isLogin()) {
-    ElMessageBox.confirm(
-      `是否确认退出${configStore.config?.name}账号？`,
-      '温馨提示',
-      {
-        confirmButtonText: '确认退出',
-        cancelButtonText: '暂不退出',
-        type: 'warning',
-      }
-    ).then(() => {
-      return userStore.logout()
-    }).then(() => {
-      ElMessage({
-        type: 'success',
-        message: '账号退出成功',
-      })
-      toNewLogin()
-    })
-  }
 }
 </script>
 
@@ -117,14 +51,14 @@ const logout = () => {
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>
-          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" @click="toCenter" />
+          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" />
         </el-text>
         <template #dropdown>
           <el-dropdown-menu class="drop_menu">
-            <el-dropdown-item @click="toHome" ><el-text class="drop_item">主页</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toCenter" ><el-text class="drop_item">我的中心</el-text></el-dropdown-item>
-            <el-dropdown-item v-if="userStore.user.type !== 1" @click="toAdmin"><el-text class="drop_item">管理后台</el-text></el-dropdown-item>
-            <el-dropdown-item @click="logout" ><el-text class="drop_item">退出登录</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toHome"><el-text>主页</el-text></el-dropdown-item>
+            <el-dropdown-item @tclick="toCenter"><el-text>我的中心</el-text></el-dropdown-item>
+            <el-dropdown-item v-if="userStore.user.type !== 1" @click="toAdmin"><el-text>管理后台</el-text></el-dropdown-item>
+            <el-dropdown-item><el-text>退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -132,17 +66,8 @@ const logout = () => {
   </div>
   <div v-else>
     <el-button-group>
-      <el-button size="large" type="primary" @click="toLogin">
-        登录
-      </el-button>
-      <el-button size="large" type="success" @click="toRegirster">
-        注册
-      </el-button>
-      <el-button size="large" type="warning" @click="toKefu">
-        客服
-      </el-button>
-      <el-button size="large" type="info" @click="toAboutUs">
-        关于{{ configStore.config?.name }}
+      <el-button size="large" type="primary">
+
       </el-button>
     </el-button-group>
   </div>

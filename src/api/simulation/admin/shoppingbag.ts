@@ -1,6 +1,6 @@
 import {Result, Success} from "@/utils/request"
 import wupinPic from "@/assets/images/tmp.jpg"
-import {Wupin} from "@/store/hotwupin"
+import {AdminWupin} from "#/admin/wupin";
 
 export interface AdminShopRecord {
     id: number
@@ -9,7 +9,7 @@ export interface AdminShopRecord {
     classid: number
     num: number
     time: number
-    wupin: Wupin
+    wupin: AdminWupin
 }
 
 type AdminShopRecordLst = {
@@ -31,9 +31,9 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const shopRecordLst = ref([] as AdminShopRecord[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (shopRecordLst.value.length >= pagesize) {
             break
         }
@@ -47,12 +47,14 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
             time: 1734024269,
             wupin: {
                 id: 1,
-                name: `物品-${page}-${i}`,
+                name: `商品-${page}-${i}`,
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "分类1",
+                    id: 2,
+                    name: "商品分类",
+                    show: true,
+                    down: false
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -65,6 +67,13 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                buyprice: 90000,
+                buypingjia: 20,
+                buyjian: 15,
+                classShow: true,
+                classDown: false,
+                hot: false,
+                show: true,
             },
         })
     }
@@ -73,7 +82,7 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: shopRecordLst.value.length,
                 list: shopRecordLst.value,
             },

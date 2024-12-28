@@ -76,6 +76,14 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 }
 
 const updateAvatar = (avatar: UploadFile) => {
+  if (!hasPermission) {
+    ElMessage({
+      type: 'error',
+      message: "暂无权限"
+    })
+    return
+  }
+
   if (!avatar || !avatar.size || !avatar.raw) {
     ElMessage({
       type: 'warning',
@@ -106,12 +114,24 @@ const updateAvatar = (avatar: UploadFile) => {
 }
 
 const goEdit = () => {
-  pushTo(router, route, "/admin/user/list/edit")
+  pushTo(router, route, "/admin/user/edit/info")
 }
 
 const goPassword = () => {
-  pushTo(router, route, "/admin/user/list/password")
+  pushTo(router, route, "/admin/user/edit/password")
 }
+
+const hasPermission = computed(() => {
+  if (!user.value) {
+    return false
+  }
+
+  if (user.value.status === 3 || !isRootAdmin()) {
+    return false
+  }
+
+  return isAdmin()
+})
 
 </script>
 
@@ -139,11 +159,11 @@ const goPassword = () => {
           <div style="margin-top: 20px" class="user_info_box">
             <div class="user_info_btn">
               <el-button-group>
-                <el-button type="success" :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())" @click="goEdit">
+                <el-button type="success" :disabled="!hasPermission" @click="goEdit">
                   <el-icon><Edit /></el-icon>
                   编辑用户
                 </el-button>
-                <el-button type="danger" :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())" @click="goPassword">
+                <el-button type="danger" :disabled="!hasPermission" @click="goPassword">
                   <el-icon><EditPen /></el-icon>
                   修改密码
                 </el-button>
@@ -161,13 +181,12 @@ const goPassword = () => {
                   :on-exceed="handleExceed"
                   :show-file-list="false"
                   :on-change="updateAvatar"
-                  :disabled="!user || user.status === 3 || (user.type === 3 && !isRootAdmin())"
               >
                 <el-tooltip
                     effect="dark"
                     placement="bottom-end"
                 >
-                  <el-button type="primary">
+                  <el-button type="primary" :disabled="!hasPermission">
                     <el-icon><Edit /></el-icon>
                     更换头像
                   </el-button>
@@ -186,7 +205,7 @@ const goPassword = () => {
           <div>
             <div class="user_info_box">
               <el-text class="user_info_text">
-                消费物品总件数：{{ user.totalJian >= 0 ? user.totalJian : 0 }} 件
+                消费商品总件数：{{ user.totalJian >= 0 ? user.totalJian : 0 }} 件
               </el-text>
             </div>
 
@@ -221,15 +240,21 @@ const goPassword = () => {
               </el-text>
             </div>
 
-            <div class="user_info_box">
+            <div v-if="user.pingjiaPre" class="user_info_box">
               <el-text class="user_info_text">
-                消费好评率：{{ user.goodPre.toFixed(2) }} %
+                总计评价率：：{{ user.pingjiaPre.toFixed(2)  || 0}} %
               </el-text>
             </div>
 
-            <div class="user_info_box">
+            <div v-if="user.goodPre" class="user_info_box">
               <el-text class="user_info_text">
-                平均每笔交易金额：￥{{ (user.pricePre / 100).toFixed(2) }}
+                消费好评率：{{ user.goodPre.toFixed(2) || 0 }} %
+              </el-text>
+            </div>
+
+            <div v-if="user.pricePre" class="user_info_box">
+              <el-text class="user_info_text">
+                平均每笔交易金额：￥{{ (user.pricePre / 100).toFixed(2) || "0.00" }}
               </el-text>
             </div>
           </div>

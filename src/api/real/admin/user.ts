@@ -28,7 +28,7 @@ export function apiAdminGetUserInfo(id: number): Result<AdminUserWithoutPre> {
 }
 
 type AdminUserLst = {
-    maxpage: number
+    maxcount: number
     total: number
     list: AdminUserWithoutPre[]
 }
@@ -55,9 +55,9 @@ export function apiAdminGetUserLst(page: number, pagesize: number, phone?: strin
     //     method: 'get',
     // })
 
-    const pagemax = 121
+    const maxcount = 121
     const userLst = ref([] as AdminUserWithoutPre[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (userLst.value.length >= pagesize) {
             break
         }
@@ -85,7 +85,7 @@ export function apiAdminGetUserLst(page: number, pagesize: number, phone?: strin
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: userLst.value.length,
                 list: userLst.value,
             },

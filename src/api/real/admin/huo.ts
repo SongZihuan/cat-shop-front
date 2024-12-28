@@ -8,6 +8,7 @@ export const apiAdminPostGouWuDaoHuo = (userId: number, buyRecordId: number): Su
             code: 0,
             data: {
                 success: true,
+                waitsec: 20,
             },
         },
         status: 200,

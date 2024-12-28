@@ -66,7 +66,7 @@ const changePage = (status: number | string) => {
       data: res.data.data.list,
       pagesizze:20,
       total: res.data.data.total,
-      maxpage: res.data.data.maxpage,
+      maxcount: res.data.data.maxcount,
       pagesize: 20,
     }
   }).catch(() => {
@@ -78,7 +78,7 @@ const changePage = (status: number | string) => {
 }
 
 const toHome = () => {
-  pushTo(router, route, "/admin/user/list/info")
+  pushTo(router, route, "/admin/user/info")
 }
 </script>
 
@@ -86,11 +86,11 @@ const toHome = () => {
   <div v-if="user && isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
     <el-card style="display: flex; height: 70vh; width: 80vw; justify-content: center; margin-top: 10px">
       <el-tabs v-model="activeModel" style="width: 75vw" :stretch="true" @tab-change="changePage(activeModel)">
-        <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status" :name="index">
+        <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status as unknown as string" :name="index">
          <div v-if="dataInfo[index]?.data && dataInfo[index].data.length > 0">
            <el-scrollbar height="60vh">
              <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px;">
-               <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxpage || 0" @change="changePage(index)" />
+               <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
              </div>
              <div style="width: 100%; display: flex; justify-content: center">
                <div style="width: 100%;">
@@ -100,7 +100,7 @@ const toHome = () => {
                </div>
              </div>
              <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-               <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxpage || 0" @change="changePage(index)" />
+               <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
              </div>
            </el-scrollbar>
          </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useAdminUserStore, {AdminUser, RootAdminUserStatus, RootAdminUserType} from "@/store/admin/user"
+import useAdminUserStore, {AdminUser, AdminUserStatus, AdminUserType} from "@/store/admin/user"
 import useConfigStore from "@/store/config"
 import {isAdmin} from "@/store/admin"
 import { ElMessage } from "element-plus"
@@ -16,7 +16,7 @@ if (!isAdmin()) {
   })
 }
 
-const maxpage = ref(0)
+const maxcount = ref(0)
 const page = ref(Number(route.query?.page).valueOf() || 1)
 const pagesize = ref(20)
 if (page.value < 1) {
@@ -29,7 +29,7 @@ const userLst = ref([] as AdminUser[])
 
 const onChange = () => {
   adminUserStore.getUserLst(page.value, pagesize.value).then((res) => {
-    maxpage.value = res.maxpage
+    maxcount.value = res.maxcount
     userLst.value = res.list
   })
 }
@@ -73,12 +73,12 @@ const toInfo = (id: number) => {
         <el-table-column prop="id" label="用户ID" />
         <el-table-column label="类型" >
           <template #default="{row}">
-            {{ RootAdminUserType[row.type] || "未知" }}
+            {{ AdminUserType[row.type] || "未知" }}
           </template>
         </el-table-column>
         <el-table-column label="状态" >
           <template #default="{row}">
-            {{ RootAdminUserStatus[row.status] || "未知" }}
+            {{ AdminUserStatus[row.status] || "未知" }}
           </template>
         </el-table-column>
         <el-table-column prop="name" label="昵称" />
@@ -102,12 +102,32 @@ const toInfo = (id: number) => {
         <el-table-column prop="totalPingJia" label="总评价次数" />
         <el-table-column label="平均消费金额" >
           <template #default="{ row }">
-            ￥{{ (row.pricePre / 100).toFixed(2) }}
+            <span v-if="row.pricePre">
+              ￥{{ (row.pricePre / 100).toFixed(2) || "0.00" }}
+            </span>
+            <span v-else>
+              ￥0.00
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="评价率" >
+          <template #default="{ row }">
+            <span v-if="row.pingjiaPre">
+              {{ row.pingjiaPre.toFixed(2) || 0 }}%
+            </span>
+            <span v-else>
+              0%
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="好评率" >
           <template #default="{ row }">
-            {{ row.goodPre.toFixed(2) }}%
+            <span v-if="row.pingjiaPre">
+              {{ row.goodPre.toFixed(2) || 0 }}%
+            </span>
+            <span v-else>
+              0%
+            </span>
           </template>
         </el-table-column>
         <el-table-column label="详情" >
@@ -117,7 +137,7 @@ const toInfo = (id: number) => {
         </el-table-column>
       </el-table>
       <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxpage || 0" @change="onChange" />
+        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
       </div>
     </el-card>
   </div>

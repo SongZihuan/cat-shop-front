@@ -95,8 +95,8 @@ const onChangeWupin = () => {
         email: wupin.value.email,
         wechat: wupin.value.wechat,
         location: wupin.value.location,
-        isHot: wupin.value.isHot,
-        isShow: wupin.value.isShow,
+        hot: wupin.value.hot,
+        show: wupin.value.show,
       }
 
       defaultClass.value = wupin.value.classOf
@@ -132,7 +132,7 @@ const classLstPagesize = ref(20)
 
 const onClassLstChange = () => {
   apiAdminGetClassLst(classLstPage.value, classLstPagesize.value).then((res) => {
-    classLstMaxPage.value = res.data.data.maxpage
+    classLstMaxPage.value = res.data.data.maxcount
     classLst.value = res.data.data.list
 
     if (classLst.value.every((item) => item.id !== form.value.classid)) {
@@ -154,8 +154,8 @@ const form = ref({
   email: "",
   wechat: "",
   location: "",
-  isHot: false,
-  isShow: true,
+  hot: false,
+  show: true,
 } as AdminWupinBase)
 
 const hotPrice = ref("")
@@ -174,8 +174,8 @@ const hasChange = computed(() => {
       form.value.email !== wupin.value?.email ||
       form.value.wechat !== wupin.value?.wechat ||
       form.value.location !== wupin.value?.location ||
-      form.value.isHot !== wupin.value?.isHot ||
-      form.value.isShow !== wupin.value?.isShow ||
+      form.value.hot !== wupin.value?.hot ||
+      form.value.show !== wupin.value?.show ||
       newPic.value !== null
 })
 
@@ -503,13 +503,13 @@ const selectMsg = computed(() => {
               <template #label>
                 <el-text>是否热门</el-text>
               </template>
-              <el-checkbox v-model="form.isHot" label=""/>
+              <el-checkbox v-model="form.hot" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>
                 <el-text>是否销售</el-text>
               </template>
-              <el-checkbox v-model="form.isShow" label=""/>
+              <el-checkbox v-model="form.show" label=""/>
             </el-form-item>
             <el-form-item>
               <template #label>
@@ -533,7 +533,7 @@ const selectMsg = computed(() => {
               </el-alert>
             </div>
             <div v-if="!checkClassId" class="tip_box" style="display: flex; justify-content: center">
-              <el-alert title="请选择正确的分类！" :closable="false" type="warning" center show-icon>
+              <el-alert title="请选择正确商品分类！" :closable="false" type="warning" center show-icon>
               </el-alert>
             </div>
             <div v-if="!checkHotPrice" class="tip_box" style="display: flex; justify-content: center">

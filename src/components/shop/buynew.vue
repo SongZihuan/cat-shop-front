@@ -58,6 +58,7 @@ const emailCheck = computed(() => {
 })
 const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkName.value && checkLocation.value && phoneCheck.value && emailCheck.value)
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const doAliPay = () => {
   const location = {
     name: form.value.name,
@@ -92,6 +93,7 @@ const doAliPay = () => {
   })
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const doWeChatPay = () => {
   const location = {
     name: form.value.name,
@@ -127,7 +129,9 @@ const doWeChatPay = () => {
 }
 
 const open = (wp: Wupin, n: number) => {
-  if (n < 1) {
+  if (!wp || wp.id === 0) {
+    return
+  } else if (n < 1) {
     return
   }
   
@@ -144,7 +148,9 @@ const close = () => {
 }
 
 const openWithShop = (record: ShopRecord) => {
-  if (record.num < 1) {
+  if (!record || !record.wupin || record.wupin.id === 0) {
+    return
+  } else if (record.num < 1) {
     return
   }
 
@@ -188,7 +194,7 @@ defineExpose({
           </div>
           <div class="repay_info">
             <el-text>
-              商品类别：{{ wupin.classOf.name }}
+              商品商品分类：{{ wupin.classOf.name }}
             </el-text>
           </div>
           <div class="repay_info">
@@ -280,11 +286,11 @@ defineExpose({
         </div>
         <div style="width: 15vw; margin-top: 5px; display: flex; justify-content: center">
           <el-button-group>
-            <el-button type="info" @click="model = false">取消支付</el-button>
-            <el-button :disabled="!allCheck" type="primary" @click="doAliPay">
+            <el-button type="info">取消支付</el-button>
+            <el-button :disabled="!allCheck" type="primary">
               支付宝支付
             </el-button>
-            <el-button :disabled="!allCheck" type="success" @click="doWeChatPay">
+            <el-button :disabled="!allCheck" type="success">
               微信支付
             </el-button>
           </el-button-group>

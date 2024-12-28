@@ -7,6 +7,7 @@ export interface AdminClassID {
 export interface AdminClassData {
     name: string
     show: boolean
+    down: boolean
 }
 
 export interface AdminClass extends AdminClassID, AdminClassData{ }
@@ -19,6 +20,7 @@ type AdminClassLst = {
 export interface NewClassData {
     name: string
     show: boolean
+    down: boolean
 }
 
 export function apiAdminGetClass(classId: number): Result<AdminClass> {
@@ -27,8 +29,9 @@ export function apiAdminGetClass(classId: number): Result<AdminClass> {
             code: 0,
             data: {
                 id: classId,
-                name: "分类" + classId,
+                name: "商品分类" + classId,
                 show: classId % 2 == 0,
+                down: false,
             },
         },
         status: 200,
@@ -49,17 +52,18 @@ export function apiAdminGetClassLst(page: number, pagesize: number): Result<Admi
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const classLst = ref([] as AdminClass[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (classLst.value.length >= pagesize) {
             break
         }
 
         classLst.value.push({
             id: page * pagesize + i + 1,
-            name: "分类" + (page * pagesize + i + 1),
+            name: "商品分类" + (page * pagesize + i + 1),
             show: i % 2 == 0,
+            down: false,
         })
     }
 
@@ -67,7 +71,7 @@ export function apiAdminGetClassLst(page: number, pagesize: number): Result<Admi
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: classLst.value.length,
                 list: classLst.value,
             },
@@ -91,6 +95,19 @@ export const apiAdminPostChangeClassName = (classId: number, name: string): Succ
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const apiAdminPostChangeClassShow = (classId: number, show: boolean): Success => {
+    return Promise.resolve({
+        data: {
+            code: 0,
+            data: {
+                success: true
+            }
+        },
+        status: 200
+    })
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const apiAdminPostChangeClassDown = (classId: number, down: boolean): Success => {
     return Promise.resolve({
         data: {
             code: 0,

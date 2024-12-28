@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useAdminUserStore, {AdminUser} from "@/store/admin/user"
-import {isAdmin, isRootAdmin} from "@/store/admin"
+import {isRootAdmin} from "@/store/admin"
 import pushTo from "@/views/admin/router_push"
 
 const router = useRouter()
 const route = useRoute()
 
-if (!isAdmin()) {
+if (!isRootAdmin()) {
   router.push({
     path: "error",
     query: {
@@ -94,7 +94,7 @@ const update = () => {
 </script>
 
 <template>
-  <div v-if="user && isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
+  <div v-if="user && isRootAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
     <el-card v-if="user.status === 3" style="margin-top: 10px">
       <el-result
           icon="error"

@@ -8,7 +8,7 @@ const route = useRoute()
 
 const wupinlst = ref([] as Wupin[])
 const currentPage = ref(Number(route.query?.page).valueOf() || 1)
-const pagemax = ref(0)
+const maxcount = ref(0)
 const pagesize = ref(20)
 if (currentPage.value < 1) {
   currentPage.value = 1
@@ -26,7 +26,7 @@ const changePage = async () => {
 
   await apiGetSearchWupin(data.value?.search || "", data.value?.select || [], currentPage.value, 20).then((res) => {
     wupinlst.value = res.data.data.list
-    pagemax.value = res.data.data.maxpage
+    maxcount.value = res.data.data.maxcount
   })
 }
 
@@ -47,7 +47,7 @@ changePage()
     </div>
   </div>
   <div style="display: flex; justify-content: center">
-    <el-pagination v-model:current-page="currentPage" class="pager" background layout="prev, pager, next" :total="pagemax" :page-size="pagesize" @change="changePage" />
+    <el-pagination v-model:current-page="currentPage" class="pager" background layout="prev, pager, next" :total="maxcount" :page-size="pagesize" @change="changePage" />
   </div>
 </template>
 

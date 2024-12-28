@@ -8,12 +8,6 @@ const route = useRoute()
 const title = computed(() => route.meta?.title ? route.meta.title : "")
 const configStore = useConfigStore()
 
-const goHome = () => {
-  router.push({
-    path: "/shop/home"
-  })
-}
-
 const goKefu = () => {
   router.push({
     path: "/system/kefu"
@@ -26,8 +20,8 @@ const goKefu = () => {
     <el-page-header icon="">
       <template #title>
         <div style="display: flex; justify-content: left">
-          <div class="title_box" @click="goHome">
-            <span @click="goHome">
+          <div class="title_box">
+            <span>
               <el-avatar class="avatar_logo" :src="configStore.config.logo" fit="fill"></el-avatar>
               <el-text class="title">
                 {{ configStore.config?.name }}

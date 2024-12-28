@@ -15,7 +15,7 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
     for (let i = 0; i < 50; i++) {
         let cl = {
             id: 1,
-            name: "分类1"
+            name: "商品分类1",
         } as Class
 
         if (classStore.classLst.length > 0) {
@@ -24,7 +24,7 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
 
         wupinLst.push({
             id: i + 1,
-            name: "物品" + " - " + (i + 1),
+            name: "商品" + " - " + (i + 1),
             pic: WupinPic,
             classid: cl.id,
             classOf: cl,

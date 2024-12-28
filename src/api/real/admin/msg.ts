@@ -10,7 +10,7 @@ export interface AdminMsg {
 type AdminMsgLst = {
     total: number
     list: AdminMsg[]
-    maxpage: number
+    maxcount: number
 }
 
 export function apiAdminGetUserMsg(userId: number, page: number, pagesize: number): Result<AdminMsgLst> {
@@ -27,9 +27,9 @@ export function apiAdminGetUserMsg(userId: number, page: number, pagesize: numbe
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const msgLst = ref([] as AdminMsg[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (msgLst.value.length >= pagesize) {
             break
         }
@@ -46,7 +46,7 @@ export function apiAdminGetUserMsg(userId: number, page: number, pagesize: numbe
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: msgLst.value.length,
                 list: msgLst.value,
             },
@@ -69,9 +69,9 @@ export function apiAdminGetMsg(page: number, pagesize: number): Result<AdminMsgL
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const msgLst = ref([] as AdminMsg[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (msgLst.value.length >= pagesize) {
             break
         }
@@ -88,7 +88,7 @@ export function apiAdminGetMsg(page: number, pagesize: number): Result<AdminMsgL
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: msgLst.value.length,
                 list: msgLst.value,
             },

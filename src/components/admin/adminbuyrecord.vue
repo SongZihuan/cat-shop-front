@@ -2,7 +2,6 @@
 import {AdminBuyRecordStatus, AdminBuyRecord} from "#/admin/buyrecord"
 import {formatDate} from "@/utils/time"
 import { ElMessageBox } from 'element-plus'
-import pushTo from "@/views/admin/router_push"
 import {
   apiAdminPostPeoplePay,
 } from "#/admin/pay";
@@ -23,6 +22,7 @@ import {LocationForUser} from "#/center/pay"
 import {isEmail, isMobile} from "@/utils/str"
 import useConfigStore from "@/store/config"
 import { ElMessage } from "element-plus"
+import pushTo from "@/views/admin/router_push";
 
 const configStore = useConfigStore()
 const props = defineProps({
@@ -38,10 +38,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  "adminuser": {
-    type: Boolean,
-    default: true,
-  }
 })
 
 const emits = defineEmits(["reload"])
@@ -51,7 +47,6 @@ const route = useRoute()
 const record = computed(() => props.record)
 const safe = computed(() => props.safe)
 const xiangqing = computed(() => props.xiangqing)
-const adminuser = computed(() => props.adminuser)
 
 const onClassClick = () => {
   record.value && record.value.wupin.classid > 1 && router.push({
@@ -65,24 +60,29 @@ const onClassClick = () => {
   })
 }
 
-const onGoWupin = () => {
-  record.value && router.push({
-    path: "/shop/wupin",
-    query: {
-      "id": record.value.wupinid,
-    }
+const onGoWupinConfirm = () => {
+  ElMessageBox.confirm(
+      `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    onGoWupin()
   })
 }
 
-const onXiangQing = () => {
-  if (adminuser.value) {
-    pushTo(router, route, "/admin/user/list/buyrecord", {
-      "recordId": record.value.id,
-    })
-    return
-  }
-  pushTo(router, route, "/admin/buyrecord/list/info", {
-    "recordId": record.value.id,
+const onGoWupin = () => {
+  pushTo(router, route, "/admin/user/list/wupin", {
+    wupinId: record.value.wupin.id,
+  })
+}
+
+const onGoLockWupin = () => {
+  pushTo(router, route, "/admin/user/list/lockwupin", {
+    wupinId: record.value.wupin.id,
   })
 }
 
@@ -208,7 +208,7 @@ const quXiao = () => {
   }
 
   ElMessageBox.confirm(
-      '物品尚未发货，是否取消订单？',
+      '商品尚未发货，是否取消订单？',
       '取消发货提示',
       {
         confirmButtonText: '取消发货',
@@ -628,6 +628,12 @@ const shenQingAndAcceptTuiHuo = () => {
   })
 }
 
+const onXiangQing = () => {
+  pushTo(router, route, "/admin/user/list/buyrecord", {
+    recordId: record.value.id,
+  })
+}
+
 </script>
 
 <template>
@@ -637,7 +643,7 @@ const shenQingAndAcceptTuiHuo = () => {
         <div style="display: flow-root">
           <div style="float: left">
             <el-badge :value="record.wupin.tag" style="margin-top: 10px">
-              <el-text class="wupin_name" @click="onGoWupin"> {{ record.wupin.name }} </el-text>
+              <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
             </el-badge>
             <el-text v-if="record.wupin.classid > 1 && record.wupin.classOf" class="wupin_class_name">
               商品来源：
@@ -648,6 +654,18 @@ const shenQingAndAcceptTuiHuo = () => {
               <el-button v-if="xiangqing" type="success" @click="onXiangQing">
                 查看详情
               </el-button>
+              <el-button type="success" @click="onGoWupin">
+                查看商品售卖页
+              </el-button>
+              <el-tooltip
+                  effect="dark"
+                  placement="bottom-end"
+                  content="即您购买商品时，商品信息的备份内容。"
+              >
+                <el-button type="primary" @click="onGoLockWupin">
+                  查看商品存档页
+                </el-button>
+              </el-tooltip>
               <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
                 取消支付
               </el-button>

@@ -8,25 +8,18 @@ import {
 } from "#/admin/user";
 import {sha256} from "@/utils/encrypt"
 import {apiAdminRestartServer, apiAdminStopServer} from "@/api/simulation/admin/httpserver";
+import {ElMessage} from "element-plus";
 
 export const AdminUserType = {
-    1: "用户",
-    2: "管理员",
+    1: "新用户",
+    2: "挂利用",
+    3: "根管理员",
 }
 
 export const AdminUserStatus = {
     1: "正常",
     2: "冻结",
-}
-
-export const RootAdminUserType = {
-    ...AdminUserType,
     3: "根管理员",
-}
-
-export const RootAdminUserStatus = {
-    ...AdminUserStatus,
-    3: "删除",// 理论上不会有
 }
 
 export interface AdminUserId {
@@ -57,6 +50,7 @@ export interface AdminUserWithoutPre extends AdminUserId, AdminUserBase, AdminUs
 }
 
 export interface AdminUserPre {
+    pingjiaPre: number
     goodPre: number
     pricePre: number
 }
@@ -91,11 +85,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                 user.avatar = configStore.config?.avatar
             }
 
-            if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.type)) {
+            if (!Object.keys(AdminUserStatus).some((v) => Number(v).valueOf() === user.type)) {
                 user.type = 1
             }
 
-            if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
+            if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.status)) {
                 user.status = 1
             }
 
@@ -116,6 +110,7 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
 
         return apiAdminGetUserLst(page, pagesize, phone, name, status).then((res) => {
             res.data.data.list && res.data.data.list.forEach((user: AdminUser) => {
+                user.pingjiaPre = (user.totalPingJia / user.totalBuy) * 100
                 user.goodPre = (user.totalGood / user.totalPingJia) * 100
                 user.pricePre = user.totalPrice / user.totalBuy
 
@@ -127,11 +122,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                     user.avatar = configStore.config?.avatar
                 }
 
-                if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.type)) {
+                if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.type)) {
                     user.type = 1
                 }
 
-                if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
+                if (!Object.keys(AdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
                     user.status = 1
                 }
 
@@ -139,7 +134,7 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
             })
 
             return {
-                maxpage: res.data.data.maxpage,
+                maxcount: res.data.data.maxcount,
                 total: userLst.length,
                 list: userLst
             }
@@ -224,7 +219,15 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
 
         return apiAdminRestartServer(passwordHash, secret).then((res) => {
             if (!res.data.data.success) {
-                return Promise.reject("重启成功")
+                const waitsec = res.data.data.waitsec && res.data.data.waitsec >= 0 ? res.data.data.waitsec : 20
+
+                setTimeout(() => {
+                    ElMessage({
+                        message: '后端Http重启倒计时完毕，请确认服务是否正常。',
+                        type: 'success',
+                    })
+                }, waitsec * 1000)
+                return Promise.reject(`重启成功，预计重启时间${waitsec}秒。`)
             }
             return Promise.resolve()
         })

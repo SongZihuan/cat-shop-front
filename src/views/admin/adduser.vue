@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ElMessage, ElMessageBox } from 'element-plus'
-import useAdminUserStore, {AdminUserStatus, RootAdminUserStatus} from "@/store/admin/user";
-import {isAdmin, isRootAdmin} from "@/store/admin"
+import useAdminUserStore, {AdminUserStatus} from "@/store/admin/user";
+import {isAdmin} from "@/store/admin"
 import {isMobile} from "@/utils/str"
 import {NewUserData} from "#/admin/user"
 
@@ -29,7 +29,7 @@ const ub = ref({
   email: "",
 } as NewUserData)
 
-const userStatusLst = ref(isRootAdmin() ? RootAdminUserStatus : AdminUserStatus as { [key: number]: string })
+const userStatusLst = ref(AdminUserStatus)
 
 const checkName = computed(() => ub.value.name && ub.value.name.length > 0 && ub.value.name.length <= 10)
 const phoneCheck = computed(() => isMobile(ub.value.phone))

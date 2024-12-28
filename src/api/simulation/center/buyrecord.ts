@@ -45,6 +45,7 @@ export interface BuyRecord {
     isgood: boolean
     user: LocationForUser
     shop: LocationForUser
+    nowwupin: Wupin
     wupin: Wupin
 }
 
@@ -62,7 +63,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
     //     method: 'get',
     // })
 
-    if (offset > 10000) {
+    if (offset > 120) {
         return Promise.resolve({
             data: {
                 code: 0,
@@ -103,12 +104,12 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
             isgood: true,
             wupin: {
                 id: 1,
-                name: "物品",
+                name: "商品",
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -121,6 +122,41 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                buyprice: 2000,
+                buypingjia: 30,
+                buyjian: 20,
+                classShow: true,
+                classDown: false,
+                show: true,
+                hot: true,
+            },
+            nowwupin: {
+                id: 1,
+                name: "商品",
+                pic: wupinPic,
+                classid: 2,
+                classOf: {
+                    id: 1,
+                    name: "商品分类",
+                },
+                tag: "火爆",
+                hotPrice: 9999,
+                realPrice: 19999,
+                info: "hhhhhh",
+                ren: "小超市",
+                phone: "17322061610",
+                email: "songzihuan@song-zh.com",
+                location: "广东广州",
+                buytotal: 100,
+                buydaohuo: 95,
+                buygood: 90,
+                buyprice: 2000,
+                buypingjia: 30,
+                buyjian: 20,
+                classShow: true,
+                classDown: false,
+                show: true,
+                hot: true,
             },
             user: {
                 name: "用户",
@@ -187,12 +223,34 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                 isgood: true,
                 wupin: {
                     id: 1,
-                    name: "物品",
+                    name: "商品",
                     pic: wupinPic,
                     classid: 2,
                     classOf: {
                         id: 2,
-                        name: "分类1",
+                        name: "商品分类",
+                    },
+                    tag: "火爆",
+                    hotPrice: 9999,
+                    realPrice: 19999,
+                    info: "hhhhhh",
+                    ren: "宋子桓",
+                    phone: "17322061610",
+                    wechat: "abcd",
+                    email: "songzihuan@song-zh.com",
+                    location: "广东广州",
+                    buytotal: 100,
+                    buydaohuo: 95,
+                    buygood: 90,
+                } as Wupin,
+                nowwupin: {
+                    id: 1,
+                    name: "商品",
+                    pic: wupinPic,
+                    classid: 2,
+                    classOf: {
+                        id: 2,
+                        name: "商品分类",
                     },
                     tag: "火爆",
                     hotPrice: 9999,
@@ -230,7 +288,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
 }
 
 type BuyRecordLstByPage = {
-    maxpage: number
+    maxcount: number
     total: number
     list: BuyRecord[]
 }
@@ -249,9 +307,9 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
     //     method: 'get',
     // })
 
-    const pagemax = 100
+    const maxcount = 100
     const buyRecordLst = ref([] as BuyRecord[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (buyRecordLst.value.length >= pagesize) {
             break
         }
@@ -282,12 +340,12 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
             isgood: true,
             wupin: {
                 id: 1,
-                name: `物品-${page}-${i}`,
+                name: `商品-${page}-${i}`,
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -300,6 +358,41 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                hot: false,
+                show: true,
+                classShow: true,
+                classDown: false,
+            },
+            nowwupin: {
+                id: 1,
+                name: `商品-${page}-${i}`,
+                pic: wupinPic,
+                classid: 2,
+                classOf: {
+                    id: 1,
+                    name: "商品分类",
+                },
+                tag: "火爆",
+                hotPrice: 9999,
+                realPrice: 19999,
+                info: "hhhhhh",
+                ren: "小超市",
+                phone: "17322061610",
+                email: "songzihuan@song-zh.com",
+                location: "广东广州",
+                buytotal: 100,
+                buydaohuo: 95,
+                buygood: 90,
+                buyprice: 999,
+                buypingjia: 20,
+                buyjian: 10,
+                hot: false,
+                show: true,
+                classShow: true,
+                classDown: false,
             },
             user: {
                 name: "用户",
@@ -324,7 +417,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
         data: {
             code: 0,
             data: {
-                maxpage: pagemax,
+                maxcount: maxcount,
                 total: buyRecordLst.value.length,
                 list: buyRecordLst.value,
             },

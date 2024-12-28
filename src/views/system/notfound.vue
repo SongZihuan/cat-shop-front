@@ -38,7 +38,7 @@ backTimer()
           </div>
         </template>
         <template #extra>
-          <el-button  type="primary" @click="goHome">回到主页（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+          <el-button  type="primary">回到主页（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
         </template>
       </el-result>
     </el-card>

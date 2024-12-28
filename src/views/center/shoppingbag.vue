@@ -6,7 +6,6 @@ let offset = 0
 const limit = 20
 const stop = ref(false)
 const shopRecord = ref([] as ShopRecord[])
-const router = useRouter()
 
 const updater = () => {
   if (stop.value) {
@@ -34,12 +33,6 @@ const reload = () => {
   updater()
 }
 
-const toHome = () => {
-  router.push({
-    path: "/shop/home"
-  })
-}
-
 </script>
 
 <template>
@@ -52,13 +45,15 @@ const toHome = () => {
             sub-title="欢迎到别处去看看吧"
         >
           <template #extra>
-            <el-button type="primary" @click="toHome">到我的中心</el-button>
+            <el-button type="primary">到我的中心</el-button>
           </template>
         </el-result>
       </div>
       <div v-else v-infinite-scroll="updater" style="height: 60vh; width: 50vw; overflow: auto">
-        <div v-for="(item, index) in shopRecord" :key="index" style="margin-left: 30px; margin-right: 30px">
+        <div v-for="(item, index) in shopRecord" :key="index">
+          <div v-if="item.wupin.id !== 0" style="margin-left: 30px; margin-right: 30px">
             <Shoppingbag ref="shopper" :record="item" @reload="reload"></Shoppingbag>
+          </div>
         </div>
       </div>
     </el-card>

@@ -30,6 +30,17 @@ reload()
       <BuyRecord :zhifutishi="true" :record="record as BuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></BuyRecord>
     </div>
   </div>
+  <div v-else>
+    <el-result
+        icon="warning"
+        title="此商品已下架"
+        sub-title="欢迎到别处去看看吧"
+    >
+      <template #extra>
+        <el-button type="primary">到我的中心</el-button>
+      </template>
+    </el-result>
+  </div>
 </template>
 
 <style scoped lang="scss">

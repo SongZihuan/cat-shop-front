@@ -12,7 +12,7 @@ export const apiGetClassLst = (): Result<ClassLst> => {
 
     for (let i = 0; i < total; i++) {
         classLst.push({
-            name: "分类" + (i + 1),
+            name: "商品分类" + (i + 1),
             id: i + 1,
         })
     }

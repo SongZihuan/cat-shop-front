@@ -3,7 +3,6 @@ import AdminShoppingbag from "@/components/admin/adminshoppingbag.vue"
 import {isAdmin} from "@/store/admin"
 import useAdminUserStore, {AdminUser} from "@/store/admin/user"
 import {AdminShopRecord, apiAdminGetUserShoppingRecord} from "#/admin/shoppingbag"
-import pushTo from "@/views/admin/router_push"
 
 const router = useRouter()
 const route = useRoute()
@@ -22,7 +21,7 @@ const userAdminStore = useAdminUserStore()
 const userId = ref(Number(route.query?.userId).valueOf() || 0)
 const user = ref(null as AdminUser | null)
 
-const maxpage = ref(0)
+const maxcount = ref(0)
 const page = ref(Number(route.query?.page).valueOf() || 1)
 const pagesize = ref(20)
 if (page.value < 1) {
@@ -53,13 +52,9 @@ if (userId.value) {
 
 const onChange = () => {
   user.value && apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {
-    maxpage.value = res.data.data.maxpage
+    maxcount.value = res.data.data.maxcount
     shoppingbagLst.value = res.data.data.list
   })
-}
-
-const toHome = () => {
-  pushTo(router, route, "/admin/user/list/info")
 }
 
 </script>
@@ -71,7 +66,7 @@ const toHome = () => {
         <el-scrollbar height="65vh">
           <div>
             <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px;">
-              <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxpage || 0" @change="onChange" />
+              <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
             </div>
             <div style="width: 55vw; display: flex; justify-content: center">
               <div style="width: 100%;">
@@ -83,7 +78,7 @@ const toHome = () => {
               </div>
             </div>
             <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-              <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxpage || 0" @change="onChange" />
+              <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
             </div>
           </div>
         </el-scrollbar>
@@ -95,7 +90,7 @@ const toHome = () => {
             sub-title="欢迎到别处去看看吧"
         >
           <template #extra>
-            <el-button type="primary" @click="toHome">到我的中心</el-button>
+            <el-button type="primary">到我的中心</el-button>
           </template>
         </el-result>
       </div>

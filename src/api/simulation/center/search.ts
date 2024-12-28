@@ -6,14 +6,14 @@ import { Result} from "@/utils/request"
 export interface WupinLst {
     list: Wupin[]
     total: number
-    maxpage: number
+    maxcount: number
 }
 
 export const apiGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<WupinLst> => {
     let classId = 1
     let classOf = {
         id: 1,
-        name: "分类1",
+        name: "商品分类",
     }
 
     if (pagesize <= 0 || pagesize > 20) {
@@ -30,16 +30,16 @@ export const apiGetSearchWupin = (search: string, select: Array<number>, page: n
         }
     }
 
-    const pagemax = 50
+    const maxcount = 50
     const wupinlst = ref([] as Wupin[])
-    for (let i = (page - 1) * pagesize; i < pagemax; i++) {
+    for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (wupinlst.value.length >= pagesize) {
             break
         }
 
         wupinlst.value.push({
             id: i + 1,
-            name: "物品" + search + " - " + (i + 1),
+            name: "商品" + search + " - " + (i + 1),
             pic: WupinPic,
             classid: classId,
             classOf: classOf,
@@ -81,7 +81,7 @@ export const apiGetSearchWupin = (search: string, select: Array<number>, page: n
                 data: {
                     list: wupinlst.value,
                     total: wupinlst.value.length,
-                    pagemax: pagemax,
+                    maxcount: maxcount,
                 }
             },
             status: 200

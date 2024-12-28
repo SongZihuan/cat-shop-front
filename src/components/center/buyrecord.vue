@@ -19,6 +19,7 @@ import useConfigStore from "@/store/config"
 
 const configStore = useConfigStore()
 const router = useRouter()
+
 const props = defineProps({
   "record": {
     type: Object as PropType<BuyRecordData>,
@@ -69,11 +70,34 @@ const onClassClick = () => {
   })
 }
 
+const onGoWupinConfirm = () => {
+  ElMessageBox.confirm(
+      `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
+      '温馨提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    onGoWupin()
+  })
+}
+
 const onGoWupin = () => {
   record.value && router.push({
-    path: "/shop/wupin",
+    path: "/shop/wupin/record",
     query: {
-      "id": record.value.wupinid,
+      "id": record.value.id,
+    }
+  })
+}
+
+const onGoLockWupin = () => {
+  record.value && router.push({
+    path: "/shop/wupin/lock",
+    query: {
+      "id": record.value.id,
     }
   })
 }
@@ -516,7 +540,7 @@ const changeUser = () => {
         <div style="display: flow-root">
           <div style="float: left">
             <el-badge :value="record.wupin.tag" style="margin-top: 10px">
-              <el-text class="wupin_name" @click="onGoWupin"> {{ record.wupin.name }} </el-text>
+              <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
             </el-badge>
             <el-text v-if="record.wupin.classid > 1 && record.wupin.classOf" class="wupin_class_name">
               商品来源：
@@ -525,8 +549,17 @@ const changeUser = () => {
           </div>
             <el-button-group style="float:right;">
               <el-button v-if="xiangqing" type="success" @click="onXiangQing">
-                查看详情
+                查看商品目前销售详情
               </el-button>
+              <el-tooltip
+                  effect="dark"
+                  placement="bottom-end"
+                  content="即您购买商品时，商品信息的备份内容。"
+              >
+                <el-button type="primary" @click="onGoLockWupin">
+                  查看商品信息存档页面
+                </el-button>
+              </el-tooltip>
               <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
                 取消支付
               </el-button>
@@ -688,6 +721,17 @@ const changeUser = () => {
         </div>
       </div>
     </el-card>
+    <div v-else>
+      <el-result
+          icon="warning"
+          title="此商品已下架"
+          sub-title="欢迎到别处去看看吧"
+      >
+        <template #extra>
+          <el-button type="primary">到我的中心</el-button>
+        </template>
+      </el-result>
+    </div>
   </div>
   <el-dialog
       v-model="repayModel"

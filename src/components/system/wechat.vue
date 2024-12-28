@@ -6,10 +6,6 @@
   const wechatStore = useWechatStore()
   const configStore = useConfigStore()
 
-  const onClick = () => {
-    wechatStore.close()
-  }
-
   const delayShow = ref(false)
   const show = ref(false)
   const isAdmin = computed(() => route.meta?.admin === true || route.meta?.rootAdmin === true)
@@ -24,9 +20,6 @@
     }, 1000)
   })
 
-  const onShow = () => {
-    show.value = true
-  }
 </script>
 
 <template>
@@ -40,12 +33,12 @@
             </el-text>
           </div>
         </template>
-        <div class="wechat_img" @click="onShow">
+        <div class="wechat_img">
           <el-image :src="configStore.config?.wechat" fit="contain"> </el-image>
         </div>
         <template #footer>
           <div style="display: flex; justify-content: center;">
-            <el-button @click="onClick">
+            <el-button>
               关闭
             </el-button>
           </div>

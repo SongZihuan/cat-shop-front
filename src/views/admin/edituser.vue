@@ -3,7 +3,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import useAdminUserStore, {
   AdminUser,
   AdminUserBase,
-  RootAdminUserType, RootAdminUserStatus
+  AdminUserStatus, AdminUserType
 } from "@/store/admin/user"
 import pushTo from "@/views/admin/router_push"
 import {isAdmin, isRootAdmin} from "@/store/admin"
@@ -101,8 +101,8 @@ const hasChange = computed(() => {
   return ub.value.type !== user.value?.type && ub.value.name !== user.value?.name || ub.value.location !== user.value?.location || ub.value.status !== user.value?.status || ub.value.wechat !== user.value?.wechat || ub.value.email !== user.value?.email
 })
 
-const userStatusLst = ref(RootAdminUserStatus as { [key: number]: string })
-const userTypeLst = ref(RootAdminUserType as { [key: number]: string })
+const userStatusLst = ref(AdminUserStatus as { [key: number]: string })
+const userTypeLst = ref(AdminUserType as { [key: number]: string })
 
 const deleteCheck = computed(() => !(user.value && user.value.status === 3 && ub.value.status !== 3))
 const rootAdminCheck = computed(() => !(user.value && user.value.type === 3 && ub.value.status !== 1))

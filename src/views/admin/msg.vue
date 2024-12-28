@@ -16,7 +16,7 @@ if (!isAdmin()) {
   })
 }
 
-const maxpage = ref(0)
+const maxcount = ref(0)
 const page = ref(Number(route.query?.page).valueOf() || 1)
 const pagesize = ref(20)
 if (page.value < 1) {
@@ -26,14 +26,14 @@ const msgLst = ref([] as AdminMsg[])
 
 const onChange = () => {
   apiAdminGetMsg(page.value, pagesize.value).then((res) => {
-    maxpage.value = res.data.data.maxpage
+    maxcount.value = res.data.data.maxcount
     msgLst.value = res.data.data.list
   })
 }
 onChange()
 
 const toUser = (userId: number) => {
-  userId && pushTo(router, route, "/admin/user/list/info", {
+  userId && pushTo(router, route, "/admin/user/info", {
     userId: userId,
   })
 }
@@ -50,7 +50,7 @@ const toBack = () => {
       <div v-if="msgLst && msgLst.length > 0">
         <el-scrollbar height="60vh">
           <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxpage || 0" @change="onChange" />
+            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
           </div>
           <div style="width: 55vw; display: flex; justify-content: center">
             <div style="width: 100%;">
@@ -80,7 +80,7 @@ const toBack = () => {
             </div>
           </div>
           <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxpage || 0" @change="onChange" />
+            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
           </div>
         </el-scrollbar>
       </div>

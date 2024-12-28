@@ -50,12 +50,12 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
             time: 1734024269,
             wupin: {
                 id: 1,
-                name: "物品",
+                name: "商品",
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
                     id: 1,
-                    name: "分类1",
+                    name: "商品分类",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -68,6 +68,13 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
                 buytotal: 100,
                 buydaohuo: 95,
                 buygood: 90,
+                buyprice: 1000,
+                buypingjia: 10,
+                buyjian: 10,
+                show: true,
+                classShow: true,
+                classDown: false,
+                hot: true,
             },
         })
     }
