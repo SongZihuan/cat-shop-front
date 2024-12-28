@@ -42,16 +42,24 @@ const onClassClick = () => {
 }
 
 const onWupinClick = () => {
-  record.value && router.push({
-    path: "/shop/wupin",
-    query: {
-      id: record.value.wupin.id,
-    }
-  })
+  if (!record.value) {
+    // NOT-THING-TO-DO
+  } else if (record.down) {
+    ElMessageBox.alert('商品暂时下架啦，搜同款看看吧！', '下架通知', {
+      confirmButtonText: 'OK',
+    })
+  } else {
+    record.value && router.push({
+      path: "/shop/wupin",
+      query: {
+        id: record.value.wupin.id,
+      }
+    })
+  }
 }
 
 const onClickBag = () => {
-  record.value && apiPostAddToShoppingBag(record.value.wupin.id, num.value).then((res) => {
+  record.value && !record.value.down && apiPostAddToShoppingBag(record.value.wupin.id, num.value).then((res) => {
     if (res.data.data.success) {
       if (num.value <= 0) {
         ElNotification({
@@ -96,6 +104,9 @@ const num = ref(record.value && record.value.num || 0)
 if (num.value < 0) {
   num.value = 0
 }
+if (record.value.down) {
+  num.value = 0
+}
 
 const byn = ref(null as any)
 const buy = () => {
@@ -105,6 +116,10 @@ const buy = () => {
       message: "系统出现了问题，请重试。"
     })
     return
+  }
+
+  if (!record.value || record.value.down) {
+    return;
   }
 
   if (num.value <= 0) {
@@ -149,7 +164,12 @@ const buy = () => {
             <el-scrollbar height="20vh">
               <div style="display: flow-root">
                 <div class="price_box" style="float: left">
-                  <div v-if="facePrice == 0">
+                  <div v-if="record.down">
+                    <el-text class="wupin_hot_price">
+                      商品下架，暂时无法出售
+                    </el-text>
+                  </div>
+                  <div v-else-if="facePrice == 0">
                     <el-text class="wupin_hot_price">
                       现在：免费抢购
                       <br>
@@ -233,17 +253,21 @@ const buy = () => {
           <el-divider direction="vertical" style="height: 20vh; border-width: 1px; margin-left: 15px; margin-right: 15px"></el-divider>
           <div style="display: flex; flex-direction: column; justify-content: space-between; height: 20vh">
             <div style="display: flex">
-              <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+              <el-input-number v-model="num" :disabled="record.value" :min="0" :max="99" size="large" class="buy_item">
                 <template #suffix>
                   <span> 件 </span>
                 </template>
               </el-input-number>
-              <el-button class="buy_item" size="large" @click="onClickBag">
+              <el-button :disabled="record.value" class="buy_item" size="large" @click="onClickBag">
                 <el-icon style="margin-right: 3px"><Handbag /></el-icon> 重新加入加入购物车
               </el-button>
             </div>
             <div style="display: flex">
-              <el-button class="buy_item" size="large" :disabled="num <= 0" @click="buy">
+              <el-button v-if="record.value" disabled class="buy_item" size="large">
+                <el-icon style="margin-right: 3px"><Money /></el-icon>
+                立即购买
+              </el-button>
+              <el-button v-else class="buy_item" size="large" :disabled="num <= 0" @click="buy">
                 <el-icon style="margin-right: 3px"><Money /></el-icon>
                 立即购买
                 <el-text v-if="num >= 1"> （ 实际价格：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </el-text>

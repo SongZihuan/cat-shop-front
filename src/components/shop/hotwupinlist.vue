@@ -17,7 +17,8 @@
 .classLst {
   display: flex;
   flex-flow: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 </style>

@@ -8,7 +8,7 @@ export interface Class {
 const useClassStore = defineStore("classStore", () => {
     const classLst = ref([] as Class[])
     const allClass = ref({
-        id: 0,
+        id: 1,
         name: "全部",
     } as Class)
 
@@ -18,7 +18,8 @@ const useClassStore = defineStore("classStore", () => {
 
     const updateInfo = () => {
         return apiGetClassLst().then((res) => {
-            classLst.value = res.data.data.list
+            classLst.value = res.data.data.list as Class[]
+            classLst.value = classLst.value.filter((item) => item.id > 1 && item.show && !item.down)
             return classLst.value
         })
     }
@@ -36,6 +37,9 @@ const useClassStore = defineStore("classStore", () => {
     })
 
     const findClass = (id: number) => {
+        if (id === 1) {
+            return allClass
+        }
         return classLst.value.find((item) => item.id === id)
     }
 

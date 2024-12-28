@@ -9,9 +9,9 @@
   const recordId = ref(route.query.id as number | null | undefined)
   if (!recordId.value || recordId.value <= 0) {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   }
@@ -22,12 +22,22 @@
   apiGetBuyRecordInfo(recordId.value as number).then((res) => {
     record.value = res.data.data as BuyRecord
     wupin.value = record.value.wupin as Wupin
-    openTips()
+
+    if (!wupin.value || wupin.value.id === 0) {
+      router.push({
+        path: "/system/error",
+        query: {
+          msg: "商品不存在",
+        }
+      })
+    } else {
+      openTips()
+    }
   }).catch(() => {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   })

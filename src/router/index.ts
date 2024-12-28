@@ -91,7 +91,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'user',
-        component: () => import('@/views/center/mine.vue'),
+        component: () => import('@/views/center/profile.vue'),
         meta: {
           title: '个人中心',
           xauth: true,

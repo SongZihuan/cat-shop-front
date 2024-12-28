@@ -20,16 +20,24 @@ const toBack = () => {
   pushTo(router, route, "/admin/user/list")
 }
 
+let timeoutID = 0
 const backSec = ref(6)
+const isBack = ref(false)
 const backTimer = () => {
+  isBack.value = true
   if (backSec.value == 0) {
-    toBack()
+    goHome()
     return
   }
 
-  backSec.value = backSec.value - 1
-  setTimeout(backTimer, 1000)
+  backSec.value -= backSec.value
+  timeoutID = setTimeout(backTimer, 1000)
 }
+backTimer()
+
+onUnmounted(() => {
+  timeoutID && clearTimeout(timeoutID)
+})
 
 const userAdminStore = useAdminUserStore()
 
@@ -94,17 +102,18 @@ const update = () => {
 </script>
 
 <template>
-  <div v-if="user && isRootAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
+  <el-result
+      v-if="isBack"
+      icon="error"
+      title="用户已被删除"
+      sub-title="用户已被删除，无法修改其信息。"
+  >
+    <template #extra>
+      <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+    </template>
+  </el-result>
+  <div v-else-if="user && isRootAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
     <el-card v-if="user.status === 3" style="margin-top: 10px">
-      <el-result
-          icon="error"
-          title="用户已被删除"
-          sub-title="用户已被删除，无法修改其信息。"
-      >
-        <template #extra>
-          <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
-        </template>
-      </el-result>
     </el-card>
     <el-card v-else-if="user.type === 3 && !isRootAdmin()" style="margin-top: 10px">
       <el-result

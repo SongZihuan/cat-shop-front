@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import useClassStore from "@/store/class"
-  import {Search} from '@element-plus/icons-vue'
+  import {Search as SearchIcon} from '@element-plus/icons-vue'
+  import {AdminClass, apiAdminGetClassLst} from "#/admin/class";
 
   const router = useRouter()
   const route = useRoute()
@@ -39,7 +39,21 @@
   const select = ref(data.value.select || props.select || [] as number[])
   const search = ref(data.value.search || props.search || "" as string)
 
-  const classStore = useClassStore()
+  const classLst = ref([] as AdminClass[])
+  const classLstPage = ref(1)
+  const classLstMaxPage = ref(0)
+  const classLstPagesize = ref(20)
+
+  const onClassLstChange = () => {
+    apiAdminGetClassLst(classLstPage.value, classLstPagesize.value).then((res) => {
+      classLstMaxPage.value = res.data.data.maxcount
+      classLst.value = [{id: 0, name: "全部", show: false, down: false} as AdminClass].concat(res.data.data.list)
+      if (select && !classLst.value.some((item) => item.id === select.value)) {
+        select.value = undefined
+      }
+    })
+  }
+  onClassLstChange()
 
   const onSearch = () => {
     router.push({
@@ -53,14 +67,6 @@
     })
   }
 
-  const onChange = (ids: number[]) => {
-    if (ids[ids.length - 1] === classStore.allClass.id) {
-      select.value = [classStore.allClass.id]
-    } else {
-      select.value = ids.filter((id) => id !== classStore.allClass.id)
-    }
-  }
-
 </script>
 
 <template>
@@ -70,20 +76,24 @@
         placeholder="请选择商品分类"
         size="large"
         style="width: 20%; margin-right: 5px"
-        :multiple="true"
+        :multiple="false"
         :clearable="true"
-        @change="onChange"
     >
       <el-option
-          v-for="(item, j) in classStore.classLstWithAll"
+          v-for="(item, j) in classLst"
           :key="j"
           :label="item.name"
           :value="item.id"
       >
       </el-option>
+      <template #footer>
+        <div style="display: flex; justify-content: center; margin-top: 10px;">
+          <el-pagination v-model:current-page="classLstPage" class="pager" background layout="prev, pager, next" :page-size="classLstPagesize" :total="classLstMaxPage || 0" @change="onClassLstChange" />
+        </div>
+      </template>
     </el-select>
     <el-input v-model="search" maxlength="120" placeholder="搜索感兴趣的内容吧" size="large" :clearable="true"></el-input>
-    <el-button size="large" :bg="true" type="success" style="margin-left: 5px" @click="onSearch"> <el-icon style="margin-right: 3px"><Search /></el-icon> 立刻搜索 </el-button>
+    <el-button size="large" :bg="true" type="success" style="margin-left: 5px" @click="onSearch"> <el-icon style="margin-right: 3px"><SearchIcon /></el-icon> 立刻搜索 </el-button>
   </div>
 </template>
 

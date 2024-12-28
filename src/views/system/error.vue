@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {asString} from "@/utils/str";
+import {clearCaches} from "@typescript-eslint/parser";
 
 const route = useRoute()
 const router = useRouter()
@@ -15,6 +16,7 @@ if (!msg.value || msg.value.length > 20) {
   msg.value = "遇到系统未能捕获的错误，请稍后臭重试。"
 }
 
+let timeoutID = 0
 const backSec = ref(6)
 const backTimer = () => {
   if (backSec.value == 0) {
@@ -22,10 +24,14 @@ const backTimer = () => {
     return
   }
 
-  backSec.value = backSec.value - 1
-  setTimeout(backTimer, 1000)
+  backSec.value -= backSec.value
+  timeoutID = setTimeout(backTimer, 1000)
 }
 backTimer()
+
+onUnmounted(() => {
+  timeoutID && clearTimeout(timeoutID)
+})
 
 </script>
 

@@ -9,9 +9,9 @@
   const recordId = ref(route.query.id as number | null | undefined)
   if (!recordId.value || recordId.value <= 0) {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   }
@@ -22,26 +22,23 @@
   apiGetBuyRecordInfo(recordId.value as number).then((res) => {
     record.value = res.data.data as BuyRecord
     wupin.value = record.value.nowwupin as Wupin
+
+    if (!record || record.value.down || !wupin.value || wupin.value.id === 0 || wupin.value.down) {
+      router.push({
+        path: "/system/error",
+        query: {
+          msg: "商品已下架",
+        }
+      })
+    }
   }).catch(() => {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   })
-
-  // const onClassClick = () => {
-  //   wupin.value && wupin.value.classid > 1 && router.push({
-  //     path: "/shop/search",
-  //     query: {
-  //       "info": JSON.stringify({
-  //         select: [wupin.value && wupin.value.classid],
-  //         search: "",
-  //       })
-  //     }
-  //   })
-  // }
 
   const num = ref(1)
   const realPrice = computed(() => {
@@ -77,50 +74,6 @@
     return "谨慎购买"
   })
 
-  // const onClickBag = () => {
-  //   wupin.value && apiPostAddToShoppingBag(wupin.value.id, num.value).then((res) => {
-  //     if (res.data.data.success) {
-  //       wupin.value && ElNotification({
-  //         title: '已经加入购物车',
-  //         message: `尊敬的用户您好，我们已经将 ${num.value}件 ${wupin.value.name} 添加到您的购物车。请您进行接下来的操作。若现在购买，预测价格为￥${totalPrice.value}。`,
-  //         duration: 5000,
-  //         type: "success",
-  //         position: 'top-left',
-  //       })
-  //     } else {
-  //       ElMessage({
-  //         type: 'error',
-  //         message: "加入购物车失败",
-  //       })
-  //     }
-  //   })
-  // }
-  //
-  // const onBackToBuyRecord = () => {
-  //   record.value && router.push({
-  //     path: "/center/buyrecord",
-  //     query: {
-  //       id: record.value.id,
-  //     }
-  //   })
-  // }
-
-  // const byn = ref(null as any)
-  // const buy = () => {
-  //   if (!byn.value) {
-  //     ElMessage({
-  //       type: 'warning',
-  //       message: "系统出现了问题，请重试。"
-  //     })
-  //     return
-  //   }
-  //
-  //   if (num.value <= 0) {
-  //     return
-  //   }
-  //
-  //   byn.value.open(wupin.value, num.value)
-  // }
 </script>
 
 <template>

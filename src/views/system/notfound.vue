@@ -8,6 +8,7 @@ const goHome = () => {
   })
 }
 
+let timeoutID = 0
 const backSec = ref(6)
 const backTimer = () => {
   if (backSec.value == 0) {
@@ -15,10 +16,14 @@ const backTimer = () => {
     return
   }
 
-  backSec.value = backSec.value - 1
-  setTimeout(backTimer, 1000)
+  backSec.value -= backSec.value
+  timeoutID = setTimeout(backTimer, 1000)
 }
 backTimer()
+
+onUnmounted(() => {
+  timeoutID && clearTimeout(timeoutID)
+})
 
 </script>
 

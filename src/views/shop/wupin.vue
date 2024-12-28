@@ -12,9 +12,9 @@
   const wupinId = ref(route.query.id as number | null | undefined)
   if (!wupinId.value || wupinId.value <= 0) {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   }
@@ -24,9 +24,9 @@
     wupin.value = res.data.data
   }).catch(() => {
     router.push({
-      path: '/error',
+      path: "/system/error",
       query: {
-        msg: "找不到商品",
+        msg: "商品不存在",
       }
     })
   })

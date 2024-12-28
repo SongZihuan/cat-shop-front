@@ -49,41 +49,51 @@ import {
     }
   }
 
+  const goHome = () => {
+    router.push({
+      "path": "/home",
+    })
+  }
+
   const status = ref(1)
   const paynow = () => {
     const bid = ref(route.query?.[buyRecordId] || 0)
     if (!bid.value) {
       status.value = 2
+      backTimer(goHome)
       return
     }
 
     apiPostTestPay(bid.value as number).then((res) => {
       if (res.data.data.success) {
         status.value = 3
+        backTimer(goRedirect)
       } else {
         status.value = 2
+        backTimer(goHome)
       }
     }, () => {
       status.value = 2
+      backTimer(goHome)
     })
   }
   setTimeout(() => paynow(), 3000)
 
+  let timeoutID = 0
   const backSec = ref(6)
-  const backTimer = () => {
+  const backTimer = (back: ()=>{}) => {
     if (backSec.value == 0) {
-      goRedirect()
+      back()
       return
     }
 
-    backSec.value = backSec.value - 1
-    setTimeout(backTimer, 1000)
+    backSec.value -= backSec.value
+    timeoutID = setTimeout(backTimer, 1000)
   }
+  backTimer()
 
-  watch(() => status.value, () => {
-    if (status.value !== 1) {
-      backTimer()
-    }
+  onUnmounted(() => {
+    timeoutID && clearTimeout(timeoutID)
   })
 
 </script>
@@ -123,7 +133,7 @@ import {
       </template>
       <template #extra>
         <el-button type="danger" size="large">
-          返回
+          返回商户
           （{{ backSec > 5 ? 5 : backSec }}s）
         </el-button>
       </template>
@@ -145,7 +155,7 @@ import {
       </template>
       <template #extra>
         <el-button type="success" size="large">
-          返回
+          返回商户
           （{{ backSec > 5 ? 5 : backSec }}s）
         </el-button>
       </template>

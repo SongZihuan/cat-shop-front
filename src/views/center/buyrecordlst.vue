@@ -60,7 +60,7 @@ changePage(activeModel.value)
            <div style="display: flex; justify-content: center">
              <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
            </div>
-         </div>
+          </div>
           <div v-else>
             <el-result
                 icon="success"

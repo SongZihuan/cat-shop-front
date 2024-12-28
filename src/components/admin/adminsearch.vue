@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {AdminClass, apiAdminGetClassLst} from "#/admin/class";
-  import {Search} from '@element-plus/icons-vue'
+  import {Search as SearchIcon} from '@element-plus/icons-vue'
   import pushTo from "@/views/admin/router_push";
 
   const router = useRouter()
@@ -91,7 +91,7 @@
       </template>
     </el-select>
     <el-input v-model="search" maxlength="120" placeholder="搜索感兴趣的内容吧" size="large" :clearable="true"></el-input>
-    <el-button size="large" :bg="true" type="success" style="margin-left: 5px" @click="onSearch"> <el-icon style="margin-right: 3px"><Search /></el-icon> 立刻搜索 </el-button>
+    <el-button size="large" :bg="true" type="success" style="margin-left: 5px" @click="onSearch"> <el-icon style="margin-right: 3px"><SearchIcon /></el-icon> 立刻搜索 </el-button>
   </div>
 </template>
 

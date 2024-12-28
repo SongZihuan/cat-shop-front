@@ -15,7 +15,7 @@ import {
 import useUserStore from "@/store/user"
 import {isEmail, isMobile} from "@/utils/str"
 import useConfigStore from "@/store/config"
-import {AdminBuyRecordStatus} from "#/admin/buyrecord";
+import {AdminBuyRecordStatus} from "#/admin/buyrecord"
 
 const configStore = useConfigStore()
 const router = useRouter()
@@ -87,7 +87,7 @@ const onGoWupinConfirm = () => {
     })
   } else {
     ElMessageBox.confirm(
-        `是否确认前往商品 ${record.value.wupin.name} 的售卖页面（商品已经下架）？`,
+        `是否确认前往商品 ${record.value.wupin.name} 的购买时备份信息页面（商品已经下架）？`,
         '温馨提示',
         {
           confirmButtonText: '确认',
@@ -95,13 +95,13 @@ const onGoWupinConfirm = () => {
           type: 'warning',
         }
     ).then(() => {
-      onGoWupin()
+      onGoLockWupin()
     })
   }
 }
 
 const onGoWupin = () => {
-  record.value && router.push({
+  record.value && !record.value.down && router.push({
     path: "/shop/wupin/record",
     query: {
       "id": record.value.id,
@@ -555,10 +555,10 @@ const changeUser = () => {
       <template #header>
         <div style="display: flow-root">
           <div style="float: left">
-            <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `售卖的已下架 | ${record.wupin.tag}` : '售卖的已下架') : record.wupin.tag)" style="margin-top: 10px">
+            <el-badge  class="title" :value="record.wupin.tag" style="margin-top: 10px">
               <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
             </el-badge>
-            <el-text v-if="record.wupin.classid > 1 && record.wupin.classOf" class="wupin_class_name">
+            <el-text v-if="record.wupin.classid !== 1 && record.wupin.classOf && record.wupin.classOf.id !== 1" class="wupin_class_name">
               商品来源：
               <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ record.wupin.classOf.name }} > </el-text>
             </el-text>
@@ -567,17 +567,30 @@ const changeUser = () => {
               <el-button v-if="xiangqing" type="success" @click="onXiangQing">
                 查看详情
               </el-button>
-              <el-button type="success"  @click="onGoWupin">
-                <span v-if="record.down">查看商品售卖页（已经下架）</span>
-                <span v-else>查看商品售卖页</span>
+              <el-button v-if="record.down" type="success" :disabled="record.down">
+                商品已下架
+              </el-button>
+              <el-button v-else type="success" @click="onGoWupin">
+                查看商品售卖页
               </el-button>
               <el-tooltip
+                  v-if="record.down"
                   effect="dark"
                   placement="bottom-end"
-                  content="即您购买商品时，商品信息的备份内容。"
+                  content="原商品已经下架，此处是您购买商品时信息的备份内容。"
               >
-                <el-button type="primary" @click="onGoLockWupin" :disabled="record.down">
-                  查看商品存档页
+                <el-button type="primary" @click="onGoLockWupin">
+                  查看商品售卖存档页
+                </el-button>
+              </el-tooltip>
+              <el-tooltip
+                  v-else
+                  effect="dark"
+                  placement="bottom-end"
+                  content="此处是您购买商品时信息的备份内容。"
+              >
+                <el-button type="primary" @click="onGoLockWupin">
+                  查看商品售卖存档页
                 </el-button>
               </el-tooltip>
               <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
@@ -627,16 +640,16 @@ const changeUser = () => {
       <div style="display: flex; justify-content: left">
         <div>
           <div>
-            <el-text v-if="record.down">
-              销售情况：商品下架啦，但不会影响你已确认付款的订单。
-            </el-text>
-            <el-text v-else>
-              销售情况：正常销售中
+            <el-text>
+              本次消费进度：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
             </el-text>
           </div>
           <div>
-            <el-text>
-              购物状态：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
+            <el-text v-if="record.down">
+              商品销售情况：商品下架啦，但不会影响你已确认付款的订单。
+            </el-text>
+            <el-text v-else>
+              商品销售情况：正常销售中
             </el-text>
           </div>
           <div>

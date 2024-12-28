@@ -23,12 +23,15 @@ const goKefu = () => {
     <el-card style="max-width: 75%; min-width: 30%; margin-top: 10px">
       <template #header>
         <el-text class="title">
-          关于{{ configStore.config?.name }}
+          关于{{ configStore.config?.name ? configStore.config?.name : "我们" }}
         </el-text>
       </template>
 
-      <el-text class="content">
+      <el-text v-if="configStore.config?.aboutus" class="content">
         {{ configStore.config?.aboutus }}
+      </el-text>
+      <el-text v-else class="content">
+        什么都没有留下...
       </el-text>
 
       <template #footer>
