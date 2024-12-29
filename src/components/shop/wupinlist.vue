@@ -24,6 +24,7 @@
   display: flex;
   flex-flow: wrap;
   justify-content: space-between;
+  gap: 10px;
 }
 
 </style>

@@ -184,7 +184,7 @@ const hasPermission = computed(() => {
               >
                 <el-tooltip
                     effect="dark"
-                    placement="bottom-end"
+                    placement="bottom"
                 >
                   <el-button type="primary" :disabled="!hasPermission">
                     <el-icon><Edit /></el-icon>

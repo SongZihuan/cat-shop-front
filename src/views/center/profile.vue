@@ -49,13 +49,15 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
   let offset = 0
   const limit = 20
   const stop = ref(false)
+  const loading = ref(false)
 
   const buyRecord = ref([] as BuyRecord[])
   const updater = () => {
-    if (stop.value) {
+    if (stop.value || loading.value) {
       return
     }
 
+    loading.value = true
     apiGetUserBuyRecordLst(offset, limit).then((res) => {
       if (res.data.data.total < limit) {
         stop.value = true
@@ -65,6 +67,8 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
       buyRecord.value = buyRecord.value.concat(res.data.data.list)
     }).catch(() => {
       stop.value = true
+    }).finally(() => {
+      loading.value = false
     })
   }
   updater()
@@ -138,7 +142,6 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
   const updateHeaderHeight = new ResizeObserver((entries) => {
     entries.forEach(entry => {
       headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
-      console.log("headerHeight.value2", headerHeight.value)
     })
   })
 
@@ -159,51 +162,58 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
         <div class="profile_box">
           <el-scrollbar>
             <div>
-              <el-image :src="userStore.user.avatar" fit="contain" style="margin-right: 15px; height: auto; width: 70%; border-radius: 20px" :initial-index="0" :preview-src-list="[userStore.user.avatar]"></el-image>
               <div style="margin-right: 15px">
-                <div class="user_info_box">
-                  <div class="user_info_btn">
-                    <el-button-group>
-                      <el-button type="success" @click="goEdit">
-                        <el-icon><Edit /></el-icon>
-                        更改个人信息
-                      </el-button>
-                      <el-button type="danger" @click="goPassword">
-                        <el-icon><EditPen /></el-icon>
-                        修改账号密码
-                      </el-button>
-                    </el-button-group>
+                <div>
+                  <div class="user_heart_box">
+                    <el-image :src="userStore.user.avatar" fit="contain" style="margin-right: 15px; height: auto; width: 70%; border-radius: 20px" :initial-index="0" :preview-src-list="[userStore.user.avatar]"></el-image>
                   </div>
-                  <div class="user_info_btn">
-                    <el-upload
-                        ref="avatarUpload"
-                        v-model:file-list="avatar"
-                        action="#"
-                        accept=".jpg,.jpeg,.png"
-                        :auto-upload="false"
-                        :multiple="false"
-                        :limit="1"
-                        :on-exceed="handleExceed"
-                        :show-file-list="false"
-                        :on-change="updateAvatar"
-                    >
-                      <el-tooltip
-                          effect="dark"
-                          placement="bottom-end"
-                      >
-                        <el-button type="primary">
+                  <div class="user_heart_box">
+                    <div class="user_info_btn">
+                      <el-button-group>
+                        <el-button type="success" @click="goEdit">
                           <el-icon><Edit /></el-icon>
-                          更换头像
+                          更改个人信息
                         </el-button>
-                        <template #content>
-                          <el-text style="color: white">
-                            仅限jpg/png文件，不超过500KB
-                          </el-text>
-                        </template>
-                      </el-tooltip>
-                    </el-upload>
+                        <el-button type="danger" @click="goPassword">
+                          <el-icon><EditPen /></el-icon>
+                          修改账号密码
+                        </el-button>
+                      </el-button-group>
+                    </div>
+                  </div>
+                  <div class="user_heart_box">
+                    <div class="user_info_btn">
+                      <el-upload
+                          ref="avatarUpload"
+                          v-model:file-list="avatar"
+                          action="#"
+                          accept=".jpg,.jpeg,.png"
+                          :auto-upload="false"
+                          :multiple="false"
+                          :limit="1"
+                          :on-exceed="handleExceed"
+                          :show-file-list="false"
+                          :on-change="updateAvatar"
+                      >
+                        <el-tooltip
+                            effect="dark"
+                            placement="bottom"
+                        >
+                          <el-button type="primary">
+                            <el-icon><Edit /></el-icon>
+                            更换头像
+                          </el-button>
+                          <template #content>
+                            <el-text style="color: white">
+                              仅限jpg/png文件，不超过500KB
+                            </el-text>
+                          </template>
+                        </el-tooltip>
+                      </el-upload>
+                    </div>
                   </div>
                 </div>
+
                 <div class="user_info_box">
                   <el-text class="user_info_text">
                     <el-icon><Iphone /></el-icon>
@@ -211,6 +221,7 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
                     {{ userStore.user.phone ? userStore.user.phone : "暂无" }}
                   </el-text>
                 </div>
+
                 <div class="user_info_box">
                   <el-text class="user_info_text">
                     <el-icon><Location /></el-icon>
@@ -271,26 +282,6 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
                     平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
                   </el-text>
                 </div>
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
-                  </el-text>
-                </div>
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
-                  </el-text>
-                </div><div class="user_info_box">
-                <el-text class="user_info_text">
-                  平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
-                </el-text>
-              </div>
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
-                  </el-text>
-                </div>
-
               </div>
             </div>
           </el-scrollbar>
@@ -312,16 +303,23 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
             </el-result>
           </div>
           <div v-else>
-            <div v-infinite-scroll="updater" class="infinite">
-              <div class="title_buy_record_box">
-                <el-text class="title_buy_record"> 购物记录 </el-text>
-              </div>
-
-              <div v-for="(item, index) in buyRecord" :key="index" class="buy_record_box">
-                <div class="buy_record">
-                  <Buyrecord :record="item"></Buyrecord>
+            <div class="scroll">
+              <van-list
+                  v-model="loading"
+                  :finished="stop"
+                  finished-text="没有更多数据了"
+                  @load="updater"
+              >
+                <div class="title_buy_record_box">
+                  <el-text class="title_buy_record"> 购物记录 </el-text>
                 </div>
-              </div>
+
+                <div v-for="(item, index) in buyRecord" :key="index" class="buy_record_box">
+                  <div class="buy_record">
+                    <Buyrecord :record="item"></Buyrecord>
+                  </div>
+                </div>
+              </van-list>
             </div>
           </div>
         </div>
@@ -364,15 +362,23 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
     margin-right: 2.5px;
   }
 
-  .infinite {
+  .scroll {
     overflow: auto;
     height: calc(#{var(--base-card-body-height)} - 6px);
   }
 
   .user_info_box {
-    margin-top: 1px;
+    margin-top: 2px;
     margin-bottom: 3px;
   }
+
+   .user_heart_box {
+     display: flex;
+     justify-content: center;
+
+     margin-top: 1px;
+     margin-bottom: 3px;
+   }
 
   .user_name {
     display: inline-block;

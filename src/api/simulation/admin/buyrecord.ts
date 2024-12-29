@@ -107,8 +107,8 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                     show: true,
                     down: false,
                 },
@@ -136,8 +136,8 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                     show: true,
                     down: false,
                 },
@@ -243,8 +243,8 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                     show: true,
                     down: false,
                 },
@@ -272,8 +272,8 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                     show: true,
                     down: false,
                 },

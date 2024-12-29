@@ -42,7 +42,6 @@ const changeName = (classId: number, oldName: string) => {
     confirmButtonText: '提交',
     cancelButtonText: '取消',
   }).then(({ value: newName }) => {
-    console.log("newName", newName, typeof newName)
     if (!newName || newName.length === 0) {
       ElMessage({
         type: "error",

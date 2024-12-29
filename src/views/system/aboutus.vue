@@ -19,34 +19,40 @@ const goKefu = () => {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="max-width: 75%; min-width: 30%; margin-top: 10px">
-      <template #header>
-        <el-text class="title">
-          关于{{ configStore.config?.name ? configStore.config?.name : "我们" }}
-        </el-text>
-      </template>
-
-      <el-text v-if="configStore.config?.aboutus" class="content">
-        {{ configStore.config?.aboutus }}
+  <el-card class="base_card">
+    <template #header>
+      <el-text class="title">
+        关于{{ configStore.config?.name ? configStore.config?.name : "我们" }}
       </el-text>
-      <el-text v-else class="content">
-        什么都没有留下...
-      </el-text>
+    </template>
 
-      <template #footer>
-        <div style="display: flex; justify-content: right">
-          <el-button-group>
-            <el-button type="success" @click="goHome">返回首页</el-button>
-            <el-button type="primary" @click="goKefu">我的客服</el-button>
-          </el-button-group>
-        </div>
-      </template>
-    </el-card>
-  </div>
+    <el-text v-if="configStore.config?.aboutus" class="content">
+      {{ configStore.config?.aboutus }}
+    </el-text>
+    <el-text v-else class="content">
+      什么都没有留下...
+    </el-text>
+
+    <template #footer>
+      <div style="display: flex; justify-content: right">
+        <el-button-group>
+          <el-button type="success" @click="goHome">返回首页</el-button>
+          <el-button type="primary" @click="goKefu">我的客服</el-button>
+        </el-button-group>
+      </div>
+    </template>
+  </el-card>
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  --base-card-height: #{var(--custom-height)};
+  --base-card-width: #{var(--custom-little-width)};
+  --base-card-min-width: #{var(--custom-min-width)};
+  max-width: #{var(--base-card-width)};
+  min-width: var(--base-card-min-width);
+}
+
 .title {
   margin-bottom: 5px;
   font-size: 0.8vw;

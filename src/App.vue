@@ -77,6 +77,8 @@
   const bodyHeight = computed(() => showFooter.value ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)` : `calc(100vh - ${headerDiv.value.height}px)`)
   const bodyWidth = computed(() => "85vw")
   const bodyLittleWidth = computed(() => "60vw")
+  const bodyMinWidth = computed(() => "35vw")
+  const bodyMostMinWidth = computed(() => "20vw")
 </script>
 
 <template>
@@ -102,6 +104,8 @@
   --custom-height: v-bind(bodyHeight);
   --custom-width: v-bind(bodyWidth);
   --custom-little-width: v-bind(bodyLittleWidth);
+  --custom-min-width: v-bind(bodyMinWidth);
+  --custom-most-min-width: v-bind(bodyMostMinWidth);
 }
 </style>
 

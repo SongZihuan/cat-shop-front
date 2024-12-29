@@ -120,7 +120,7 @@ const logout = () => {
       </el-text>
     </div>
   </div>
-  <div v-else-if="isLogin() && hasLoad() ">
+  <div v-else-if="isLogin() && hasLoad()">
     <div class="user_name">
       <el-dropdown size="large" class="dropdown">
         <el-text class="user_name_text custom-dropdown">
@@ -130,7 +130,7 @@ const logout = () => {
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>
-          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" />
+          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" @click="toHome"/>
         </el-text>
         <template #dropdown>
           <el-dropdown-menu>
@@ -140,7 +140,7 @@ const logout = () => {
             <el-dropdown-item @click="toBuyRecord"><el-text>我的购物记录</el-text></el-dropdown-item>
             <el-dropdown-item @click="toBag"><el-text>我的购物车</el-text></el-dropdown-item>
             <el-dropdown-item @click="toKefu"><el-text>我的客服</el-text></el-dropdown-item>
-            <el-dropdown-item @clic="toAboutUs"><el-text>关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toAboutUs"><el-text>关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
             <el-dropdown-item @click="logout" ><el-text>退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>
         </template>

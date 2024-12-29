@@ -144,6 +144,6 @@ const update = () => {
 
 <style scoped lang="scss">
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 </style>

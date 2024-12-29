@@ -8,6 +8,12 @@ const goHome = () => {
   })
 }
 
+const goKefu = () => {
+  router.push({
+    path: "/system/kefu",
+  })
+}
+
 let timeoutID: NodeJS.Timeout | number | undefined = undefined
 const backSec = ref(6)
 const backTimer = () => {
@@ -28,28 +34,35 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-result
-          style="min-width: 10vw; min-height: 40vh"
-          icon="error"
-          title="页面不存在"
-      >
-        <template #sub-title>
-          <div class="info_box">
-            <el-text>
-              您访问的页面不存在。
-            </el-text>
-          </div>
-        </template>
-        <template #extra>
-          <el-button  type="primary">回到主页（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
-        </template>
-      </el-result>
-    </el-card>
-  </div>
+  <el-card class="base_card">
+    <el-result
+        style="min-width: 10vw; min-height: 40vh"
+        icon="error"
+        title="页面不存在"
+    >
+      <template #sub-title>
+        <div class="info_box">
+          <el-text>
+            您访问的页面不存在。
+          </el-text>
+        </div>
+      </template>
+      <template #extra>
+        <el-button-group>
+          <el-button type="info" size="large" @click="goHome">回到主页（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+          <el-button type="primary" size="large" @click="goKefu">寻求客服帮助</el-button>
+        </el-button-group>
+      </template>
+    </el-result>
+  </el-card>
 </template>
 
 <style scoped lang="scss">
-
+.base_card {
+  --base-card-height: #{var(--custom-height)};
+  --base-card-width: #{var(--custom-little-width)};
+  --base-card-min-width: #{var(--custom-most-min-width)};
+  max-width: #{var(--base-card-width)};
+  min-width: var(--base-card-min-width);
+}
 </style>

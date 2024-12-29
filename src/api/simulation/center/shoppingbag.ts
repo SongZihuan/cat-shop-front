@@ -18,7 +18,7 @@ type ShopRecordLst = {
     list: ShopRecord[]
 }
 
-export function apiGetUserShoppingRecord(offset: number, limit: number): Result<ShopRecordLst> {
+export const apiGetUserShoppingRecord = (offset: number, limit: number): Result<ShopRecordLst> => {
     if (limit > 100) {
         limit = 100
     }
@@ -27,7 +27,7 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
     //     method: 'get',
     // })
 
-    if (offset > 10000) {
+    if (offset > 100) {
         return Promise.resolve({
             data: {
                 code: 0,
@@ -55,8 +55,8 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                 },
                 tag: "火爆",
                 hotPrice: 9999,

@@ -12,7 +12,7 @@ if (process.argv[2] === "--mode") {
     })
 }
 
-console.log("process.env.VITE_SIMULATION = ", process.env.VITE_SIMULATION)
+console.log("process.env.VITE_SIMULATION =", process.env.VITE_SIMULATION)
 
 const tsconfig = process.env.VITE_SIMULATION === "true" ? fs.readFileSync('tsconfig.simulation.json', 'utf-8') : fs.readFileSync('tsconfig.real.json', 'utf-8')
 

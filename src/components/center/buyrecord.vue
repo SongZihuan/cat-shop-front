@@ -549,41 +549,35 @@ const changeUser = () => {
           </div>
           <div style="float: right">
             <el-button-group>
-              <el-button v-if="xiangqing" type="success" @click="onXiangQing" size="large" class="class_btn">
+              <el-button v-if="xiangqing" type="success" size="large" class="class_btn" @click="onXiangQing">
                 查看详情
               </el-button>
-              <el-button v-if="record.down" type="success" disabled size="large" class="class_btn">
+              <el-button v-if="safe && record.down" type="success" size="large" class="class_btn" disabled>
                 商品已下架
               </el-button>
-              <el-button v-else type="success" size="large" class="class_btn" @click="onGoWupin">
+              <el-button v-else-if="safe && !record.down" type="success" size="large" class="class_btn" @click="onGoWupin">
                 查看商品售卖页
               </el-button>
               <el-tooltip
-                  v-if="record.down"
+                  v-if="safe && record.down"
                   effect="dark"
-                  placement="bottom-end"
+                  placement="bottom"
                   content="原商品已经下架，此处是您购买商品时信息的备份内容。"
               >
-                <el-button type="primary" @click="onGoLockWupin" size="large" class="class_btn">
+                <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
                   查看商品售卖存档页
                 </el-button>
               </el-tooltip>
               <el-tooltip
-                  v-else
+                  v-else-if="safe && !record.down"
                   effect="dark"
-                  placement="bottom-end"
+                  placement="bottom"
                   content="此处是您购买商品时信息的备份内容。"
               >
                 <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
                   查看商品售卖存档页
                 </el-button>
               </el-tooltip>
-              <el-button v-if="record.wupin.classid !== 1 && record.wupin.classOf && record.wupin.classOf.id !== 1" size="large" class="class_btn" disabled>
-                商品分类： {{ record.wupin.classOf.name }}
-              </el-button>
-              <el-button v-else size="large" class="class_btn" disabled>
-                商品暂无分类
-              </el-button>
             </el-button-group>
           </div>
         </div>
@@ -648,6 +642,14 @@ const changeUser = () => {
             </el-text>
             <el-text v-else>
               商品销售情况：正常销售中
+            </el-text>
+          </div>
+          <div class="info_box">
+            <el-text v-if="record.classid !== 1 && record.wupin && record.wupin.classOf && record.wupin.classOf.id === record.classid">
+              商品分类：{{ record.wupin.classOf.name }}
+            </el-text>
+            <el-text v-else>
+              商品分类：暂无 {{ record.classid }}  {{ record.wupin.classOf.id }}
             </el-text>
           </div>
           <div class="info_box">
@@ -1313,7 +1315,7 @@ const changeUser = () => {
 }
 
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .repay_info {
@@ -1409,7 +1411,7 @@ const changeUser = () => {
 .footer_btn {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
+  justify-content: flex-end;
   gap: 5px;
 }
 

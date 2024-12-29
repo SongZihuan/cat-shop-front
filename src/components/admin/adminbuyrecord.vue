@@ -676,7 +676,7 @@ const onXiangQing = () => {
               </el-button>
               <el-tooltip
                   effect="dark"
-                  placement="bottom-end"
+                  placement="bottom"
                   content="即您购买商品时，商品信息的备份内容。"
               >
                 <el-button type="primary" @click="onGoLockWupin">
@@ -1319,7 +1319,7 @@ const onXiangQing = () => {
 
 <style scoped lang="scss">
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .repay_info {

@@ -369,7 +369,7 @@ const selectMsg = computed(() => {
                   >
                     <el-tooltip
                         effect="dark"
-                        placement="bottom-end"
+                        placement="bottom"
                     >
                       <el-button type="primary">
                         <el-icon><Edit /></el-icon>
@@ -627,7 +627,7 @@ const selectMsg = computed(() => {
 
 <style scoped lang="scss">
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 #editorBox {

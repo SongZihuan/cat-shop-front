@@ -51,7 +51,7 @@ const toAdmin = () => {
           <el-icon class="el-icon--right" style="margin-right: 10px">
             <arrow-down />
           </el-icon>
-          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" />
+          <el-avatar class="user_avatar" shape="square" size="large" :src="userStore.user?.avatar" @click="toCenter"/>
         </el-text>
         <template #dropdown>
           <el-dropdown-menu class="drop_menu">

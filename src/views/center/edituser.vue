@@ -65,6 +65,12 @@ const checkLocation = computed(() => {
 })
 const allCheck = computed(() => checkLocation.value && checkWeChat.value && codeCheck.value && checkName.value && checkEmail.value && hasChange.value)
 
+const goHome = () => {
+  router.push({
+    path: "/center/user"
+  })
+}
+
 const update = () => {
   ElMessageBox.confirm('您是否确定更新你的用户信息', '提示', {
     confirmButtonText: '确定更新',
@@ -92,99 +98,108 @@ const update = () => {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-form :model="ub" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>昵称</el-text>
+  <el-card class="base_card">
+    <el-form :model="ub" label-width="auto" style="width: 15vw">
+      <el-form-item>
+        <template #label>
+          <el-text>昵称</el-text>
+        </template>
+        <el-input
+            v-model="ub.name"
+            maxlength="10"
+            minlength="1"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>微信</el-text>
+        </template>
+        <el-input
+            v-model="ub.wechat"
+            maxlength="30"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>邮箱</el-text>
+        </template>
+        <el-input
+            v-model="ub.email"
+            maxlength="30"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>地址</el-text>
+        </template>
+        <el-input v-model="ub.location" minlength="0" maxlength="150" show-word-limit/>
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>验证码</el-text>
+        </template>
+        <el-input v-model="code" clearable>
+          <template #append>
+            <el-text>
+              {{ question }}
+            </el-text>
           </template>
-          <el-input
-              v-model="ub.name"
-              maxlength="10"
-              minlength="1"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>微信</el-text>
-          </template>
-          <el-input
-              v-model="ub.wechat"
-              maxlength="30"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>邮箱</el-text>
-          </template>
-          <el-input
-              v-model="ub.email"
-              maxlength="30"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>地址</el-text>
-          </template>
-          <el-input v-model="ub.location" minlength="0" maxlength="150" show-word-limit/>
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>验证码</el-text>
-          </template>
-          <el-input v-model="code" clearable>
-            <template #append>
-              <el-text>
-                {{ question }}
-              </el-text>
-            </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center">
-        <el-button :disabled="!allCheck" @click="update">
+        </el-input>
+      </el-form-item>
+    </el-form>
+    <div style="display: flex; width: 15vw; justify-content: center">
+      <el-button-group>
+        <el-button type="success" size="large" :disabled="!allCheck" @click="update">
           更新
         </el-button>
+        <el-button type="primary" size="large" @click="goHome">
+          返回
+        </el-button>
+      </el-button-group>
+    </div>
+    <div style="width: 15vw; margin-top: 5px">
+      <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的邮箱（40字以内）！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkWeChat" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的微信（40字以内）！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkLocation" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的地址（150字以内）！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请编辑信息！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
+      <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-    </el-card>
-  </div>
+      <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的邮箱（40字以内）！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!checkWeChat" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的微信（40字以内）！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!checkLocation" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的地址（150字以内）！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请编辑信息！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+    </div>
+  </el-card>
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  --base-card-height: #{var(--custom-height)};
+  --base-card-width: #{var(--custom-little-width)};
+  max-width: #{var(--base-card-width)};
+}
+
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 </style>

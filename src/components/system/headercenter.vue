@@ -13,13 +13,20 @@ const goKefu = () => {
     path: "/system/kefu"
   })
 }
+
+const toHome = () => {
+  router.push({
+    path: "/shop/home"
+  })
+}
+
 </script>
 
 <template>
   <div class="header">
     <el-page-header icon="">
       <template #title>
-        <div style="display: flex; justify-content: left">
+        <div style="display: flex; justify-content: left" @click="toHome">
           <div class="title_box">
             <span>
               <el-avatar class="avatar_logo" :src="configStore.config.logo" fit="fill"></el-avatar>
@@ -32,8 +39,17 @@ const goKefu = () => {
       </template>
 
       <template #content>
-        <el-text class="subtitle">
-          {{ title }} - {{ configStore.config?.subname }}
+        <el-text v-if="title && configStore.config.subname" class="subtitle">
+          {{ title }} - {{ configStore.config.subname }}
+        </el-text>
+        <el-text v-else-if="configStore.config.subname" class="subtitle">
+          {{ configStore.config.subname }}
+        </el-text>
+        <el-text v-else-if="title" class="subtitle">
+          {{ title }}
+        </el-text>
+        <el-text>
+          欢迎您的到来
         </el-text>
       </template>
 

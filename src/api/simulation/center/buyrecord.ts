@@ -109,8 +109,8 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -135,8 +135,8 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -353,8 +353,8 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                 },
                 tag: "火爆",
                 hotPrice: 9999,
@@ -379,8 +379,8 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 pic: wupinPic,
                 classid: 2,
                 classOf: {
-                    id: 1,
-                    name: "商品分类",
+                    id: 2,
+                    name: "商品分类2",
                 },
                 tag: "火爆",
                 hotPrice: 9999,

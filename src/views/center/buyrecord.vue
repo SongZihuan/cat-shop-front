@@ -25,10 +25,8 @@ reload()
 </script>
 
 <template>
-  <div v-if="record && record.wupin" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <div style="width: 50%;">
+  <div v-if="record && record.wupin" class="base">
       <BuyRecord :zhifutishi="true" :record="record as BuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></BuyRecord>
-    </div>
   </div>
   <div v-else>
     <el-result
@@ -44,6 +42,12 @@ reload()
 </template>
 
 <style scoped lang="scss">
+.base {
+  display: flex;
+  justify-content: center;
+  width: var(--custom-little-width);
+  min-height: var(--custom-height);
+}
 
 .wupin_name {
   display: inline-block;

@@ -287,10 +287,10 @@ defineExpose({
         <div style="width: 15vw; margin-top: 5px; display: flex; justify-content: center">
           <el-button-group>
             <el-button type="info">取消支付</el-button>
-            <el-button :disabled="!allCheck" type="primary">
+            <el-button :disabled="!allCheck" type="primary" @click="doAliPay">
               支付宝支付
             </el-button>
-            <el-button :disabled="!allCheck" type="success">
+            <el-button :disabled="!allCheck" type="success" @click="doWeChatPay">
               微信支付
             </el-button>
           </el-button-group>
@@ -328,7 +328,7 @@ defineExpose({
 
 <style scoped lang="scss">
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .repay_info {

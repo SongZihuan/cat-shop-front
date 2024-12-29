@@ -21,8 +21,6 @@ const dataInfo = ref({} as any)
 const currentPage = ref<{ [key: string]: number }>({})
 
 const changePage = (status: string) => {
-  console.log("status", status, typeof status)
-
   const page = currentPage.value[status] || 1
   apiAdminGetBuyRecordByPage(page, 20, Number(status).valueOf()).then((res) => {
     dataInfo.value[status] = {
@@ -32,7 +30,6 @@ const changePage = (status: string) => {
       maxcount: res.data.data.maxcount,
       pagesize: 20,
     }
-    console.log(res.data.data.maxcount)
   }).catch(() => {
     ElMessage({
       type: "error",
@@ -50,7 +47,6 @@ changePage(activeModel.value)
     <el-card style="display: flex; height: 70vh; width: 80vw; justify-content: center; margin-top: 10px">
       <el-tabs v-model="activeModel" style="width: 75vw" :stretch="true" @tab-change="changePage(activeModel)">
         <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status as unknown as string" :name="index">
-          AAA {{ typeof  status }}  {{ status }}
           <div v-if="dataInfo[index]?.data && dataInfo[index].data.length > 0">
            <el-scrollbar height="60vh">
              <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px;">

@@ -106,7 +106,6 @@
   const updateHeaderHeight = new ResizeObserver((entries) => {
     entries.forEach(entry => {
       headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
-      console.log("headerHeight.value", headerHeight.value)
     })
   })
 
@@ -136,15 +135,13 @@
             </el-badge>
           </div>
           <div style="float: right">
-            <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
-              <el-button size="large" class="class_btn">
-                商品分类： {{ wupin.classOf.name }}
-              </el-button>
-            </div>
-            <div v-else>
-              <el-button size="large" class="class_btn" disabled>
+            <div class="class_box">
+              <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
+                商品分类：{{ wupin.classOf.name }}
+              </div>
+              <div v-else>
                 商品暂无分类
-              </el-button>
+              </div>
             </div>
           </div>
         </div>
@@ -152,9 +149,11 @@
     </template>
     <div class="box">
       <div class="left_box">
-        <el-scrollbar height="70vh">
+        <el-scrollbar>
           <div style="padding-right: 5px">
-            <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 85%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+            <div class="img_box">
+              <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 85%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+            </div>
             <div v-if="wupin.ren" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Microphone /></el-icon>
@@ -328,10 +327,10 @@
                 </template>
               </el-input-number>
               <el-button-group>
-                <el-button class="buy_item" size="large" @click="onClickBag">
+                <el-button class="buy_item" type="primary" size="large" @click="onClickBag">
                   <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入购物车
                 </el-button>
-                <el-button class="buy_item" size="large" @click="buy">
+                <el-button class="buy_item" type="success" size="large" @click="buy">
                   <el-icon style="margin-right: 3px"><Money /></el-icon>
                   立即购买
                   <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
@@ -402,13 +401,13 @@
 
   .wupin_hot_price {
     color: red;
-    font-size: 1vw;
+    font-size: 1.5rem;
   }
 
   .wupin_hot_real_price {
     margin-left: 5px;
     color: black;
-    font-size: 0.7vw;
+    font-size: 1.3rem;
   }
 
   .wupin_hot_real_price_line-through {
@@ -417,13 +416,13 @@
 
   .wupin_sb_price {
     color: blue;
-    font-size: 1vw;
+    font-size: 1.3rem;
   }
 
   .wupin_sb_real_price {
     margin-left: 5px;
     color: black;
-    font-size: 0.7vw;
+    font-size: 1.3rem;
   }
 
   .wupin_sb_real_price_line_through {
@@ -432,7 +431,7 @@
 
   .wupin_real_price {
     color: black;
-    font-size: 1vw;
+    font-size: 1.3rem;
   }
 
   .wupin_else_real_price {
@@ -459,8 +458,8 @@
   }
 
   .wupin_info_box, .wupin_buy_total_box {
-    margin-top: 1px;
-    margin-bottom: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
   .wupin_buy_total_text {
@@ -482,5 +481,17 @@
 
   .buy_box {
     float: right;
+  }
+
+  .class_box {
+    border: 1px solid #333333;;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+  }
+
+  .img_box {
+    display: flex;
+    justify-content: center;
   }
 </style>

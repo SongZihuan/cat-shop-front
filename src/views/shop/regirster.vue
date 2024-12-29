@@ -11,6 +11,13 @@ const configStore = useConfigStore()
 const route = useRoute()
 const router = useRouter()
 
+const toLogin = () => {
+  router.push({
+    path: "/shop/login",
+    query: route.query,
+  })
+}
+
 const goRedirect = () => {
   const redirectPath = route.query?.[redirect]
   if (typeof redirectPath === "string" && redirectPath.length > 0) {
@@ -111,81 +118,94 @@ const notAcceptXieyi = () => {
 </script>
 
 <template>
-  <div v-if="!isLogin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-form :model="form" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>手机号</el-text>
-          </template>
-          <el-input
-              v-model="form.phone"
-              maxlength="20"
-              minlength="1"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>密码</el-text>
-          </template>
-          <el-input v-model="form.password" type="password" show-password />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>再次密码</el-text>
-          </template>
-          <el-input v-model="form.passwordDouble" type="password" show-password />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>验证码</el-text>
-          </template>
-          <el-input v-model="form.code" clearable>
-            <template #append>
-              <el-text>
-                {{ question }}
-              </el-text>
+  <el-card v-if="!isLogin()" class="base_card">
+    <div class="box">
+      <div>
+        <el-form :model="form" label-width="auto" style="width: 15vw">
+          <el-form-item>
+            <template #label>
+              <el-text>手机号</el-text>
             </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center; margin-top: 10px">
-        <div>
-          <el-checkbox v-model="accept" class="xieyi_checkbox" label="我同意" size="large" />
-          <el-text class="xieyi_text" @click="openXieyi"> 用户协议 </el-text>
+            <el-input
+                v-model="form.phone"
+                maxlength="20"
+                minlength="1"
+                show-word-limit
+                clearable
+            />
+          </el-form-item>
+          <el-form-item>
+            <template #label>
+              <el-text>密码</el-text>
+            </template>
+            <el-input v-model="form.password" type="password" show-password />
+          </el-form-item>
+          <el-tooltip
+              effect="dark"
+              placement="bottom"
+              content="请再次输入密码已确保准确性"
+          >
+            <el-form-item>
+              <template #label>
+                <el-text>密码</el-text>
+              </template>
+              <el-input v-model="form.passwordDouble" type="password" show-password />
+            </el-form-item>
+          </el-tooltip>
+          <el-form-item>
+            <template #label>
+              <el-text>验证码</el-text>
+            </template>
+            <el-input v-model="form.code" clearable>
+              <template #append>
+                <el-text>
+                  {{ question }}
+                </el-text>
+              </template>
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <div style="display: flex; width: 15vw; justify-content: center; margin-top: 10px">
+          <div>
+            <el-checkbox v-model="accept" class="xieyi_checkbox" label="我同意" size="large" />
+            <el-text class="xieyi_text" @click="openXieyi"> 用户协议 </el-text>
+          </div>
+        </div>
+        <div style="display: flex; width: 15vw; justify-content: center; margin-top: 10px">
+          <el-button-group>
+            <el-button type="success" :disabled="!allCheck" @click="register">
+              注册并登录
+            </el-button>
+            <el-button type="primary" @click="toLogin">
+              已有账号？直接登录
+            </el-button>
+          </el-button-group>
+        </div>
+        <div style="width: 15vw; margin-top: 5px">
+          <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
+            <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
+            </el-alert>
+          </div>
+          <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
+            <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
+            </el-alert>
+          </div>
+          <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
+            <el-alert title="密码必须长度大于8！" :closable="false" type="warning" center show-icon>
+            </el-alert>
+          </div>
+          <div v-if="!doublePasswordCheck" class="tip_box" style="display: flex; justify-content: center">
+            <el-alert title="两次输入密码不正确！" :closable="false" type="warning" center show-icon>
+            </el-alert>
+          </div>
+          <div v-if="!accept" class="tip_box" style="display: flex; justify-content: center">
+            <el-alert title="请同意用户协议！" :closable="false" type="warning" center show-icon>
+            </el-alert>
+          </div>
         </div>
       </div>
-      <div style="display: flex; width: 15vw; justify-content: center; margin-top: 10px">
-        <el-button :disabled="!allCheck" @click="register">
-          注册并登录
-        </el-button>
-      </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="密码必须长度大于8！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!doublePasswordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="两次输入密码不正确！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!accept" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请同意用户协议！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-      </div>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
   <div v-else></div>
 
   <el-dialog
@@ -220,8 +240,21 @@ const notAcceptXieyi = () => {
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  --base-card-height: #{var(--custom-height)};
+  --base-card-width: #{var(--custom-little-width)};
+  --base-card-min-width: #{var(--custom-min-width)};
+  max-height: #{var(--base-card-height)};
+  max-width: #{var(--base-card-width)};
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+}
+
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .xieyi_checkbox {
   vertical-align: middle;

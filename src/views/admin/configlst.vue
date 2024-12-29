@@ -251,7 +251,7 @@ const deleteConfig = (key: string) => {
               >
                 <el-tooltip
                     effect="dark"
-                    placement="bottom-end"
+                    placement="bottom"
                 >
                   <el-button type="primary" plain>
                     <el-icon><Edit /></el-icon>

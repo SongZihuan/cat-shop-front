@@ -36,21 +36,46 @@ changePage()
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <div style="width: 65%;">
+  <div class="outside">
+    <div class="search">
       <Search  style="margin-top: 10px; margin-bottom: 10px" :tyoe="-1"></Search>
     </div>
-  </div>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <div style="width: 90%; display: flex; justify-content: space-between; margin-top: 10px">
+    <div class="wupinlst">
       <WupinLst :wp="wupinlst"></WupinLst>
     </div>
-  </div>
-  <div style="display: flex; justify-content: center">
-    <el-pagination v-model:current-page="currentPage" class="pager" background layout="prev, pager, next" :total="maxcount" :page-size="pagesize" @change="changePage" />
+    <div class="pagination">
+     <el-pagination v-model:current-page="currentPage" class="pager" background layout="prev, pager, next" :total="maxcount" :page-size="pagesize" @change="changePage" />
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+.outside {
+  display: flex;
+  flex-direction: column; /* 竖直排列 */
+  align-items: center; /* 水平居中 */
+}
+
+.search {
+  width: #{var(--custom-little-width)};
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.wupinlst {
+  display: flex;
+  justify-content: center;
+
+  width: #{var(--custom-width)};
+  margin-top: 10px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+
+  width: #{var(--custom-width)};
+  margin-top: 10px;
+}
 
 </style>

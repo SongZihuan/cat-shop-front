@@ -42,6 +42,12 @@ const passwordCheck = computed(() => form.value.newPassword.length >= 8)
 const doublePasswordCheck = computed(() => form.value.newPassword === form.value.newPasswordDouble)
 const allCheck = computed(() => codeCheck.value && oldPasswordCheck.value && passwordCheck.value && doublePasswordCheck.value)
 
+const goHome = () => {
+  router.push({
+    path: "/center/user"
+  })
+}
+
 const update = () => {
   ElMessageBox.confirm('您是否确定更新您的用户密码', '提示', {
     confirmButtonText: '确定更新',
@@ -54,7 +60,7 @@ const update = () => {
         message: "更新成功",
       })
       router.push({
-        path: "/shop/home"
+        path: "/shop/home"  // 已经退出，无法返回/center/user
       })
     }, () => {
       resetCode()
@@ -69,69 +75,84 @@ const update = () => {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-form :model="form" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>旧密码</el-text>
-          </template>
-          <el-input v-model="form.oldPassword" type="password" show-password />
-        </el-form-item>
+  <el-card class="base_card">
+    <el-form :model="form" label-width="auto" style="width: 15vw">
+      <el-form-item>
+        <template #label>
+          <el-text>旧密码</el-text>
+        </template>
+        <el-input v-model="form.oldPassword" type="password" show-password />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>新密码</el-text>
+        </template>
+        <el-input v-model="form.newPassword" type="password" show-password />
+      </el-form-item>
+      <el-tooltip
+          effect="dark"
+          content="再次输入新密码"
+          placement="bottom"
+      >
         <el-form-item>
           <template #label>
             <el-text>新密码</el-text>
           </template>
-          <el-input v-model="form.newPassword" type="password" show-password />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>再次新密码</el-text>
-          </template>
           <el-input v-model="form.newPasswordDouble" type="password" show-password />
         </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>验证码</el-text>
+      </el-tooltip>
+      <el-form-item>
+        <template #label>
+          <el-text>验证码</el-text>
+        </template>
+        <el-input v-model="code" clearable>
+          <template #append>
+            <el-text>
+              {{ question }}
+            </el-text>
           </template>
-          <el-input v-model="code" clearable>
-            <template #append>
-              <el-text>
-                {{ question }}
-              </el-text>
-            </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center">
-        <el-button :disabled="!allCheck" @click="update">
+        </el-input>
+      </el-form-item>
+    </el-form>
+    <div style="display: flex; width: 15vw; justify-content: center">
+      <el-button-group>
+        <el-button type="success" size="large" :disabled="!allCheck" @click="update">
           更新
         </el-button>
+        <el-button type="primary" size="large" @click="goHome">
+          返回
+        </el-button>
+      </el-button-group>
+    </div>
+    <div style="width: 15vw; margin-top: 5px">
+      <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!oldPasswordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入旧密码！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="新密码必须长度大于8！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!doublePasswordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="两次输入新密码不正确！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
+      <div v-if="!oldPasswordCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入旧密码！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-    </el-card>
-  </div>
+      <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="新密码必须长度大于8！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!doublePasswordCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="两次输入新密码不正确！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+    </div>
+  </el-card>
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  --base-card-height: #{var(--custom-height)};
+  --base-card-width: #{var(--custom-little-width)};
+  max-width: #{var(--base-card-width)};
+}
+
 .tip_box {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 </style>
