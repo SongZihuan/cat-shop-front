@@ -75,7 +75,7 @@
   // header 10vh + 3px
   // footer 7vh + 3px
   const bodyHeight = computed(() => showFooter.value ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)` : `calc(100vh - ${headerDiv.value.height}px)`)
-  const bodyWidth = computed(() => "90vw")
+  const bodyWidth = computed(() => "85vw")
   const bodyLittleWidth = computed(() => "60vw")
 </script>
 
@@ -121,7 +121,6 @@
     display: flex;
     justify-content: center;
 
-    height: #{var(--custom-height)};
     min-height: #{var(--custom-height)};
   }
 

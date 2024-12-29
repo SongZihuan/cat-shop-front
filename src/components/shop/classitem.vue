@@ -2,12 +2,12 @@
   import { Class } from "#/center/class"
 
   const props = defineProps({
-    "cl": {
+    "item": {
       type: Object as PropType<Class>,
       required: true,
     }
   })
-  const item = computed(() => props.cl)
+  const item = computed(() => props.item)
   const router = useRouter()
 
   const onClickClass = () => {
@@ -15,7 +15,7 @@
       path: "/shop/search",
       query: {
         "info": JSON.stringify({
-          select: [item.value?.id || 1],
+          select: item.value?.id || 0,
           search: "",
         })
       }
@@ -35,7 +35,7 @@
 
 <style scoped lang="scss">
 
-.el-button {
+.classItem {
   margin: 2px 2px 2px 2px;
 }
 

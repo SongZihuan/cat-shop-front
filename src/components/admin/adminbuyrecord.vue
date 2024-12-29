@@ -53,7 +53,7 @@ const onClassClick = () => {
     path: "/shop/search",
     query: {
       "info": JSON.stringify({
-        select: [record.value.wupin.classid],
+        select: record.value.wupin.classid || 0,
         search: "",
       })
     }

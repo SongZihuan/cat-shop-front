@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import useConfigStore from "@/store/config"
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessageBox } from 'element-plus'
 
 const configStore = useConfigStore()
 const showAD = ref({
@@ -30,19 +30,13 @@ defineExpose({
 })
 
 const onClickAD = () => {
-  if (showAD.value.url) {
+  showAD.value.url && ElMessageBox.confirm('你是否要前往广告官网？', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning',
+  }).then(() => {
     window.open(showAD.value.url)
-  } else {
-    ElMessageBox.alert(showAD.value.text, showAD.value.header, {
-      confirmButtonText: 'OK',
-      callback: () => {
-        ElMessage({
-          type: 'success',
-          message: "感谢您的关注",
-        })
-      },
     })
-  }
 }
 
 </script>
@@ -52,10 +46,13 @@ const onClickAD = () => {
     <div id="ad_text">
       <el-card>
         <template #header>
-          广告：{{ showAD.header }}
+          <el-text class="title">
+            <el-text class="title title_ad">广告：</el-text>
+            {{ showAD.header }}
+          </el-text>
         </template>
-        <el-text class="ad_text">
-          {{ showAD.text }}
+        <el-text class="content">
+          <p class="content_p"> <el-text class="context_text"> {{ showAD.text }} </el-text> </p>
         </el-text>
       </el-card>
     </div>
@@ -74,7 +71,33 @@ const onClickAD = () => {
   display: block;
 }
 
+.title {
+  font-size: 1.5rem;
+}
+
+.title_ad {
+  font-weight: bold;
+}
+
+.content {
+  --content-font-size: 1rem;
+  font-size: var(--content-font-size);
+  text-indent:2em;
+  margin: 0;
+}
+
+.content_p {
+  margin: 0;
+}
+
+.context_text {
+  font-size: var(--content-font-size);
+  line-height: 1.8em;
+}
+
 #ad_box {
+  --ad-pic-max-height: 60vh;
+
   display: flex;
   justify-content: center;
   min-width: 100%;
@@ -84,6 +107,11 @@ const onClickAD = () => {
 #ad_pic {
   flex-grow: 2;
   margin-left: 10px;
+  max-height: var(--ad-pic-max-height);
+}
+
+#ad_img {
+  max-height: var(--ad-pic-max-height);
 }
 
 #ad_text {
@@ -93,9 +121,5 @@ const onClickAD = () => {
   margin-left: 10px;
 }
 
-.ad_text {
-  font-size: 0.6vw;
-  line-height: 140%;
-}
 
 </style>

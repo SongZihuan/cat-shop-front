@@ -56,8 +56,8 @@
       path: "/shop/search",
       query: {
         "info": JSON.stringify({
-          select: select.value,
-          search: search.value,
+          select: select.value || 0,
+          search: search.value || "",
         })
       }
     })

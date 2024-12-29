@@ -72,8 +72,8 @@ const onSameClick = () => {
     path: "/shop/search",
     query: {
       "info": JSON.stringify({
-        select: [record.value.wupin.classid],
-        search: record.value.wupin.name,
+        select: record.value.wupin.classid || 0,
+        search: record.value.wupin.name || "",
       })
     }
   })
