@@ -8,7 +8,7 @@ const goHome = () => {
   })
 }
 
-let timeoutID = 0
+let timeoutID: NodeJS.Timeout | number | undefined = undefined
 const backSec = ref(6)
 const backTimer = () => {
   if (backSec.value == 0) {

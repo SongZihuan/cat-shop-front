@@ -1,5 +1,5 @@
 import {apiGetHotWupinLst} from "#/center/hotwupin"
-import { Class } from "@/store/class"
+import { Class } from "#/center/class"
 
 export interface Wupin {
     id: number

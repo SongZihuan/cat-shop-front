@@ -94,6 +94,7 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
         buydaohuo: 95,
         buygood: 90,
         hot: true,
+        down: false,
     } as AdminWupin
     return Promise.resolve({
         data: {
@@ -173,6 +174,7 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
             buydaohuo: 95,
             buygood: 90,
             hot: i % 2 == 0,
+            down: false,
         } as AdminWupin)
     }
 

@@ -39,13 +39,13 @@ const toBack = () => {
   pushTo(router, route, "/admin/user/list")
 }
 
-let timeoutID = 0
+let timeoutID: NodeJS.Timeout | number | undefined = undefined
 const backSec = ref(6)
 const isBack = ref(false)
 const backTimer = () => {
   isBack.value = true
   if (backSec.value == 0) {
-    goHome()
+    toBack()
     return
   }
 

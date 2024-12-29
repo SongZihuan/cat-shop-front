@@ -40,11 +40,11 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
     }
   })
 
-  // const goHome = () => {
-  //   router.push({
-  //     path: "/shop/home"
-  //   })
-  // }
+  const goHome = () => {
+    router.push({
+      path: "/shop/home"
+    })
+  }
 
   let offset = 0
   const limit = 20

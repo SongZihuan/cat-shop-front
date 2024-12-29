@@ -10,6 +10,7 @@ export interface ShopRecord {
     num: number
     time: number
     wupin: Wupin
+    down: boolean
 }
 
 type ShopRecordLst = {
@@ -73,6 +74,7 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
                 buyjian: 10,
                 hot: false,
             },
+            down: false,
         })
     }
 

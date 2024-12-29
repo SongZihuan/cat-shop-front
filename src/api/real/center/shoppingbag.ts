@@ -72,7 +72,6 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             down: false,

@@ -15,7 +15,7 @@ if (!msg.value || msg.value.length > 20) {
   msg.value = "遇到系统未能捕获的错误，请稍后臭重试。"
 }
 
-let timeoutID = 0
+let timeoutID: NodeJS.Timeout | number | undefined = undefined
 const backSec = ref(6)
 const backTimer = () => {
   if (backSec.value == 0) {

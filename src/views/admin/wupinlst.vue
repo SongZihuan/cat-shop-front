@@ -15,16 +15,16 @@ if (currentPage.value < 1) {
 }
 
 const data = ref({
-  select: [],
+  select: 0,
   search: "",
-} as { select?: number[], search?: string })
+} as { select?: number, search?: string })
 
 const changePage = () => {
   if (route.query?.info) {
-    data.value = JSON.parse(route.query?.info as string) as { select?: number[], search?: string }
+    data.value = JSON.parse(route.query?.info as string) as { select?: number, search?: string }
   }
 
-  apiAdminGetSearchWupin(data.value?.search || "", data.value?.select || [], currentPage.value, 20).then((res) => {
+  apiAdminGetSearchWupin(data.value?.search || "", data.value?.select || 0, currentPage.value, 20).then((res) => {
     wupinlst.value = res.data.data.list
     maxcount.value = res.data.data.maxcount
   })

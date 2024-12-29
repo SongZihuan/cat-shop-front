@@ -79,9 +79,9 @@ import {
   }
   setTimeout(() => paynow(), 3000)
 
-  let timeoutID = 0
+  let timeoutID: NodeJS.Timeout | number | undefined = undefined
   const backSec = ref(6)
-  const backTimer = (back: ()=>{}) => {
+  const backTimer = (back: ()=>void) => {
     if (backSec.value == 0) {
       back()
       return
@@ -90,7 +90,6 @@ import {
     backSec.value -= 1
     timeoutID = setTimeout(backTimer, 1000)
   }
-  backTimer()
 
   onUnmounted(() => {
     timeoutID && clearTimeout(timeoutID)

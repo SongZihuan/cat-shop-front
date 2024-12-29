@@ -124,7 +124,6 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -150,7 +149,6 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             user: {
@@ -254,7 +252,6 @@ export function apiGetBuyRecordByPage(page: number, pagesize: number, status: nu
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -280,7 +277,6 @@ export function apiGetBuyRecordByPage(page: number, pagesize: number, status: nu
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             user: {
@@ -384,7 +380,6 @@ export function apiGetUserBuyRecordByPage(userId: number, page: number, pagesize
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             nowwupin: {
@@ -410,7 +405,6 @@ export function apiGetUserBuyRecordByPage(userId: number, page: number, pagesize
                 buyprice: 1000,
                 buypingjia: 10,
                 buyjian: 10,
-                down: false,
                 hot: true,
             },
             user: {

@@ -19,11 +19,9 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
             classOf: {
                 id: 2,
                 name: "商品分类",
-                show: true,
-                down: false,
             },
             tag: "爆卖！",
-            hotPrice: 9999,
+            hotPrice: 19999,
             realPrice: 19999,
             info: "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
                 "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
@@ -51,6 +49,10 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
             buytotal: 100,
             buydaohuo: 95,
             buygood: 90,
+            buyprice: 1000,
+            buypingjia: 10,
+            buyjian: 10,
+            hot: true,
         } as Wupin)
     }
     return Promise.resolve({

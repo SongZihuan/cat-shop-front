@@ -1,4 +1,3 @@
-import {Wupin} from "@/store/hotwupin"
 import WupinPic from "@/assets/images/tmp.jpg"
 import { Result} from "@/utils/request"
 import {AdminWupin} from "#/admin/wupin";
@@ -15,7 +14,7 @@ export const apiAdminGetSearchWupin = (search: string, select: Array<number>, pa
     }
 
     const maxcount = 50
-    const wupinlst = ref([] as Wupin[])
+    const wupinlst = ref([] as AdminWupin[])
     for (let i = (page - 1) * pagesize; i < maxcount; i++) {
         if (wupinlst.value.length >= pagesize) {
             break
@@ -33,7 +32,7 @@ export const apiAdminGetSearchWupin = (search: string, select: Array<number>, pa
                 down: false,
             },
             tag: "爆卖！",
-            hotPrice: 9999,
+            hotPrice: 19999,
             realPrice: 19999,
             info: "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
                 "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
@@ -61,7 +60,13 @@ export const apiAdminGetSearchWupin = (search: string, select: Array<number>, pa
             buytotal: 100,
             buydaohuo: 95,
             buygood: 90,
-        } as Wupin)
+            buyprice: 1000,
+            buypingjia: 10,
+            buyjian: 10,
+            show: true,
+            hot: true,
+            down: false,
+        } as AdminWupin)
     }
     return Promise.resolve(
         {

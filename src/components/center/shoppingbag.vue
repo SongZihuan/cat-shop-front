@@ -30,7 +30,7 @@ const totalPrice = computed(() => {
 })
 
 const onWupinClick = () => {
-  record.value && router.push({
+  record.value && !record.value.down && router.push({
     path: "/shop/wupin",
     query: {
       id: record.value.wupin.id,
@@ -102,6 +102,14 @@ const buy = () => {
   byn.value.openWithShop(record.value)
 }
 
+const wupinNameClass = computed(() => {
+  if (record.value.down) {
+    return ["wupin_name"]
+  }
+
+  return ["wupinname", "wupin_name_click"]
+})
+
 </script>
 
 <template>
@@ -113,7 +121,7 @@ const buy = () => {
             <div style="display: flow-root">
               <div style="float: left">
                 <el-badge :value="record.wupin.tag" style="margin-top: 10px">
-                  <el-text class="wupin_name" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
+                  <el-text :class="wupinNameClass" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
                 </el-badge>
               </div>
               <div style="float: right">
@@ -143,6 +151,19 @@ const buy = () => {
             <el-scrollbar height="20vh">
               <div style="display: flow-root">
                 <div class="price_box" style="float: left">
+                  <div v-if="record.down">
+                    <el-text class="wupin_down_price">
+                      商品已下架
+                      <br>
+                      <el-text v-if="facePrice > 0" class="wupin_down_price wupin_down_price_line_through">
+                        售价：￥{{ (facePrice / 100).toFixed(2) }}
+                      </el-text>
+                      <br>
+                      <el-text v-if="realPrice > 0 && facePrice != realPrice" class="wupin_down_price wupin_down_price_line_through">
+                        原价：￥{{ (realPrice / 100).toFixed(2) }}
+                      </el-text>
+                    </el-text>
+                  </div>
                   <div v-if="facePrice == 0">
                     <el-text class="wupin_hot_price">
                       现在：免费抢购
@@ -227,18 +248,18 @@ const buy = () => {
         </div>
       <template #footer>
         <div style="display: flex; justify-content: right;">
-          <el-input-number v-model="num" :disabled="record.value" :min="0" :max="99" size="large" class="buy_item">
+          <el-input-number v-model="num" :disabled="record.down" :min="0" :max="99" size="large" class="buy_item">
             <template #suffix>
               <span> 件 </span>
             </template>
           </el-input-number>
           <el-button-group>
-            <el-button :disabled="record.value" class="buy_item" size="large" @click="onClickBag">
+            <el-button :disabled="record.down" class="buy_item" size="large" @click="onClickBag">
               <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入加入购物车
             </el-button>
-            <el-button v-if="record.value" disabled class="buy_item" size="large">
+            <el-button v-if="record.down" disabled class="buy_item" size="large">
               <el-icon style="margin-right: 3px"><Money /></el-icon>
-              立即购买
+              商品已下架
             </el-button>
             <el-button v-else class="buy_item" size="large" :disabled="num <= 0" @click="buy">
               <el-icon style="margin-right: 3px"><Money /></el-icon>
@@ -282,11 +303,15 @@ const buy = () => {
   cursor: pointer;
 }
 
-.wupin_name:hover {
+.wupin_name_click {
+  cursor: pointer;
+}
+
+.wupin_name_click:hover {
   text-decoration: underline;
 }
 
-.wupin_name:active {
+.wupin_name_click:active {
   color: blue;
 }
 
@@ -320,6 +345,15 @@ const buy = () => {
 .price_box {
   margin-top: 10px;
   margin-bottom: 5px;
+}
+
+.wupin_down_price {
+  color: #595959;
+  font-size: 1vw;
+}
+
+.wupin_down_price_line_through {
+  text-decoration: line-through;
 }
 
 .wupin_hot_price {
