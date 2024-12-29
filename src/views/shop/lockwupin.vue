@@ -216,7 +216,7 @@
                 <el-text class="wupin_hot_price">
                   <el-icon><BellFilled /></el-icon>
                   价格：免费抢购
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_else_real_price_line_through">
+                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }}
                   </el-text>
                 </el-text>
@@ -225,7 +225,7 @@
                 <el-text class="wupin_hot_price">
                   <el-icon><GobletSquareFull /></el-icon>
                   促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_else_real_price_line_through">
+                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                   <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
@@ -238,7 +238,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_else_real_price_line_through">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                 </el-text>
@@ -254,7 +254,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_else_real_price_line_through">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                     原价：免费送
                   </el-text>
                 </el-text>
@@ -356,6 +356,9 @@
     margin-left: 5px;
     color: black;
     font-size: 0.7vw;
+  }
+
+  .wupin_hot_real_price_line_through {
     text-decoration: line-through;
   }
 
@@ -368,6 +371,9 @@
     margin-left: 5px;
     color: black;
     font-size: 0.7vw;
+  }
+
+  .wupin_sb_real_price_line_through {
     text-decoration: line-through;
   }
 

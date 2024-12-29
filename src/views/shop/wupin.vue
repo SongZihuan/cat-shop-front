@@ -22,14 +22,6 @@
   const wupin = ref(null as Wupin | null)
   apiGetWupin(wupinId.value as number).then((res) => {
     wupin.value = res.data.data
-    if (!wupin.value || wupin.value.id === 0 || wupin.value.down) {
-      router.push({
-        path: "/system/error",
-        query: {
-          msg: "商品不存在1",
-        }
-      })
-    }
   }).catch(() => {
     router.push({
       path: "/system/error",
@@ -274,7 +266,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                 </el-text>
@@ -290,7 +282,7 @@
                 <el-text class="wupin_sb_price">
                   <el-icon><Pouring /></el-icon>
                   冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                     原价：免费送
                   </el-text>
                 </el-text>
@@ -300,7 +292,7 @@
                 <el-text class="wupin_real_price">
                   <el-icon><Shop /></el-icon>
                   售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_else_real_price">
+                  <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
                     原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                   </el-text>
                 </el-text>
@@ -387,6 +379,9 @@
     margin-left: 5px;
     color: black;
     font-size: 0.7vw;
+  }
+
+  .wupin_sb_real_price_line_through {
     text-decoration: line-through;
   }
 
@@ -399,6 +394,9 @@
     margin-left: 5px;
     color: black;
     font-size: 0.7vw;
+  }
+
+  .wupin_else_real_price_line_through {
     text-decoration: line-through;
   }
 

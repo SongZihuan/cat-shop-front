@@ -16,7 +16,7 @@ const goKefu = () => {
 </script>
 
 <template>
-  <el-header height="10vh" style="background-color: aliceblue; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+  <div class="header">
     <el-page-header icon="">
       <template #title>
         <div style="display: flex; justify-content: left">
@@ -53,10 +53,20 @@ const goKefu = () => {
         </div>
       </template>
     </el-page-header>
-  </el-header>
+  </div>
 </template>
 
 <style scoped lang="scss">
+.header {
+  height: 10vh;
+  max-height: 10vh;
+  min-height: 10vh;
+
+  background-color: aliceblue;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
 #logo {
   float: left;
 }

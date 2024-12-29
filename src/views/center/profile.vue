@@ -2,7 +2,7 @@
 import useUserStore, {isLogin, hasLoad, UserTypeList} from "@/store/user"
   import {Edit} from "@element-plus/icons-vue"
   import {BuyRecord} from "#/center/buyrecord"
-  import Buyrecord from "@/components/center/buyrecord.vue"
+  // import Buyrecord from "@/components/center/buyrecord.vue"
 import {ElNotification, ElMessage, UploadFile} from "element-plus"
   import { genFileId } from 'element-plus'
   import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
@@ -40,11 +40,11 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
     }
   })
 
-  const goHome = () => {
-    router.push({
-      path: "/shop/home"
-    })
-  }
+  // const goHome = () => {
+  //   router.push({
+  //     path: "/shop/home"
+  //   })
+  // }
 
   let offset = 0
   const limit = 20
@@ -130,159 +130,239 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
       })
     })
   }
+
+  const headerCustomer = ref<HTMLElement>()
+  const headerHeight = ref("0")
+  const el_card_header_px = 19
+
+  const updateElementHeight = new ResizeObserver((entries) => {
+    entries.forEach(entry => {
+      headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
+      console.log("headerHeight.value", headerHeight.value)
+    })
+  })
+
+  onMounted(() => {
+    if (headerCustomer.value) {
+      updateElementHeight.observe(headerCustomer.value)
+    }
+  })
+
 </script>
 
 <template>
-  <div v-if="hasLoad()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <div style="display: inline-block; width: 15vw; max-height: 60vh; min-height: 60vh; margin-right: 20px; margin-left: 20px">
-        <el-scrollbar height="60vh">
-          <div style="padding-right: 15px">
-            <el-image :src="userStore.user.avatar" fit="contain" style="margin-right: 15px; height: auto; width: 100%; border-radius: 20px" :initial-index="0" :preview-src-list="[userStore.user.avatar]"></el-image>
-            <div style="margin-right: 15px">
-              <div class="user_info_box">
-                <div class="user_info_btn">
-                  <el-button-group>
-                    <el-button type="success" @click="goEdit">
-                      <el-icon><Edit /></el-icon>
-                      更改个人信息
-                    </el-button>
-                    <el-button type="danger" @click="goPassword">
-                      <el-icon><EditPen /></el-icon>
-                      修改账号密码
-                    </el-button>
-                  </el-button-group>
-                </div>
-                <div class="user_info_btn">
-                  <el-upload
-                      ref="avatarUpload"
-                      v-model:file-list="avatar"
-                      action="#"
-                      accept=".jpg,.jpeg,.png"
-                      :auto-upload="false"
-                      :multiple="false"
-                      :limit="1"
-                      :on-exceed="handleExceed"
-                      :show-file-list="false"
-                      :on-change="updateAvatar"
-                  >
-                    <el-tooltip
-                        effect="dark"
-                        placement="bottom-end"
-                    >
-                      <el-button type="primary">
+    <el-card v-if="hasLoad()" class="base_card">
+      <template #header>
+        <div ref="headerCustomer">
+          <el-badge :value="kehutag" style="margin-top: 10px;">
+            <el-text class="user_name">{{ userStore.user.name }} </el-text>
+          </el-badge>
+        </div>
+      </template>
+      <div class="outside">
+        <div class="profile_box">
+          <el-scrollbar>
+            <div>
+              <el-image :src="userStore.user.avatar" fit="contain" style="margin-right: 15px; height: auto; width: 70%; border-radius: 20px" :initial-index="0" :preview-src-list="[userStore.user.avatar]"></el-image>
+              <div style="margin-right: 15px">
+                <div class="user_info_box">
+                  <div class="user_info_btn">
+                    <el-button-group>
+                      <el-button type="success" @click="goEdit">
                         <el-icon><Edit /></el-icon>
-                        更换头像
+                        更改个人信息
                       </el-button>
-                      <template #content>
-                        <el-text style="color: white">
-                          仅限jpg/png文件，不超过500KB
-                        </el-text>
-                      </template>
-                    </el-tooltip>
-                  </el-upload>
+                      <el-button type="danger" @click="goPassword">
+                        <el-icon><EditPen /></el-icon>
+                        修改账号密码
+                      </el-button>
+                    </el-button-group>
+                  </div>
+                  <div class="user_info_btn">
+                    <el-upload
+                        ref="avatarUpload"
+                        v-model:file-list="avatar"
+                        action="#"
+                        accept=".jpg,.jpeg,.png"
+                        :auto-upload="false"
+                        :multiple="false"
+                        :limit="1"
+                        :on-exceed="handleExceed"
+                        :show-file-list="false"
+                        :on-change="updateAvatar"
+                    >
+                      <el-tooltip
+                          effect="dark"
+                          placement="bottom-end"
+                      >
+                        <el-button type="primary">
+                          <el-icon><Edit /></el-icon>
+                          更换头像
+                        </el-button>
+                        <template #content>
+                          <el-text style="color: white">
+                            仅限jpg/png文件，不超过500KB
+                          </el-text>
+                        </template>
+                      </el-tooltip>
+                    </el-upload>
+                  </div>
                 </div>
-              </div>
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  <el-icon><Iphone /></el-icon>
-                  电话：
-                  {{ userStore.user.phone ? userStore.user.phone : "暂无" }}
-                </el-text>
-              </div>
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  <el-icon><Location /></el-icon>
-                  地址：
-                  {{ userStore.user.location ? userStore.user.location : "暂无" }}
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    <el-icon><Iphone /></el-icon>
+                    电话：
+                    {{ userStore.user.phone ? userStore.user.phone : "暂无" }}
+                  </el-text>
+                </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    <el-icon><Location /></el-icon>
+                    地址：
+                    {{ userStore.user.location ? userStore.user.location : "暂无" }}
+                  </el-text>
+                </div>
 
-              <el-divider border-style="solid" content-position="left" style="margin-top: 50px;">
-                消费统计
-              </el-divider>
+                <el-divider border-style="solid" content-position="left" style="margin-top: 50px;">
+                  消费统计
+                </el-divider>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  消费物品总件数：{{ userStore.user.totalJian >= 0 ? userStore.user.totalJian : 0 }} 件
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    消费物品总件数：{{ userStore.user.totalJian >= 0 ? userStore.user.totalJian : 0 }} 件
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  消费总次数：{{ userStore.user.totalBuy >= 0 ? userStore.user.totalBuy : 0 }} 次
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    消费总次数：{{ userStore.user.totalBuy >= 0 ? userStore.user.totalBuy : 0 }} 次
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  消费总金额：
-                  ￥{{ userStore.user.totalPrice >= 0 ? (userStore.user.totalPrice / 100).toFixed(2) : "0.00" }}
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    消费总金额：
+                    ￥{{ userStore.user.totalPrice >= 0 ? (userStore.user.totalPrice / 100).toFixed(2) : "0.00" }}
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  收货总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    收货总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  总评价次数：{{ userStore.user.totalPingJia >= 0 ? userStore.user.totalPingJia : 0 }} 次
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    总评价次数：{{ userStore.user.totalPingJia >= 0 ? userStore.user.totalPingJia : 0 }} 次
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  消费好评次数：{{ userStore.user.totalGood >= 0 ? userStore.user.totalGood : 0 }} 次
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    消费好评次数：{{ userStore.user.totalGood >= 0 ? userStore.user.totalGood : 0 }} 次
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
-                <el-text class="user_info_text">
-                  消费好评率：{{ userStore.user.goodPre.toFixed(2) }} %
-                </el-text>
-              </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    消费好评率：{{ userStore.user.goodPre.toFixed(2) }} %
+                  </el-text>
+                </div>
 
-              <div class="user_info_box">
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
+                  </el-text>
+                </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
+                  </el-text>
+                </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
+                  </el-text>
+                </div><div class="user_info_box">
                 <el-text class="user_info_text">
                   平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
                 </el-text>
               </div>
+                <div class="user_info_box">
+                  <el-text class="user_info_text">
+                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
+                  </el-text>
+                </div>
+
+              </div>
             </div>
-          </div>
-        </el-scrollbar>
-      </div>
-      <div style="display: inline-block; width: 35vw; max-height: 60vh; margin-right: 20px; margin-left: 20px">
-        <el-badge :value="kehutag" style="margin-top: 10px; height: 5vh">
-          <el-text class="user_name">{{ userStore.user.name }} </el-text>
-        </el-badge>
-        <div v-if="buyRecord.length === 0" style="margin-top: 10px">
-          <el-result icon="info" title="文学提示">
-            <template #sub-title>
-              <p>你还没有任何购买记录。</p>
-              <p>你可以去主页看看，那里或许有你想要的。</p>
-            </template>
-            <template #extra>
-              <el-button type="success" size="large" @click="goHome">去首页看看</el-button>
-            </template>
-          </el-result>
+          </el-scrollbar>
         </div>
-        <div v-else style="margin-top: 10px">
-          <div v-infinite-scroll="updater" style="overflow: auto; height: 53vh">
-            <div v-for="(item, index) in buyRecord" :key="index" class="buy_record_box">
+        <div class="buy_box">
+          <div v-if="buyRecord.length === 0">
+            <el-result icon="info" title="文学提示">
+              <template #sub-title>
+                <p>你还没有任何购买记录。</p>
+                <p>你可以去主页看看，那里或许有你想要的。</p>
+              </template>
+              <template #extra>
+                <el-button type="success" size="large" @click="goHome">去首页看看</el-button>
+              </template>
+            </el-result>
+          </div>
+          <div v-else>
+            <div v-infinite-scroll="updater" class="infinite">
+              <div v-for="(item, index) in buyRecord" :key="index" class="buy_record_box">
                 <Buyrecord :record="item"></Buyrecord>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </el-card>
-  </div>
   <div v-else></div>
 </template>
 
 <style scoped lang="scss">
+   .base_card {
+     --base-card-height: #{var(--custom-height)};
+     --base-card-width: #{var(--custom-little-width)};
+     height: #{var(--base-card-height)};
+     max-height: #{var(--base-card-height)};
+     width: #{var(--base-card-width)};
+   }
+
+   .outside {
+     display: flow-root;
+     --base-card-body-height: calc(#{var(--base-card-height)} - v-bind(headerHeight) - 20px);  // el_card对body内置的padding
+     height: calc(#{var(--base-card-body-height)} - 6px);
+     max-height: calc(#{var(--base-card-body-height)} - 6px);
+     margin-top: 3px;
+     margin-bottom: 3px;
+   }
+
+  .profile_box {
+    float: left;
+    width: calc(30% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
+
+  .buy_box {
+    float: right;
+    width: calc(70% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
+
+  .infinite {
+    overflow: auto;
+    height: calc(#{var(--base-card-body-height)} - 6px);
+  }
+
   .user_info_box {
     margin-top: 1px;
     margin-bottom: 3px;

@@ -127,7 +127,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 buypingjia: 30,
                 buyjian: 20,
                 hot: false,
-                down: false,
+                
             },
             nowwupin: {
                 id: 1,
@@ -153,7 +153,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 buypingjia: 30,
                 buyjian: 20,
                 hot: false,
-                down: false,
+                
             },
             user: {
                 name: "用户",
@@ -244,7 +244,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     buypingjia: 30,
                     buyjian: 15,
                     hot: false,
-                    down: false,
+                    
                 } as Wupin,
                 nowwupin: {
                     id: 1,
@@ -271,7 +271,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     buypingjia: 30,
                     buyjian: 15,
                     hot: false,
-                    down: false,
+                    
                 } as Wupin,
                 user: {
                     name: "用户",
@@ -289,6 +289,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     email: "1234",
                     remark: "1234,"
                 } as LocationForUser,
+                down: false,
             } as BuyRecord,
         },
         status: 200,
@@ -370,7 +371,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 buypingjia: 30,
                 buyjian: 15,
                 hot: false,
-                down: false,
+                
             },
             nowwupin: {
                 id: 1,
@@ -396,7 +397,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 buypingjia: 30,
                 buyjian: 15,
                 hot: false,
-                down: false,
+                
             },
             user: {
                 name: "用户",

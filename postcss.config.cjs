@@ -1,5 +1,5 @@
 // 根据 isH5 变量确定是否开启 H5 自适应模式
-const isH5 = true
+const isH5 = false
 
 const autoprefixer = require('autoprefixer')
 const pxToViewport = require('postcss-px-to-viewport-8-plugin')

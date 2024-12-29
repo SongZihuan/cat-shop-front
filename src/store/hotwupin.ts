@@ -23,7 +23,6 @@ export interface Wupin {
     buypingjia: number
     buyjian: number
     hot: boolean,
-    down: boolean,
 }
 
 const useHotWupinStore = defineStore("hotWupinStore", () => {

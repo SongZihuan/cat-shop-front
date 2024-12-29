@@ -25,14 +25,6 @@ const updater = () => {
 }
 updater()
 
-const reload = () => {
-  offset = 0
-  stop.value = false
-  shopRecord.value = [] as ShopRecord[]
-
-  updater()
-}
-
 </script>
 
 <template>
@@ -50,10 +42,10 @@ const reload = () => {
         </el-result>
       </div>
       <div v-else v-infinite-scroll="updater" style="height: 60vh; width: 50vw; overflow: auto">
+        len: {{ shopRecord.length }}
         <div v-for="(item, index) in shopRecord" :key="index">
-          <div v-if="item.wupin.id !== 0" style="margin-left: 30px; margin-right: 30px">
-            <Shoppingbag ref="shopper" :record="item" @reload="reload"></Shoppingbag>
-          </div>
+          AAA {{ index }}
+          <Shoppingbag ref="shopper" :record="item"></Shoppingbag>
         </div>
       </div>
     </el-card>

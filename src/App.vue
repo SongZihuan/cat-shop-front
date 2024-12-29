@@ -74,41 +74,67 @@
   watch(() => configStore.config.icon, setLogo)
   setLogo()
 
+  const headerDiv = ref()
+  const footerDiv = ref()
+
   const isAdmin = computed(() => route.meta?.admin === true || route.meta?.rootAdmin === true)
   const showFooter = computed(() => !isAdmin.value && configStore.config.footer && configStore.config.footer.length > 0)
 
-  const bodyHeight = computed(() => showFooter.value ? "83vh" : "90vh")
-
+  // header 10vh + 3px
+  // footer 7vh + 3px
+  const bodyHeight = computed(() => showFooter.value ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)` : `calc(100vh - ${headerDiv.value.height}px)`)
+  const bodyWidth = computed(() => "90vw")
+  const bodyLittleWidth = computed(() => "60vw")
 </script>
 
 <template>
   <div id="home">
-    <div class="header" style="height: 10vh">
-      <Header></Header>
+    <div class="header">
+      <Header ref="headerDiv"></Header>
     </div>
-    <div id="body" :style='{"min-height": bodyHeight}'>
-      <el-container>
-        <el-main>
-          <router-view></router-view>
-        </el-main>
-      </el-container>
+    <div id="out_body">
+      <div id="body">
+        <router-view></router-view>
+      </div>
     </div>
-    <div v-if="showFooter" style="height: 7vh;">
-      <Footer></Footer>
+    <div v-if="showFooter">
+      <Footer ref="footerDiv"></Footer>
     </div>
   </div>
   <Rightwin></Rightwin>
   <Wechat></Wechat>
 </template>
 
+<style lang="scss">
+#home {
+  --custom-height: v-bind(bodyHeight);
+  --custom-width: v-bind(bodyWidth);
+  --custom-little-width: v-bind(bodyLittleWidth);
+}
+</style>
+
 <style scoped lang="scss">
-  #logo {
-    float: left;
+  #home {
+    width: 100%;
   }
 
-  #home {
+  #body {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+
+    width: #{var(--custom-width)};
+  }
+
+  #out_body {
+    display: flex;
+    justify-content: center;
+
+    height: #{var(--custom-height)};
+    min-height: #{var(--custom-height)};
+  }
+
+  #logo {
+    float: left;
   }
 
   .avatar_logo {
