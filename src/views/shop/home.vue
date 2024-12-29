@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ClassLst from '@/components/shop/classlist.vue'
 import Search from "@/components/shop/search.vue"
-// import Ad from "@/components/shop/ad.vue"
+import Ad from "@/components/shop/ad.vue"
 import Hotwupinlist from "@/components/shop/hotwupinlist.vue"
 
 const adDiv = ref(null as any)
@@ -11,12 +11,14 @@ const adDiv = ref(null as any)
 <template>
   <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
     <div style="width: 65%;">
-      <Search  style="margin-top: 10px; margin-bottom: 10px" :tyoe="-1"></Search>
-      <div style="display: flex; flex-direction: row-reverse; justify-content: space-between; margin-top: 10px">
-        <div class="ad_box" style="width: 65%">
+      <div class="search">
+        <Search></Search>
+      </div>
+      <div class="ad_class_box">
+        <div class="ad_box">
           <Ad ref="adDiv"></Ad>
         </div>
-        <div class="class_box" style="width: 35%">
+        <div class="class_box">
           <el-scrollbar :height="adDiv && adDiv.height">
             <ClassLst style="width: 100%"></ClassLst>
           </el-scrollbar>
@@ -32,6 +34,20 @@ const adDiv = ref(null as any)
 </template>
 
 <style scoped lang="scss">
+.search {
+  width: #{var(--custom-little-width)};
+  margin-top: 10px;
+  margin-bottom: 10px
+}
+
+.ad_class_box {
+  width: #{var(--custom-little-width)};
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
 .ad_box {
   width: calc(65% - 3px);
   margin-left: 3px;

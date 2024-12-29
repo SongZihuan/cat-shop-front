@@ -1,6 +1,5 @@
 import {Wupin} from "@/store/hotwupin"
 import WupinPic from "@/assets/images/tmp.jpg"
-import useClassStore from "@/store/class"
 import { Result} from "@/utils/request"
 
 export interface WupinLst {
@@ -10,26 +9,16 @@ export interface WupinLst {
 }
 
 export const apiGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<WupinLst> => {
-    let classId = 1
-    let classOf = {
-        id: 1,
-        name: "商品分类",
+    const classId = 2
+    const classOf = {
+        id: 2,
+        name: "商品分类2",
     }
 
     if (pagesize <= 0 || pagesize > 20) {
         return Promise.reject()
     }
-
-    if (select.length !== 0) {
-        const classStore = useClassStore()
-        const cl = classStore.findClass(select[0])
-
-        if (cl) {
-            classId = cl.id
-            classOf = cl
-        }
-    }
-
+    
     const maxcount = 50
     const wupinlst = ref([] as Wupin[])
     for (let i = (page - 1) * pagesize; i < maxcount; i++) {

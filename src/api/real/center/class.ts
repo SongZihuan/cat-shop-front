@@ -1,5 +1,14 @@
-import {Class} from "@/store/class"
 import {Result} from "@/utils/request"
+
+export interface Class {
+    id: number
+    name: string
+}
+
+export const allClass = ref({
+    id: 0,
+    name: "全部",
+} as Class)
 
 export interface ClassLst {
     list: Class[],

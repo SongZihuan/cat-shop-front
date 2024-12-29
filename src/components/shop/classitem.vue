@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import useClassStore, { Class } from "@/store/class"
+  import { Class } from "#/center/class"
 
   const props = defineProps({
     "cl": {
@@ -9,14 +9,13 @@
   })
   const item = computed(() => props.cl)
   const router = useRouter()
-  const classStore = useClassStore()
 
   const onClickClass = () => {
     router.push({
       path: "/shop/search",
       query: {
         "info": JSON.stringify({
-          select: [item.value?.id || classStore.allClass.id],
+          select: [item.value?.id || 1],
           search: "",
         })
       }

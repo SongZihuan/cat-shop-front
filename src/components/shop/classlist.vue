@@ -1,13 +1,20 @@
 <script setup lang="ts">
   import ClassItem from "@/components/shop/classitem.vue"
-  import useClassStore from "@/store/class"
+  import {Class, apiGetClassLst} from "#/center/class";
 
-  const classStore = useClassStore()
+  const classLst = ref([] as Class[])
+
+  const getClass = () => {
+    apiGetClassLst(50, 0).then((res) => {
+      classLst.value = res.data.data.list as Class[]
+    })
+  }
+  getClass()
 </script>
 
 <template>
   <div class="classLst">
-    <ClassItem v-for="(item, j) in classStore.classLst" :key="j" :cl="item"> </ClassItem>
+    <ClassItem v-for="(item, j) in classLst" :key="j" :cl="item"> </ClassItem>
   </div>
 </template>
 

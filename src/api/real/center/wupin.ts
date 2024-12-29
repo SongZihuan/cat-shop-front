@@ -1,27 +1,17 @@
 import {Wupin} from "@/store/hotwupin"
 import {Result} from "@/utils/request"
-import useClassStore, {Class} from "@/store/class"
 import WupinPic from "@/assets/images/tmp.jpg"
 
 export const apiGetWupin = (id: number): Result<Wupin> => {
-    const classStore = useClassStore()
-    classStore.getLst()
-
-    const classId = 1
-    let classOf = classStore.findClass(classId) as Class
-    if (!classOf) {
-        classOf = {
-            id: classId,
-            name: "商品分类" + classOf,
-        }
-    }
-
     const wupin = {
         id: id,
         name: "商品" + id,
         pic: WupinPic,
-        classid: classId,
-        classOf: classOf,
+        classid: 2,
+        classOf: {
+            id: 2,
+            name: "商品分类",
+        },
         tag: "爆卖！",
         hotPrice: 19999,
         realPrice: 19999,

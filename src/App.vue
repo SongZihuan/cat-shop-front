@@ -5,7 +5,6 @@
   import Rightwin from "@/components/system/rightwin.vue"
   import Header from "@/components/system/header.vue"
   import useUserStore, {isLogin} from "@/store/user"
-  import useClassStore from "@/store/class"
   import useHotWupinStore from "@/store/hotwupin"
   import {clearPlaceholderLoading, placeholderLoading} from '@/utils/placeholder-loading'
 
@@ -17,13 +16,11 @@
   const route = useRoute()
   const configStore = useConfigStore()
   const userStore = useUserStore()
-  const classStore = useClassStore()
   const hotWupinStore = useHotWupinStore()
 
   configStore.updateConfig()
   configStore.updateXieyi()
   isLogin() && userStore.updateInfo()
-  classStore.updateInfo()
   hotWupinStore.updateInfo()
 
   const fn1 = (t: number) => {
@@ -48,14 +45,9 @@
   setTimeout(() => fn2(900000), 900000)// 10分
 
   const fn3 = (t: number) => {
-    Promise.all(
-        [
-          classStore.updateInfo(),
-          hotWupinStore.updateInfo(),
-        ]
-    ).finally(() => {
-      setTimeout(() => fn3(t), t)
-    })
+      hotWupinStore.updateInfo().finally(() => {
+        setTimeout(() => fn3(t), t)
+      })
   }
   setTimeout(() => fn3(900000), 900000)// 10分
 

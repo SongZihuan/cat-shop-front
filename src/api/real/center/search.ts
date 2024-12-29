@@ -1,6 +1,5 @@
 import {Wupin} from "@/store/hotwupin"
 import WupinPic from "@/assets/images/tmp.jpg"
-import useClassStore from "@/store/class"
 import { Result} from "@/utils/request"
 
 export interface WupinLst {
@@ -9,25 +8,9 @@ export interface WupinLst {
     maxcount: number
 }
 
-export const apiGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<WupinLst> => {
-    let classId = 1
-    let classOf = {
-        id: 1,
-        name: "商品分类",
-    }
-
+export const apiGetSearchWupin = (search: string, select: number, page: number, pagesize: number): Result<WupinLst> => {
     if (pagesize <= 0 || pagesize > 20) {
         return Promise.reject()
-    }
-
-    if (select.length !== 0) {
-        const classStore = useClassStore()
-        const cl = classStore.findClass(select[0])
-
-        if (cl) {
-            classId = cl.id
-            classOf = cl
-        }
     }
 
     const maxcount = 50
@@ -41,8 +24,13 @@ export const apiGetSearchWupin = (search: string, select: Array<number>, page: n
             id: i + 1,
             name: "商品" + search + " - " + (i + 1),
             pic: WupinPic,
-            classid: classId,
-            classOf: classOf,
+            classid: 2,
+            classOf: {
+                id: 2,
+                name: "商品分类",
+                show: true,
+                down: false,
+            },
             tag: "爆卖！",
             hotPrice: 9999,
             realPrice: 19999,

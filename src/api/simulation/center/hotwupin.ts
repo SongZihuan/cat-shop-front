@@ -1,6 +1,6 @@
 import {Result} from "@/utils/request"
 import {Wupin} from "@/store/hotwupin"
-import useClassStore, {Class} from "@/store/class"
+import {Class} from "#/center/class"
 import WupinPic from "@/assets/images/tmp.jpg"
 
 export interface HotWupinLst {
@@ -9,18 +9,13 @@ export interface HotWupinLst {
 }
 
 export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
-    const classStore = useClassStore()
     const wupinLst = [] as Wupin[]
 
     for (let i = 0; i < 50; i++) {
         let cl = {
-            id: 1,
-            name: "商品分类1",
+            id: 2,
+            name: "商品分类2",
         } as Class
-
-        if (classStore.classLst.length > 0) {
-            cl = classStore.classLst[Math.floor(Math.random() * classStore.classLst.length)]
-        }
 
         wupinLst.push({
             id: i + 1,

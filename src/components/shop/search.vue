@@ -6,10 +6,6 @@
   const route = useRoute()
 
   const props = defineProps({
-    "type": {
-      type: String,
-      required: false,
-    },
     "select": {
       type: Array<number>,
       required: false,
@@ -36,7 +32,7 @@
   infoController(route.query?.info)
   watch(() => route.query?.info, infoController)
 
-  const select = ref(data.value.select || props.select || [] as number[])
+  const select = ref(0 as number)
   const search = ref(data.value.search || props.search || "" as string)
 
   const classLst = ref([] as AdminClass[])
@@ -49,7 +45,7 @@
       classLstMaxPage.value = res.data.data.maxcount
       classLst.value = [{id: 0, name: "全部", show: false, down: false} as AdminClass].concat(res.data.data.list)
       if (select && !classLst.value.some((item) => item.id === select.value)) {
-        select.value = undefined
+        select.value = 0
       }
     })
   }

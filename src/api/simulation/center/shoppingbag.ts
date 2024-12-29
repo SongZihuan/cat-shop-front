@@ -41,7 +41,6 @@ export function apiGetUserShoppingRecord(offset: number, limit: number): Result<
 
     const shopRecordLst = [] as ShopRecord[]
     for (let i = 0; i < limit; i++) {
-        console.log("TAG A", i)
         shopRecordLst.push({
             id: offset + i + 1,
             userid: 1,

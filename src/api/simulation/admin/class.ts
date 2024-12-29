@@ -17,6 +17,13 @@ type AdminClassLst = {
     list: AdminClass[]
 }
 
+export const allClass = ref({
+    id: 0,
+    name: "全部",
+    show: false,
+    down: false,
+} as AdminClass)
+
 export interface NewClassData {
     name: string
     show: boolean

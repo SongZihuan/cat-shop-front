@@ -1,4 +1,3 @@
-import useClassStore from "@/store/class"
 import {Result, Success} from "@/utils/request"
 import WupinPic from "@/assets/images/tmp.jpg"
 import {AdminClass} from "#/admin/class"
@@ -51,19 +50,12 @@ export interface AdminWupinWithInfo extends AdminWupinBaseWithClass, AdminWupinW
 export interface AdminWupin extends AdminWupinID, AdminWupinWithInfo { }
 
 export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
-    const classStore = useClassStore()
-
-    const classId = 1
-    let classOf = classStore.findClass(classId) as AdminClass
-    if (!classOf) {
-        classOf = {
-            id: classId,
-            name: "商品分类" + classOf,
-            show: true,
-            down: false,
-        }
-    } else {
-        classOf.show = true
+    const classId = 2
+    const classOf = {
+        id: classId,
+        name: "商品分类" + classId,
+        show: true,
+        down: false,
     }
 
     const wupin = {
@@ -133,21 +125,6 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
     //     method: 'get',
     // })
 
-    const classStore = useClassStore()
-
-    const classId = 1
-    let classOf = classStore.findClass(classId) as AdminClass
-    if (!classOf) {
-        classOf = {
-            id: classId,
-            name: "商品分类" + classOf,
-            show: true,
-            down: false,
-        }
-    } else {
-        classOf.show = true
-    }
-
     const maxcount = 121
     const wupinLst = ref([] as AdminWupin[])
     for (let i = (page - 1) * pagesize; i < maxcount; i++) {
@@ -159,8 +136,13 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
             id: page * pagesize + i + 1,
             name: "商品" + (page * pagesize + i + 1),
             pic: WupinPic,
-            classid: classId,
-            classOf: classOf,
+            classid: 2,
+            classOf: {
+                id: 2,
+                name: "商品分类2",
+                show: true,
+                down: false,
+            },
             tag: "爆卖！",
             hotPrice: 19999,
             realPrice: 19999,
