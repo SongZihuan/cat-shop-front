@@ -133,20 +133,16 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
   const headerCustomer = ref<HTMLElement>()
   const headerHeight = ref("0")
-  const el_card_header_px = 19
+  const el_card_header_px = 37
 
-  const updateElementHeight = new ResizeObserver((entries) => {
+  const updateHeaderHeight = new ResizeObserver((entries) => {
     entries.forEach(entry => {
       headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
-      console.log("headerHeight.value", headerHeight.value)
+      console.log("headerHeight.value2", headerHeight.value)
     })
   })
 
-  onMounted(() => {
-    if (headerCustomer.value) {
-      updateElementHeight.observe(headerCustomer.value)
-    }
-  })
+ watch(headerCustomer, () => headerCustomer.value && updateHeaderHeight.observe(headerCustomer.value))
 
 </script>
 
@@ -335,7 +331,7 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
    .outside {
      display: flow-root;
-     --base-card-body-height: calc(#{var(--base-card-height)} - v-bind(headerHeight) - 20px);  // el_card对body内置的padding
+     --base-card-body-height: calc(#{var(--base-card-height)} - v-bind(headerHeight) - 40px);  // el_card对body内置的padding
      height: calc(#{var(--base-card-body-height)} - 6px);
      max-height: calc(#{var(--base-card-body-height)} - 6px);
      margin-top: 3px;

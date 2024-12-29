@@ -99,12 +99,59 @@
     byn.value.open(wupin.value, num.value)
   }
 
+  const headerCustomer = ref<HTMLElement>()
+  const headerHeight = ref("0")
+  const el_card_header_px = 37
+
+  const updateHeaderHeight = new ResizeObserver((entries) => {
+    entries.forEach(entry => {
+      headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
+      console.log("headerHeight.value", headerHeight.value)
+    })
+  })
+
+  const footerCustomer = ref<HTMLElement>()
+  const footerHeight = ref("0")
+  const el_card_footer_px = 37
+
+  const updateFooterHeight = new ResizeObserver((entries) => {
+    entries.forEach(entry => {
+      footerHeight.value = entry.contentRect.height + el_card_footer_px + "px"
+    })
+  })
+
+  watch(headerCustomer, () => headerCustomer.value && updateHeaderHeight.observe(headerCustomer.value))
+  watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(footerCustomer.value))
+
 </script>
 
 <template>
-  <div v-if="wupin" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <div style="display: inline-block; width: 15vw; height: 70vh; margin-right: 20px; margin-left: 20px">
+  <el-card v-if="wupin" class="base_card">
+    <template #header>
+      <div ref="headerCustomer">
+        <div style="display: flow-root">
+          <div style="float: left">
+            <el-badge :value="wupin.tag" style="margin-top: 10px">
+              <el-text class="wupin_name"> {{ wupin.name }} </el-text>
+            </el-badge>
+          </div>
+          <div style="float: right">
+            <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
+              <el-button size="large" class="class_btn">
+                商品分类： {{ wupin.classOf.name }}
+              </el-button>
+            </div>
+            <div v-else>
+              <el-button size="large" class="class_btn" disabled>
+                商品暂无分类
+              </el-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <div class="box">
+      <div class="left_box">
         <el-scrollbar height="70vh">
           <div style="padding-right: 5px">
             <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 85%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
@@ -198,139 +245,142 @@
               </el-text>
             </div>
           </div>
-          <div style="display: flow-root">
-            <div style="float: left">
-              <el-badge :value="wupin.tag" style="margin-top: 10px">
-                <el-text class="wupin_name"> {{ wupin.name }} </el-text>
-              </el-badge>
-            </div>
-            <div style="float: right">
-              <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
-                <el-button size="large" class="class_btn" disabled>
-                  商品分类： {{ wupin.classOf.name }}
-                </el-button>
-              </div>
-              <div v-else>
-                <el-button size="large" class="class_btn" disabled>
-                  商品暂无分类
-                </el-button>
-              </div>
-            </div>
-          </div>
         </el-scrollbar>
       </div>
-      <div style="display: inline-block; width: 50vw; height: 70vh; margin-right: 20px; margin-left: 20px">
+      <div class="right_box">
         <el-scrollbar height="70vh">
           <div style="padding-right: 5px">
-            <div style="display: flow-root">
-              <div style="float: left">
-                <el-badge :value="wupin.tag" style="margin-top: 10px">
-                  <el-text class="wupin_name"> {{ wupin.name }} </el-text>
-                </el-badge>
-              </div>
-              <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1" style="float: right">
-                <el-button size="large" class="class_btn" disabled>
-                  商品分类： {{ wupin.classOf.name }}
-                </el-button>
-              </div>
-              <div v-else style="float: right">
-                <el-button size="large" class="class_btn" disabled>
-                  商品暂无分类
-                </el-button>
-              </div>
-            </div>
-            <div class="price_box">
-              <div v-if="facePrice == 0">
-                <el-text class="wupin_hot_price">
-                  <el-icon><BellFilled /></el-icon>
-                  现在：免费抢购
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line-through">
-                    原价：￥{{ (realPrice / 100).toFixed(2) }}
-                  </el-text>
-                </el-text>
-              </div>
-              <div v-else-if="facePrice < realPrice">
-                <el-text class="wupin_hot_price">
-                  <el-icon><GobletSquareFull /></el-icon>
-                  促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line-through">
-                    原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                  </el-text>
-                  <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
-                    惊喜：{{ ((facePrice / realPrice) * 10).toFixed(1) }} 折扣
-                  </el-text>
-                </el-text>
-              </div>
-              <div v-else-if="facePrice > realPrice">
-                <!--              不应该出现此情况-->
-                <el-text class="wupin_sb_price">
-                  <el-icon><Pouring /></el-icon>
-                  冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
-                    原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                  </el-text>
-                </el-text>
-              </div>
-              <div v-else-if="facePrice == realPrice">
-                <el-text class="wupin_real_price">
-                  <el-icon><Shop /></el-icon>
-                  售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                </el-text>
-              </div>
-              <div v-else-if="realPrice == 0">
-                <!--              不应该出现此情况-->
-                <el-text class="wupin_sb_price">
-                  <el-icon><Pouring /></el-icon>
-                  冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
-                    原价：免费送
-                  </el-text>
-                </el-text>
-              </div>
-              <div v-else>
-                <!--              不应该出现此情况-->
-                <el-text class="wupin_real_price">
-                  <el-icon><Shop /></el-icon>
-                  售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                  <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
-                    原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                  </el-text>
-                </el-text>
-              </div>
-            </div>
-
-            <div style="display: flex; flex-direction: column; justify-content: left;">
-              <div style="display: flex">
-                <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
-                  <template #suffix>
-                    <span> 件 </span>
-                  </template>
-                </el-input-number>
-                <el-button-group>
-                  <el-button class="buy_item" size="large" @click="onClickBag">
-                    <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入购物车
-                  </el-button>
-                  <el-button class="buy_item" size="large" @click="buy">
-                    <el-icon style="margin-right: 3px"><Money /></el-icon>
-                    立即购买
-                    <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
-                  </el-button>
-                </el-button-group>
-              </div>
-            </div>
             <div id="info_box" class="info_box">
               <div v-html="wupin.info"></div>
             </div>
           </div>
         </el-scrollbar>
       </div>
-    </el-card>
-  </div>
+    </div>
+    <template #footer>
+      <div ref="footerCustomer">
+        <div class="footer_box">
+          <div class="price_box">
+            <div v-if="facePrice == 0">
+              <el-text class="wupin_hot_price">
+                <el-icon><BellFilled /></el-icon>
+                现在：免费抢购
+                <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line-through">
+                  原价：￥{{ (realPrice / 100).toFixed(2) }}
+                </el-text>
+              </el-text>
+            </div>
+            <div v-else-if="facePrice < realPrice">
+              <el-text class="wupin_hot_price">
+                <el-icon><GobletSquareFull /></el-icon>
+                促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line-through">
+                  原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
+                </el-text>
+                <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
+                  惊喜：{{ ((facePrice / realPrice) * 10).toFixed(1) }} 折扣
+                </el-text>
+              </el-text>
+            </div>
+            <div v-else-if="facePrice > realPrice">
+              <!--              不应该出现此情况-->
+              <el-text class="wupin_sb_price">
+                <el-icon><Pouring /></el-icon>
+                冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
+                  原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
+                </el-text>
+              </el-text>
+            </div>
+            <div v-else-if="facePrice == realPrice">
+              <el-text class="wupin_real_price">
+                <el-icon><Shop /></el-icon>
+                售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+              </el-text>
+            </div>
+            <div v-else-if="realPrice == 0">
+              <!--              不应该出现此情况-->
+              <el-text class="wupin_sb_price">
+                <el-icon><Pouring /></el-icon>
+                冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
+                  原价：免费送
+                </el-text>
+              </el-text>
+            </div>
+            <div v-else>
+              <!--              不应该出现此情况-->
+              <el-text class="wupin_real_price">
+                <el-icon><Shop /></el-icon>
+                售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
+                  原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
+                </el-text>
+              </el-text>
+            </div>
+          </div>
+
+          <div class="buy_box">
+            <div style="display: flex; justify-content: right">
+              <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+                <template #suffix>
+                  <span> 件 </span>
+                </template>
+              </el-input-number>
+              <el-button-group>
+                <el-button class="buy_item" size="large" @click="onClickBag">
+                  <el-icon style="margin-right: 3px"><Handbag /></el-icon> 加入购物车
+                </el-button>
+                <el-button class="buy_item" size="large" @click="buy">
+                  <el-icon style="margin-right: 3px"><Money /></el-icon>
+                  立即购买
+                  <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                </el-button>
+              </el-button-group>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+  </el-card>
   <div v-else></div>
   <Buynew ref="byn"></Buynew>
 </template>
 
 <style scoped lang="scss">
+  .base_card {
+    --base-card-height: #{var(--custom-height)};
+    --base-card-width: #{var(--custom-little-width)};
+    height: #{var(--base-card-height)};
+    max-height: #{var(--base-card-height)};
+    width: #{var(--base-card-width)};
+  }
+
+  .box {
+    display: flow-root;
+    --base-card-body-height: calc(#{var(--base-card-height)} - v-bind(headerHeight) - v-bind(footerHeight) - 40px);  // el_card对body内置的padding
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
+
+  .left_box {
+    float: left;
+    width: calc(30% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
+
+  .right_box {
+    float: right;
+    width: calc(70% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
+
   .class_btn {
     margin-top: 10px;
     margin-right: 10px;
@@ -348,11 +398,6 @@
   .wupin_tag {
     margin-top: 10px;
     margin-left: 5px;
-  }
-
-  .price_box {
-    margin-top: 10px;
-    margin-bottom: 10px;
   }
 
   .wupin_hot_price {
@@ -425,5 +470,17 @@
   #info_box * {
     all: initial;
     width: 100%;
+  }
+
+  .footer_box {
+    display: flow-root;
+  }
+
+  .price_box{
+    float: left;
+  }
+
+  .buy_box {
+    float: right;
   }
 </style>
