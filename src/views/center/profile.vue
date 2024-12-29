@@ -297,20 +297,30 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
         </div>
         <div class="buy_box">
           <div v-if="buyRecord.length === 0">
-            <el-result icon="info" title="文学提示">
+            <div class="title_buy_record_box">
+              <el-text class="title_buy_record"> 购物记录 </el-text>
+            </div>
+
+            <el-result icon="info" title="温馨提示">
               <template #sub-title>
                 <p>你还没有任何购买记录。</p>
                 <p>你可以去主页看看，那里或许有你想要的。</p>
               </template>
               <template #extra>
-                <el-button type="success" size="large" @click="goHome">去首页看看</el-button>
+                <el-button type="primary" size="large" @click="goHome">去首页看看</el-button>
               </template>
             </el-result>
           </div>
           <div v-else>
             <div v-infinite-scroll="updater" class="infinite">
+              <div class="title_buy_record_box">
+                <el-text class="title_buy_record"> 购物记录 </el-text>
+              </div>
+
               <div v-for="(item, index) in buyRecord" :key="index" class="buy_record_box">
-                <Buyrecord :record="item"></Buyrecord>
+                <div class="buy_record">
+                  <Buyrecord :record="item"></Buyrecord>
+                </div>
               </div>
             </div>
           </div>
@@ -379,5 +389,20 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
   .user_info_btn {
     margin-bottom: 2px;
+  }
+
+   .title_buy_record_box {
+     display: flex;
+     justify-content: center;
+     margin: 10px;
+   }
+
+  .title_buy_record {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  .buy_record {
+    margin-bottom: 10px;
   }
 </style>
