@@ -12,12 +12,12 @@ export interface AdminClassData {
 
 export interface AdminClass extends AdminClassID, AdminClassData{ }
 
-export const allClass = ref({
-    id: 0,
+export const AllClass = {
+    id: 1,
     name: "全部",
     show: false,
     down: false,
-} as AdminClass)
+} as AdminClass
 
 type AdminClassLst = {
     total: number

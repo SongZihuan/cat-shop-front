@@ -535,244 +535,279 @@ const changeUser = () => {
   })
 }
 
+const wupinNameClass = computed(() => {
+  if (record.value.down) {
+    return ["wupin_name"]
+  }
+
+  return ["wupin_name", "wupin_name_click"]
+})
+
+const maxWidth = ref("0")
+const maxText = ref(0)
+const boxWidth = ref(0)
+const count = ref(0)
+const getMaxWidth = () => {
+  const child = document.querySelectorAll('.components-center-buyrecord-info-box')
+  child.forEach((i: Element) => {
+    const element: HTMLElement = i as unknown as HTMLElement
+    if (element.offsetWidth + 20 > maxText.value) {
+      maxText.value = element.offsetWidth + 20
+    }
+  })
+
+  if (infoBox.value) {
+    boxWidth.value = infoBox.value.offsetWidth
+    count.value = Math.floor(boxWidth.value / maxText.value)
+    maxWidth.value = (boxWidth.value / count.value) + "px"
+  }
+}
+
+onMounted(() => {
+  getMaxWidth()
+})
+
+onUpdated(() => {
+  getMaxWidth()
+})
+
+const infoBox = ref<HTMLElement>()
+
 </script>
 
 <template>
-  <div>
-    <el-card v-if="record" style="margin-right: 15px">
-      <template #header>
-        <div style="display: flow-root">
-          <div style="float: left">
-            <el-badge :value="record.wupin.tag" style="margin-top: 10px">
-              <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
-            </el-badge>
-          </div>
-          <div style="float: right">
-            <el-button-group>
-              <el-button v-if="xiangqing" type="success" size="large" class="class_btn" @click="onXiangQing">
-                查看详情
-              </el-button>
-              <el-button v-if="safe && record.down" type="success" size="large" class="class_btn" disabled>
-                商品已下架
-              </el-button>
-              <el-button v-else-if="safe && !record.down" type="success" size="large" class="class_btn" @click="onGoWupin">
-                查看商品售卖页
-              </el-button>
-              <el-tooltip
-                  v-if="safe && record.down"
-                  effect="dark"
-                  placement="bottom"
-                  content="原商品已经下架，此处是您购买商品时信息的备份内容。"
-              >
-                <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
-                  查看商品售卖存档页
-                </el-button>
-              </el-tooltip>
-              <el-tooltip
-                  v-else-if="safe && !record.down"
-                  effect="dark"
-                  placement="bottom"
-                  content="此处是您购买商品时信息的备份内容。"
-              >
-                <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
-                  查看商品售卖存档页
-                </el-button>
-              </el-tooltip>
-            </el-button-group>
-          </div>
+  <el-card v-if="record" class="base_card">
+    <template #header>
+      <div style="display: flow-root">
+        <div style="float: left">
+          <el-badge :value="record.wupin.tag" style="margin-top: 10px">
+            <el-text :class="wupinNameClass" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
+          </el-badge>
         </div>
-      </template>
-
-      <template #footer>
-        <div class="footer_btn">
-          <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
-            取消支付
-          </el-button>
-          <el-button v-if="safe && record.status === 2" type="warning" @click="startRepay">
-            重新支付
-          </el-button>
-          <el-button v-if="safe && record.status === 3" type="warning" @click="quXiao">
-            取消发货
-          </el-button>
-          <el-button v-if="safe && ([1, 2, 3].some((i) => i == record.status))" type="warning" @click="startChangeUser">
-            更改收货地址
-          </el-button>
-          <el-button v-if="safe && record.status === 4" type="success" @click="confirmDaohuo">
-            确认收货
-          </el-button>
-          <el-button v-if="safe && record.status === 5" type="success" @click="giveGood">
-            给个好评
-          </el-button>
-          <el-button v-if="safe && record.status === 5" type="info" @click="giveNotGood">
-            不予置评
-          </el-button>
-          <el-button v-if="safe && ([5, 6].some((i) => i == record.status))" type="danger" @click="startTuiHuo">
-            申请退货
-          </el-button>
-          <el-button v-if="safe && record.status === 8" type="success" @click="startTuiHuoDengJi">
-            登记退货信息
-          </el-button>
-          <el-button v-if="safe && record.status === 10" type="danger" @click="startReTuiHuo">
-            重新申请退货
-          </el-button>
-          <el-button v-if="safe" type="primary" @click="showTuiHuoLocation">
-            <span v-if="([7, 8, 9, 10, 11].some((i) => i == record.status))">
-              查看退货地址
-            </span>
-            <span v-else>
-              查看商家地址
-            </span>
-          </el-button>
-          <el-button v-if="safe" type="success" @click="showFaHuoLocation">
-            查看收货地址
-          </el-button>
-        </div>
-      </template>
-
-      <div style="display: flex; justify-content: center; width: 100%">
-        <div style="width: 95%" class="box_room">
-          <div class="info_box">
-            <el-text>
-              本次消费进度：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text v-if="record.down">
-              商品销售情况：商品下架啦，但不会影响你已确认付款的订单。
-            </el-text>
-            <el-text v-else>
-              商品销售情况：正常销售中
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text v-if="record.classid !== 1 && record.wupin && record.wupin.classOf && record.wupin.classOf.id === record.classid">
-              商品分类：{{ record.wupin.classOf.name }}
-            </el-text>
-            <el-text v-else>
-              商品分类：暂无 {{ record.classid }}  {{ record.wupin.classOf.id }}
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text>
-              购买数量：{{ record.num }} 件
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text>
-              付款金额：￥{{ ((record.totalPrice / 100).toFixed(2)) }}
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text>
-              商品单价：￥{{ ((record.price / 100).toFixed(2)) }}
-            </el-text>
-          </div>
-          <div class="info_box">
-            <el-text>
-              下单时间：{{ formatDate(record.time) }}
-            </el-text>
-          </div>
-          <div v-if="[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              付款时间：{{ formatDate(record.fukuantime) }}
-            </el-text>
-          </div>
-          <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              发货时间：{{ formatDate(record.fahuotime) }}
-            </el-text>
-          </div>
-          <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status) && record.kuaidi && record.kuaidinum" class="info_box">
-            <el-text>
-              发货快递公司：{{ record.kuaidi }}
-            </el-text>
-          </div>
-          <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status) && record.kuaidi && record.kuaidinum" class="info_box">
-            <el-text>
-              发货运单号：{{ record.kuaidinum }}
-            </el-text>
-          </div>
-          <div v-if="[5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              到货时间：{{ formatDate(record.shouhuotime) }}
-            </el-text>
-          </div>
-          <div v-if="[6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              评价时间：{{ formatDate(record.pingjiatime) }}
-            </el-text>
-          </div>
-          <div v-if="[6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              评价：{{ record.isgood ? "好评" : "不予置评" }}
-            </el-text>
-          </div>
-          <div v-if="[7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              申请退货时间：{{ formatDate(record.dengjituihuotime) }}
-            </el-text>
-          </div>
-          <div v-if="[8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
-            <el-text v-if="record.status === 8">
-              申请退货情况：卖家同意退货，请尽快根据地址寄回商品，并上传物流信息。
-            </el-text>
-            <el-text v-else-if="record.status === 9">
-              申请退货情况：卖家同意退货，等待卖家收货。
-            </el-text>
-            <el-text v-else-if="record.status === 10">
-              申请退货情况：卖家不同意退货，请联系卖家。
-            </el-text>
-            <el-text v-else-if="record.status === 11">
-              申请退货情况：卖家已完成退货。
-            </el-text>
-          </div>
-          <div v-if="[8, 9, 11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              同意退货时间：{{ formatDate(record.querentuihuotime) }}
-            </el-text>
-          </div>
-          <div v-if="[9, 11].some((i) => i == record.status) && record.backkuaidi && record.backkuaidinum" class="info_box">
-            <el-text>
-              退货快递公司：{{ record.backkuaidi }}
-            </el-text>
-          </div>
-          <div v-if="[9, 11].some((i) => i == record.status) && record.backkuaidi && record.backkuaidinum" class="info_box">
-            <el-text>
-              退货单号：{{ record.backkuaidinum }}
-            </el-text>
-          </div>
-          <div v-if="[11].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              退货到货时间：{{ formatDate(record.tuohuotime) }}
-            </el-text>
-          </div>
-          <div v-if="[12, 13].some((i) => i == record.status)" class="info_box">
-            <el-text v-if="record.status === 12">
-              申请取消发货情况：正在尝试取消发货。
-            </el-text>
-            <el-text v-if="record.status === 13">
-              申请取消发货情况：已经为您取消发货。
-            </el-text>
-          </div>
-          <div v-if="[13].some((i) => i == record.status)" class="info_box">
-            <el-text>
-              确认取消发货时间：{{ formatDate(record.quxiaotime) }}
-            </el-text>
-          </div>
+        <div style="float: right">
+          <el-button-group>
+            <el-button v-if="xiangqing" type="success" size="large" class="class_btn" @click="onXiangQing">
+              查看详情
+            </el-button>
+            <el-button v-if="safe && record.down" type="success" size="large" class="class_btn" disabled>
+              商品已下架
+            </el-button>
+            <el-button v-else-if="safe && !record.down" type="success" size="large" class="class_btn" @click="onGoWupin">
+              查看商品售卖页
+            </el-button>
+            <el-tooltip
+                v-if="safe && record.down"
+                effect="dark"
+                placement="bottom"
+                content="原商品已经下架，此处是您购买商品时信息的备份内容。"
+            >
+              <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
+                查看商品售卖存档页
+              </el-button>
+            </el-tooltip>
+            <el-tooltip
+                v-else-if="safe && !record.down"
+                effect="dark"
+                placement="bottom"
+                content="此处是您购买商品时信息的备份内容。"
+            >
+              <el-button type="primary" size="large" class="class_btn" @click="onGoLockWupin">
+                查看商品售卖存档页
+              </el-button>
+            </el-tooltip>
+          </el-button-group>
         </div>
       </div>
-    </el-card>
-    <div v-else>
-      <el-result
-          icon="warning"
-          title="此商品已下架"
-          sub-title="欢迎到别处去看看吧"
-      >
-        <template #extra>
-          <el-button type="primary">到我的中心</el-button>
-        </template>
-      </el-result>
+    </template>
+
+    <template #footer>
+      <div class="footer_btn">
+        <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
+          取消支付
+        </el-button>
+        <el-button v-if="safe && record.status === 2" type="warning" @click="startRepay">
+          重新支付
+        </el-button>
+        <el-button v-if="safe && record.status === 3" type="warning" @click="quXiao">
+          取消发货
+        </el-button>
+        <el-button v-if="safe && ([1, 2, 3].some((i) => i == record.status))" type="warning" @click="startChangeUser">
+          更改收货地址
+        </el-button>
+        <el-button v-if="safe && record.status === 4" type="success" @click="confirmDaohuo">
+          确认收货
+        </el-button>
+        <el-button v-if="safe && record.status === 5" type="success" @click="giveGood">
+          给个好评
+        </el-button>
+        <el-button v-if="safe && record.status === 5" type="info" @click="giveNotGood">
+          不予置评
+        </el-button>
+        <el-button v-if="safe && ([5, 6].some((i) => i == record.status))" type="danger" @click="startTuiHuo">
+          申请退货
+        </el-button>
+        <el-button v-if="safe && record.status === 8" type="success" @click="startTuiHuoDengJi">
+          登记退货信息
+        </el-button>
+        <el-button v-if="safe && record.status === 10" type="danger" @click="startReTuiHuo">
+          重新申请退货
+        </el-button>
+        <el-button v-if="safe" type="primary" @click="showTuiHuoLocation">
+          <span v-if="([7, 8, 9, 10, 11].some((i) => i == record.status))">
+            查看退货地址
+          </span>
+          <span v-else>
+            查看商家地址
+          </span>
+        </el-button>
+        <el-button v-if="safe" type="success" @click="showFaHuoLocation">
+          查看收货地址
+        </el-button>
+      </div>
+    </template>
+    <div class="outside">
+      <div ref="infoBox" class="box_room">
+        <div class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            本次消费进度：{{ (AdminBuyRecordStatus[record.status]) || "未知" }}
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text v-if="record.down" class="info_text components-center-buyrecord-info-box">
+            商品销售情况：商品下架啦，但不会影响你已确认付款的订单。
+          </el-text>
+          <el-text v-else class="info_text components-center-buyrecord-info-box">
+            商品销售情况：正常销售中
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text v-if="record.classid !== 1 && record.wupin && record.wupin.classOf && record.wupin.classOf.id === record.classid" class="info_text components-center-buyrecord-info-box">
+            商品分类：{{ record.wupin.classOf.name }}
+          </el-text>
+          <el-text v-else class="info_text components-center-buyrecord-info-box">
+            商品分类：暂无
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            购买数量：{{ record.num }} 件
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            付款金额：￥{{ ((record.totalPrice / 100).toFixed(2)) }}
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            商品单价：￥{{ ((record.price / 100).toFixed(2)) }}
+          </el-text>
+        </div>
+        <div class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            下单时间：{{ formatDate(record.time) }}
+          </el-text>
+        </div>
+        <div v-if="[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            付款时间：{{ formatDate(record.fukuantime) }}
+          </el-text>
+        </div>
+        <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            发货时间：{{ formatDate(record.fahuotime) }}
+          </el-text>
+        </div>
+        <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status) && record.kuaidi && record.kuaidinum" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            发货快递公司：{{ record.kuaidi }}
+          </el-text>
+        </div>
+        <div v-if="[4, 5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status) && record.kuaidi && record.kuaidinum" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            发货运单号：{{ record.kuaidinum }}
+          </el-text>
+        </div>
+        <div v-if="[5, 6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            到货时间：{{ formatDate(record.shouhuotime) }}
+          </el-text>
+        </div>
+        <div v-if="[6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            评价时间：{{ formatDate(record.pingjiatime) }}
+          </el-text>
+        </div>
+        <div v-if="[6, 7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            评价：{{ record.isgood ? "好评" : "不予置评" }}
+          </el-text>
+        </div>
+        <div v-if="[7, 8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            申请退货时间：{{ formatDate(record.dengjituihuotime) }}
+          </el-text>
+        </div>
+        <div v-if="[8, 9, 10, 11].some((i) => i == record.status)" class="info_box">
+          <el-text v-if="record.status === 8" class="info_text components-center-buyrecord-info-box">
+            申请退货情况：卖家同意退货，请尽快根据地址寄回商品，并上传物流信息。
+          </el-text>
+          <el-text v-else-if="record.status === 9" class="info_text components-center-buyrecord-info-box">
+            申请退货情况：卖家同意退货，等待卖家收货。
+          </el-text>
+          <el-text v-else-if="record.status === 10" class="info_text components-center-buyrecord-info-box">
+            申请退货情况：卖家不同意退货，请联系卖家。
+          </el-text>
+          <el-text v-else-if="record.status === 11" class="info_text components-center-buyrecord-info-box">
+            申请退货情况：卖家已完成退货。
+          </el-text>
+        </div>
+        <div v-if="[8, 9, 11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            同意退货时间：{{ formatDate(record.querentuihuotime) }}
+          </el-text>
+        </div>
+        <div v-if="[9, 11].some((i) => i == record.status) && record.backkuaidi && record.backkuaidinum" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            退货快递公司：{{ record.backkuaidi }}
+          </el-text>
+        </div>
+        <div v-if="[9, 11].some((i) => i == record.status) && record.backkuaidi && record.backkuaidinum" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            退货单号：{{ record.backkuaidinum }}
+          </el-text>
+        </div>
+        <div v-if="[11].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            退货到货时间：{{ formatDate(record.tuohuotime) }}
+          </el-text>
+        </div>
+        <div v-if="[12, 13].some((i) => i == record.status)" class="info_box">
+          <el-text v-if="record.status === 12" class="info_text components-center-buyrecord-info-box">
+            申请取消发货情况：正在尝试取消发货。
+          </el-text>
+          <el-text v-if="record.status === 13" class="info_text components-center-buyrecord-info-box">
+            申请取消发货情况：已经为您取消发货。
+          </el-text>
+        </div>
+        <div v-if="[13].some((i) => i == record.status)" class="info_box">
+          <el-text class="info_text components-center-buyrecord-info-box">
+            确认取消发货时间：{{ formatDate(record.quxiaotime) }}
+          </el-text>
+        </div>
+      </div>
     </div>
+  </el-card>
+  <div v-else>
+    <el-result
+        icon="warning"
+        title="此商品已下架"
+        sub-title="欢迎到别处去看看吧"
+    >
+      <template #extra>
+        <el-button type="primary">到我的中心</el-button>
+      </template>
+    </el-result>
   </div>
   <el-dialog
       v-model="repayModel"
@@ -1303,6 +1338,11 @@ const changeUser = () => {
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  --base-card-width: calc(#{var(--custom-little-width)} - 2vw);
+  width: #{var(--base-card-width)};
+  min-height: 0;
+}
 
 .title_name {
   width: calc(30% - 5px);
@@ -1349,14 +1389,17 @@ const changeUser = () => {
   font-weight: bold;
   margin-right: 5px;
   vertical-align: bottom;
+}
+
+.wupin_name_click {
   cursor: pointer;
 }
 
-.wupin_name:hover {
+.wupin_name_click:hover {
   text-decoration: underline;
 }
 
-.wupin_name:active {
+.wupin_name_click:active {
   color: blue;
 }
 
@@ -1387,18 +1430,27 @@ const changeUser = () => {
   color: blue;
 }
 
-.info_box {
-  width: calc(max(25%, 16rem) - 5px);
-  margin-right: 2.5px;
-  margin-left: 2.5px;
-  text-align: left;
+.outside {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .box_room {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 5px;
+  width: 100%;
+}
+
+.info_box {
+  width: calc(v-bind(maxWidth) - 4px);
+  margin-bottom: 10px;
+}
+
+.info_text {
+  margin-right: 10px;
+  margin-left: 10px;
 }
 
 .footer_btn .el-button {

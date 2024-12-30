@@ -180,7 +180,7 @@ const hasChange = computed(() => {
 })
 
 const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-const checkClassId = computed(() => form.value.classid !== 0)
+const checkClassId = computed(() => form.value.classid && form.value.classid !== 1)
 const checkHotPrice = computed(() => {
   if (!hotPrice.value) {
     return true

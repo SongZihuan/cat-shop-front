@@ -17,13 +17,13 @@
       setTimeout(() => {
         wechatStore.close()
       }, 10000)
-    }, 1000)
+    }, 2500)
   })
 
 </script>
 
 <template>
-  <div v-if="!isAdmin && wechatStore.show && delayShow && configStore.config?.wechat" class="wechat">
+  <div v-if="!isAdmin && wechatStore.show && delayShow && configStore.config.wechat" class="wechat">
     <div class="wechat_box">
       <el-card>
         <template #header>
@@ -34,7 +34,7 @@
           </div>
         </template>
         <div class="wechat_img">
-          <el-image :src="configStore.config?.wechat" fit="contain"> </el-image>
+          <el-image :src="configStore.config.wechat" fit="contain"> </el-image>
         </div>
         <template #footer>
           <div style="display: flex; justify-content: center;">

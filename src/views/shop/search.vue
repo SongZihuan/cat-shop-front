@@ -15,16 +15,16 @@ if (currentPage.value < 1) {
 }
 
 const data = ref({
-  select: [],
+  select: 0,
   search: "",
-} as { select?: number[], search?: string })
+} as { select?: number, search?: string })
 
 const changePage = async () => {
   if (route.query?.info) {
-    data.value = JSON.parse(route.query?.info as string) as { select?: number[], search?: string }
+    data.value = JSON.parse(route.query?.info as string) as { select?: number, search?: string }
   }
 
-  await apiGetSearchWupin(data.value?.search || "", data.value?.select || [], currentPage.value, 20).then((res) => {
+  await apiGetSearchWupin(data.value?.search || "", data.value?.select || 0, currentPage.value, 20).then((res) => {
     wupinlst.value = res.data.data.list
     maxcount.value = res.data.data.maxcount
   })
@@ -38,7 +38,7 @@ changePage()
 <template>
   <div class="outside">
     <div class="search">
-      <Search  style="margin-top: 10px; margin-bottom: 10px" :tyoe="-1"></Search>
+      <Search style="margin-top: 10px; margin-bottom: 10px" :tyoe="-1"></Search>
     </div>
     <div class="wupinlst">
       <WupinLst :wp="wupinlst"></WupinLst>

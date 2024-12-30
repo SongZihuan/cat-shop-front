@@ -48,7 +48,7 @@ const toHome = () => {
         <el-text v-else-if="title" class="subtitle">
           {{ title }}
         </el-text>
-        <el-text>
+        <el-text v-else class="subtitle">
           欢迎您的到来
         </el-text>
       </template>

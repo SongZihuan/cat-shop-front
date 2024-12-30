@@ -1,44 +1,47 @@
 <script setup lang="ts">
-import {apiGetBuyRecordInfo, BuyRecord as BuyRecordData} from "#/center/buyrecord"
-import BuyRecord from "@/components/center/buyrecord.vue"
-
-const route = useRoute()
-const router = useRouter()
-const recordId = ref(Number(route.query?.id).valueOf() || 0)
-
-const record = ref(null as BuyRecordData | null)
-
-const reload = () => {
-  apiGetBuyRecordInfo(recordId.value as number).then((res) => {
-    record.value = res.data.data as BuyRecordData
-  }).catch(() => {
-    router.push({
-      path: "/system/error",
-      query: {
-        msg: "获取数据失败"
-      }
-    })
-  })
-}
-reload()
+// import {apiGetBuyRecordInfo, BuyRecord as BuyRecordData} from "#/center/buyrecord"
+// import BuyRecord from "@/components/center/buyrecord.vue"
+//
+// const route = useRoute()
+// const router = useRouter()
+// const recordId = ref(Number(route.query?.id).valueOf() || 0)
+//
+// const record = ref(null as BuyRecordData | null)
+//
+// const reload = () => {
+//   apiGetBuyRecordInfo(recordId.value as number).then((res) => {
+//     record.value = res.data.data as BuyRecordData
+//   }).catch(() => {
+//     router.push({
+//       path: "/system/error",
+//       query: {
+//         msg: "获取数据失败"
+//       }
+//     })
+//   })
+// }
+// reload()
 
 </script>
 
 <template>
-  <div v-if="record && record.wupin" class="base">
-      <BuyRecord :zhifutishi="true" :record="record as BuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></BuyRecord>
+  <div style="background-color: red">
+    Hello
   </div>
-  <div v-else>
-    <el-result
-        icon="warning"
-        title="此商品已下架"
-        sub-title="欢迎到别处去看看吧"
-    >
-      <template #extra>
-        <el-button type="primary">到我的中心</el-button>
-      </template>
-    </el-result>
-  </div>
+<!--  <div v-if="record && record.wupin" class="base">-->
+<!--      <BuyRecord :zhifutishi="true" :record="record as BuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></BuyRecord>-->
+<!--  </div>-->
+<!--  <div v-else>-->
+<!--    <el-result-->
+<!--        icon="warning"-->
+<!--        title="此商品已下架"-->
+<!--        sub-title="欢迎到别处去看看吧"-->
+<!--    >-->
+<!--      <template #extra>-->
+<!--        <el-button type="primary">到我的中心</el-button>-->
+<!--      </template>-->
+<!--    </el-result>-->
+<!--  </div>-->
 </template>
 
 <style scoped lang="scss">
@@ -46,7 +49,7 @@ reload()
   display: flex;
   justify-content: center;
   width: var(--custom-little-width);
-  min-height: var(--custom-height);
+  min-height: 0;
 }
 
 .wupin_name {

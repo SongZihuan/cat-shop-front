@@ -5,7 +5,7 @@
     "item": {
       type: Object as PropType<Class>,
       required: true,
-    }
+    },
   })
   const item = computed(() => props.item)
   const router = useRouter()
@@ -25,7 +25,7 @@
 
 <template>
   <div>
-    <el-button class="classItem" size="large" text @click="onClickClass">
+    <el-button size="large" text class="classItem components-shop-classitem-item" @click="onClickClass">
       <el-text tag="ins">
         {{ item.name }}
       </el-text>
@@ -36,7 +36,7 @@
 <style scoped lang="scss">
 
 .classItem {
-  margin: 2px 2px 2px 2px;
+  margin: 10px;
 }
 
 </style>

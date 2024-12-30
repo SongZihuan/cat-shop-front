@@ -107,7 +107,7 @@ const wupinNameClass = computed(() => {
     return ["wupin_name"]
   }
 
-  return ["wupinname", "wupin_name_click"]
+  return ["wupin_name", "wupin_name_click"]
 })
 
 </script>
@@ -125,17 +125,21 @@ const wupinNameClass = computed(() => {
                 </el-badge>
               </div>
               <div style="float: right">
-                <el-button-group>
-                  <el-button v-if="record.wupin.classid !== 1 && record.wupin.classOf && record.wupin.classOf.id !== 1" size="large" class="class_btn" disabled>
-                    商品分类： {{ record.wupin.classOf.name }}
-                  </el-button>
-                  <el-button v-else size="large" class="class_btn" disabled>
-                    商品暂无分类
-                  </el-button>
-                  <el-button type="primary" @click="onSameClick">
-                    搜同类
-                  </el-button>
-                </el-button-group>
+                <div class="right_box">
+                  <div class="class_box">
+                    <el-text v-if="record.wupin && record.wupin.classid !== 1 && record.wupin.classOf && record.wupin.classOf.id === record.wupin.classid" class="class_text">
+                      商品分类：{{ record.wupin.classOf.name }}
+                    </el-text>
+                    <el-text v-else class="class_text">
+                      商品暂无分类
+                    </el-text>
+                  </div>
+                  <div class="class_box class_box_click" @click="onSameClick">
+                    <el-text class="class_text">
+                      搜同类
+                    </el-text>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -406,5 +410,37 @@ const wupinNameClass = computed(() => {
 .record_info {
   color: black;
   font-size: 0.7vw;
+}
+
+.class_box {
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+
+  border: 1px solid #333333;;
+  padding: 5px;
+  border-radius: 10px;
+
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.class_box_click {
+  cursor: pointer;
+  background-color: white;
+}
+
+.class_box_click:hover {
+  background-color: rgb(220, 220, 220);
+}
+
+.class_text {
+  font-size: 1.15rem;
+  vertical-align: middle;
+}
+
+.right_box {
+  display: flex;
+  justify-content: left;
 }
 </style>

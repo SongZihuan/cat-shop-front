@@ -8,7 +8,7 @@ export interface WupinLst {
     maxcount: number
 }
 
-export const apiGetSearchWupin = (search: string, select: Array<number>, page: number, pagesize: number): Result<WupinLst> => {
+export const apiGetSearchWupin = (search: string, select: number, page: number, pagesize: number): Result<WupinLst> => {
     const classId = 2
     const classOf = {
         id: 2,

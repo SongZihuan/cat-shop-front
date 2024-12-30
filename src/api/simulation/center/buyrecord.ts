@@ -56,9 +56,14 @@ type BuyRecordLst = {
 }
 
 export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<BuyRecordLst> {
-    if (limit > 100) {
+    if (limit > 100 || limit <= 0) {
         limit = 100
     }
+
+    if (offset > 20 || offset <= 0) {
+        offset = 0
+    }
+
     // return request({
     //     url: '/user/buy/record',
     //     method: 'get',

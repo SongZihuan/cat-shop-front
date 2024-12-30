@@ -82,6 +82,18 @@
     })
   }
 
+  const onSameClick = () => {
+    wupin.value && router.push({
+      path: "/shop/search",
+      query: {
+        "info": JSON.stringify({
+          select: wupin.value.classid || 0,
+          search: wupin.value.name || "",
+        })
+      }
+    })
+  }
+
   const byn = ref(null as any)
   const buy = () => {
     if (!byn.value) {
@@ -136,11 +148,16 @@
           </div>
           <div style="float: right">
             <div class="class_box">
-              <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
+              <el-text v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1" class="class_text">
                 商品分类：{{ wupin.classOf.name }}
-              </div>
-              <div v-else>
+              </el-text>
+              <el-text v-else class="class_text">
                 商品暂无分类
+              </el-text>
+              <div class="class_box class_box_click" @click="onSameClick">
+                <el-text class="class_text">
+                  搜同类
+                </el-text>
               </div>
             </div>
           </div>
@@ -484,14 +501,29 @@
   }
 
   .class_box {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+
     border: 1px solid #333333;;
-    padding: 10px;
+    padding: 5px;
     border-radius: 10px;
-    font-size: 1.2rem;
+
+    margin-right: 5px;
+    margin-left: 5px;
   }
 
-  .img_box {
-    display: flex;
-    justify-content: center;
+  .class_box_click {
+    cursor: pointer;
+    background-color: white;
+  }
+
+  .class_box_click:hover {
+    background-color: rgb(220, 220, 220);
+  }
+
+  .class_text {
+    font-size: 1.15rem;
+    vertical-align: middle;
   }
 </style>

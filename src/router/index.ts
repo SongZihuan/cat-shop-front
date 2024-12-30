@@ -120,7 +120,7 @@ const routes: RouteRecordRaw[] = [
         path: 'buyrecordlist',
         component: () => import('@/views/center/buyrecordlst.vue'),
         meta: {
-          title: '消费列表',
+          title: '购物记录',
           xauth: true,
           wechat: true,
         }
@@ -129,7 +129,7 @@ const routes: RouteRecordRaw[] = [
         path: 'buyrecord',
         component: () => import('@/views/center/buyrecord.vue'),
         meta: {
-          title: '消费商品详情页面',
+          title: '购物商品详情页面',
           xauth: true,
           wechat: true,
         }
@@ -562,7 +562,7 @@ const routes: RouteRecordRaw[] = [
         path: 'kefu',
         component: () => import('@/views/system/kefu.vue'),
         meta: {
-          title: '我的客服',
+          title: '联系客服',
         }
       },
       {

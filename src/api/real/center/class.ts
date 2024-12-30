@@ -5,10 +5,10 @@ export interface Class {
     name: string
 }
 
-export const allClass = ref({
-    id: 0,
+export const AllClass = {
+    id: 1,
     name: "全部",
-} as Class)
+} as Class
 
 export interface ClassLst {
     list: Class[],

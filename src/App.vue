@@ -114,18 +114,23 @@
     width: 100%;
   }
 
-  #body {
-    display: flex;
-    justify-content: center;
-
-    width: #{var(--custom-width)};
-  }
-
   #out_body {
     display: flex;
     justify-content: center;
 
     min-height: #{var(--custom-height)};
+    overflow: auto; /* 如果内部内容超过100px，添加滚动条以查看多余内容 */
+    position: relative; /* 为绝对定位的子元素提供定位上下文 */
+  }
+
+  #body {
+    position: absolute;
+
+    display: flex;
+    justify-content: center;
+
+    width: #{var(--custom-width)};
+    min-height: 0;
   }
 
   #logo {

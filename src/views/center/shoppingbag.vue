@@ -20,7 +20,7 @@ const updater = async () => {
     }
 
     offset += res.data.data.total
-    shopRecord.value.push(...res.data.data.list)
+    shopRecord.value = shopRecord.value.concat(res.data.data.list)
   }).catch(() => {
     stop.value = true
   }).finally(() => {

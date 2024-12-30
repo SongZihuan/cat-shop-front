@@ -137,9 +137,9 @@ const logout = () => {
             <el-dropdown-item @click="toHome"><el-text>主页</el-text></el-dropdown-item>
             <el-dropdown-item @click="toCenter"><el-text>我的中心</el-text></el-dropdown-item>
             <el-dropdown-item v-if="userStore.user.type !== 1" @cclick="toAdmin" @click="toAdmin"><el-text>管理后台</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toBuyRecord"><el-text>我的购物记录</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toBag"><el-text>我的购物车</el-text></el-dropdown-item>
-            <el-dropdown-item @click="toKefu"><el-text>我的客服</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toBuyRecord"><el-text>购物记录</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toBag"><el-text>购物车</el-text></el-dropdown-item>
+            <el-dropdown-item @click="toKefu"><el-text>联系客服</el-text></el-dropdown-item>
             <el-dropdown-item @click="toAboutUs"><el-text>关于{{ configStore.config?.name }}</el-text></el-dropdown-item>
             <el-dropdown-item @click="logout" ><el-text>退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>

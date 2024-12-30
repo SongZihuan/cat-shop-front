@@ -5,23 +5,44 @@ export interface Class {
     name: string
 }
 
-export const allClass = ref({
-    id: 0,
+export const AllClass = {
+    id: 1,
     name: "全部",
-} as Class)
+} as Class
 
 export interface ClassLst {
     list: Class[],
     total: number,
 }
 
-export function apiGetClassLst(limit: number, offset: number): Result<ClassLst> {
-    if (limit > 100) {
+export interface GetClassData {
+    class?: Class;
+    hasfound: boolean;
+}
+
+export function apiGetClass(id: number): Result<GetClassData> {
+    return Promise.resolve({
+        data: {
+            code: 0,
+            data: {
+                class: {
+                    id: id,
+                    name: "商品分类" + id,
+                } as Class,
+                hasfound: id % 2 == 0,
+            },
+        },
+        code: 200,
+    })
+}
+
+export function apiGetClassLst(offset: number = 0, limit: number = 50): Result<ClassLst> {
+    if (limit > 100 || limit <= 0) {
         limit = 100
     }
 
-    if (offset <= 0 || offset > 20) {
-        offset = 20
+    if (offset > 20 || offset <= 0) {
+        offset = 0
     }
 
     // return request({
@@ -65,6 +86,7 @@ export function apiGetClassLst(limit: number, offset: number): Result<ClassLst> 
 export interface ClassLstByPage {
     list: Class[],
     total: number,
+    maxcount: number,
 }
 
 export function apiGetClassLstByPage(page: number, pagesize: number): Result<ClassLstByPage> {

@@ -192,9 +192,9 @@ defineExpose({
               商品名称：{{ wupin.name }}
             </el-text>
           </div>
-          <div class="repay_info">
+          <div v-if="wupin.classId !== 1 && wupin.classOf && wupin.classId === wupin.classOf.id" class="repay_info">
             <el-text>
-              商品商品分类：{{ wupin.classOf.name }}
+              商品分类：{{ wupin.classOf.name }}
             </el-text>
           </div>
           <div class="repay_info">

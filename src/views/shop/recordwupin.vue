@@ -71,6 +71,19 @@
       }
     })
   }
+
+  const onSameClick = () => {
+    record.value && router.push({
+      path: "/shop/search",
+      query: {
+        "info": JSON.stringify({
+          select: record.value.wupin.classid || 0,
+          search: record.value.wupin.name || "",
+        })
+      }
+    })
+  }
+
 </script>
 
 <template>
@@ -182,15 +195,18 @@
                 </el-badge>
               </div>
               <div style="float: right">
-                <div v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1">
-                  <el-button size="large" class="class_btn" disabled>
-                    商品分类： {{ wupin.classOf.name }}
-                  </el-button>
-                </div>
-                <div v-else>
-                  <el-button size="large" class="class_btn" disabled>
+                <div class="class_box">
+                  <el-text v-if="wupin.classid !== 1 && wupin.classOf && wupin.classOf.id !== 1" class="class_text">
+                    商品分类：{{ wupin.classOf.name }}
+                  </el-text>
+                  <el-text v-else class="class_text">
                     商品暂无分类
-                  </el-button>
+                  </el-text>
+                </div>
+                <div class="class_box class_box_click" @click="onSameClick">
+                  <el-text class="class_text">
+                    搜同类
+                  </el-text>
                 </div>
               </div>
             </div>
@@ -398,5 +414,32 @@
   .wupin_info_box, .wupin_buy_total_box {
     margin-top: 1px;
     margin-bottom: 3px;
+  }
+
+  .class_box {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+
+    border: 1px solid #333333;;
+    padding: 5px;
+    border-radius: 10px;
+
+    margin-right: 5px;
+    margin-left: 5px;
+  }
+
+  .class_box_click {
+    cursor: pointer;
+    background-color: white;
+  }
+
+  .class_box_click:hover {
+    background-color: rgb(220, 220, 220);
+  }
+
+  .class_text {
+    font-size: 1.15rem;
+    vertical-align: middle;
   }
 </style>
