@@ -33,7 +33,7 @@ const onWupinClick = () => {
   record.value && !record.value.down && router.push({
     path: "/shop/wupin",
     query: {
-      id: record.value.wupin.id,
+      wupinId: record.value.wupin.id,
     }
   })
 }
@@ -72,10 +72,8 @@ const onSameClick = () => {
   record.value && router.push({
     path: "/shop/search",
     query: {
-      "info": JSON.stringify({
-        select: record.value.wupin.classid || 0,
-        search: record.value.wupin.name || "",
-      })
+      select: record.value.wupin.classId || 0,
+      search: record.value.wupin.name || "",
     }
   })
 }
@@ -127,7 +125,7 @@ const wupinNameClass = computed(() => {
               <div style="float: right">
                 <div class="right_box">
                   <div class="class_box">
-                    <el-text v-if="record.wupin && record.wupin.classid !== 1 && record.wupin.classOf && record.wupin.classOf.id === record.wupin.classid" class="class_text">
+                    <el-text v-if="record.wupin && record.wupin.classId !== 1 && record.wupin.classOf && record.wupin.classOf.id === record.wupin.classId" class="class_text">
                       商品分类：{{ record.wupin.classOf.name }}
                     </el-text>
                     <el-text v-else class="class_text">

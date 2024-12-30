@@ -38,7 +38,7 @@ changePage()
 <template>
   <div class="outside">
     <div class="search">
-      <Search style="margin-top: 10px; margin-bottom: 10px" :tyoe="-1"></Search>
+      <Search></Search>
     </div>
     <div class="wupinlst">
       <WupinLst :wp="wupinlst"></WupinLst>

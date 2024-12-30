@@ -18,7 +18,7 @@ export interface AdminShowWupin {
 export interface AdminWupinBase extends AdminHotWupin, AdminShowWupin {
     name: string,
     pic: string
-    classid: number
+    classId: number
     tag?: string
     hotPrice?: number
     realPrice: number
@@ -38,7 +38,7 @@ export interface AdminClassForWupin {
 export interface AdminWupinBaseWithClassShow extends AdminWupinBase, AdminClassForWupin {
     name: string,
     pic: string
-    classid: number
+    classId: number
     tag?: string
     hotPrice?: number
     realPrice: number
@@ -74,7 +74,7 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
         id: id,
         name: "商品" + id,
         pic: WupinPic,
-        classid: 2,
+        classId: 2,
         classOf: {
             id: 2,
             name: "商品分类",
@@ -158,7 +158,7 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
             id: page * pagesize + i + 1,
             name: "商品" + (page * pagesize + i + 1),
             pic: WupinPic,
-            classid: 2,
+            classId: 2,
             classOf: {
                 id: 2,
                 name: "商品分类2",

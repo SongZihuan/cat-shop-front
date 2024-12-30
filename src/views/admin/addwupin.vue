@@ -82,7 +82,7 @@ onClassLstChange()
 const form = ref({
   name: "",
   pic: "",
-  classid: 0,
+  classId: 0,
   tag: "",
   hotPrice: 0,
   realPrice: 0,
@@ -97,7 +97,7 @@ const form = ref({
 } as AdminWupinBase)
 
 const resetClassId = () => {
-  (form.value as any).classid = undefined
+  (form.value as any).classId = undefined
 }
 
 resetClassId()
@@ -107,7 +107,7 @@ const realPrice = ref("0.00")
 
 const checkPiv = computed(() => newPic.value !== null)
 const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-const checkClassId = computed(() => form.value.classid > 0)// 可以选择1
+const checkClassId = computed(() => form.value.classId > 0)// 可以选择1
 const checkHotPrice = computed(() => {
   if (!hotPrice.value) {
     return true
@@ -167,7 +167,7 @@ const add = () => {
         form.value = {
           name: "",
           pic: "",
-          classid: 0,
+          classId: 0,
           tag: "",
           hotPrice: 0,
           realPrice: 0,
@@ -318,7 +318,7 @@ const openEdit = () => {
                 <el-text>商品分类</el-text>
               </template>
               <el-select
-                  v-model="form.classid"
+                  v-model="form.classId"
                   placeholder="请选择商品分类"
                   size="large"
               >

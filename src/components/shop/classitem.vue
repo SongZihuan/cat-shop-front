@@ -14,10 +14,8 @@
     router.push({
       path: "/shop/search",
       query: {
-        "info": JSON.stringify({
-          select: item.value?.id || 0,
-          search: "",
-        })
+        select: item.value.id || 0,
+        search: "",
       }
     })
   }

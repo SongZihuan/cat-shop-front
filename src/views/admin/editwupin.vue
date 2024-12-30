@@ -85,7 +85,7 @@ const onChangeWupin = () => {
       form.value = {
         name: wupin.value.name,
         pic: wupin.value.pic,
-        classid: wupin.value.classid,
+        classId: wupin.value.classId,
         tag: wupin.value.tag,
         hotPrice: wupin.value.hotPrice,
         realPrice: wupin.value.realPrice,
@@ -135,8 +135,8 @@ const onClassLstChange = () => {
     classLstMaxPage.value = res.data.data.maxcount
     classLst.value = res.data.data.list
 
-    if (classLst.value.every((item) => item.id !== form.value.classid)) {
-      (form.value as any).classid = undefined
+    if (classLst.value.every((item) => item.id !== form.value.classId)) {
+      (form.value as any).classId = undefined
     }
   })
 }
@@ -144,7 +144,7 @@ const onClassLstChange = () => {
 const form = ref({
   name: "",
   pic: "",
-  classid: 0,
+  classId: 0,
   tag: "",
   hotPrice: 0,
   realPrice: 0,
@@ -164,7 +164,7 @@ const realPrice = ref("")
 const hasChange = computed(() => {
   return form.value.name !== wupin.value?.name ||
       form.value.pic !== wupin.value?.pic ||
-      form.value.classid !== wupin.value?.classid ||
+      form.value.classId !== wupin.value?.classId ||
       form.value.tag !== wupin.value?.tag ||
       form.value.hotPrice !== wupin.value?.hotPrice ||
       form.value.realPrice !== wupin.value?.realPrice ||
@@ -180,7 +180,7 @@ const hasChange = computed(() => {
 })
 
 const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-const checkClassId = computed(() => form.value.classid && form.value.classid !== 1)
+const checkClassId = computed(() => form.value.classId && form.value.classId !== 1)
 const checkHotPrice = computed(() => {
   if (!hotPrice.value) {
     return true
@@ -226,8 +226,8 @@ const update = () => {
       form.value.realPrice = 0
     }
 
-    if (!form.value.classid) {
-      form.value.classid = defaultClass.value.id
+    if (!form.value.classId) {
+      form.value.classId = defaultClass.value.id
     }
 
     return apiAdminPostUpdateWupin(form.value, newPic.value && newPic.value.raw ? newPic.value.raw : null).then((res) => {
@@ -390,7 +390,7 @@ const selectMsg = computed(() => {
                 <el-text>商品分类</el-text>
               </template>
               <el-select
-                  v-model="form.classid"
+                  v-model="form.classId"
                   :placeholder="selectMsg"
                   size="large"
                   clearable

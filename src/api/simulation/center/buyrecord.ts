@@ -21,9 +21,9 @@ export const BuyRecordStatus = {
 
 export interface BuyRecord {
     id: number
-    userid: number
-    wupinid: number
-    classid: number
+    userId: number
+    wupinId: number
+    classId: number
     num: number
     price: number
     totalPrice: number
@@ -86,9 +86,9 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
     for (let i = 0; i < limit; i++) {
         buyRecordLst.push({
             id: offset + i + 1,
-            userid: 1,
-            wupinid: 1,
-            classid: 2,
+            userId: 1,
+            wupinId: 1,
+            classId: 2,
             num: 2,
             price: 5000,
             totalPrice: 9999,
@@ -112,7 +112,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 id: 1,
                 name: "商品",
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -138,7 +138,7 @@ export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<Bu
                 id: 1,
                 name: "商品",
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -202,9 +202,9 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
             code: 0,
             data: {
                 id: id,
-                userid: 1,
-                wupinid: 1,
-                classid: 2,
+                userId: 1,
+                wupinId: 1,
+                classId: 2,
                 num: 2,
                 price: 500,
                 totalPrice: 9999,
@@ -228,7 +228,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     id: 1,
                     name: "商品",
                     pic: wupinPic,
-                    classid: 2,
+                    classId: 2,
                     classOf: {
                         id: 2,
                         name: "商品分类2",
@@ -255,7 +255,7 @@ export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
                     id: 1,
                     name: "商品",
                     pic: wupinPic,
-                    classid: 2,
+                    classId: 2,
                     classOf: {
                         id: 2,
                         name: "商品分类2",
@@ -330,9 +330,9 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
         
         buyRecordLst.value.push({
             id: page * pagesize + i + 1,
-            userid: 1,
-            wupinid: 1,
-            classid: 2,
+            userId: 1,
+            wupinId: 1,
+            classId: 2,
             num: 2,
             price: 5000,
             totalPrice: 9999,
@@ -356,7 +356,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -382,7 +382,7 @@ export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",

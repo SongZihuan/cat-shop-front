@@ -5,7 +5,7 @@ export interface Wupin {
     id: number
     name: string
     pic: string
-    classid: number
+    classId: number
     classOf: Class
     tag?: string
     hotPrice?: number

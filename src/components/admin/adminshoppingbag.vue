@@ -32,8 +32,8 @@ const totalPrice = computed(() => {
 })
 
 const onClassClick = () => {
-  record.value.wupin.classid > 1 && pushTo(router, route, "/admin/class/info", {
-    classId: record.value.wupin.classid.toString(),
+  record.value.wupin.classId > 1 && pushTo(router, route, "/admin/class/info", {
+    classId: record.value.wupin.classId.toString(),
   })
 }
 
@@ -44,7 +44,7 @@ const onWupinClick = () => {
 }
 
 const onClickBag = () => {
-  record.value && apiAdminPostAddToShoppingBag(record.value.userid, record.value.wupin.id, num.value).then((res) => {
+  record.value && apiAdminPostAddToShoppingBag(record.value.userId, record.value.wupin.id, num.value).then((res) => {
     if (res.data.data.success) {
       if (num.value <= 0) {
         ElMessage({
@@ -71,10 +71,8 @@ const onSameClick = () => {
   record.value && router.push({
     path: "/shop/search",
     query: {
-      "info": JSON.stringify({
-        select: record.value.wupin.classid || 0,
-        search: record.value.wupin.name || "",
-      })
+      select: record.value.wupin.classId || 0,
+      search: record.value.wupin.name || "",
     }
   })
 }
@@ -96,7 +94,7 @@ if (num.value < 0) {
               <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
                 <el-text class="wupin_name" @click="onWupinClick"> {{ record.wupin.name }} </el-text>
               </el-badge>
-              <el-text v-if="record.wupin.classid > 0 && record.wupin.classOf" class="title wupin_class_name">
+              <el-text v-if="record.wupin.classId > 0 && record.wupin.classOf" class="title wupin_class_name">
                 商品来源：
                 <el-text class="title wupin_class_name_btn" @click="onClassClick"> {{ record.wupin.classOf.name }} > </el-text>
               </el-text>

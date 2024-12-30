@@ -15,7 +15,7 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
             id: i + 1,
             name: "商品" + " - " + (i + 1),
             pic: WupinPic,
-            classid: 2,
+            classId: 2,
             classOf: {
                 id: 2,
                 name: "商品分类",

@@ -4,9 +4,9 @@ import {AdminWupin} from "#/admin/wupin";
 
 export interface AdminShopRecord {
     id: number
-    userid: number
-    wupinid: number
-    classid: number
+    userId: number
+    wupinId: number
+    classId: number
     num: number
     time: number
     wupin: AdminWupin
@@ -41,16 +41,16 @@ export function apiAdminGetUserShoppingRecord(userId: number, page: number, page
 
         shopRecordLst.value.push({
             id: page * pagesize + i + 1,
-            userid: userId,
-            wupinid: 1,
-            classid: 2,
+            userId: userId,
+            wupinId: 1,
+            classId: 2,
             num: 2,
             time: 1734024269,
             wupin: {
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类",

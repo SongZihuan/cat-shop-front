@@ -81,7 +81,7 @@
   onChangeWupin()
 
   const onClassClick = () => {
-    wupin.value && wupin.value.classid > 1 && pushTo(router, route, "/admin/class/info", {
+    wupin.value && wupin.value.classId > 1 && pushTo(router, route, "/admin/class/info", {
       classId: wupin.value?.classOf.id
     })
   }
@@ -101,7 +101,7 @@
   })
 
   const onClickBag = () => {
-    record.value && apiAdminPostAddToShoppingBag(record.value.userid, record.value.wupin.id, num.value).then((res) => {
+    record.value && apiAdminPostAddToShoppingBag(record.value.userId, record.value.wupin.id, num.value).then((res) => {
       if (res.data.data.success) {
         if (num.value <= 0) {
           record.value && ElMessage({
@@ -206,7 +206,7 @@
             <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
               <el-text class="wupin_name"> {{ wupin.name }} </el-text>
             </el-badge>
-            <el-text v-if="wupin.classid > 1 && wupin.classOf" class="wupin_class_name">
+            <el-text v-if="wupin.classId > 1 && wupin.classOf" class="wupin_class_name">
               商品来源：
               <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ wupin.classOf.name }} > </el-text>
             </el-text>

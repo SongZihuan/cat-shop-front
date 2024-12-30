@@ -90,9 +90,9 @@ const onGoWupinConfirm = () => {
 
 const onGoWupin = () => {
   record.value && !record.value.down && router.push({
-    path: "/shop/wupin/record",
+    path: "/shop/wupin/sale",
     query: {
-      "id": record.value.id,
+      nowRecordId: record.value.id,
     }
   })
 }
@@ -101,7 +101,7 @@ const onGoLockWupin = () => {
   record.value && router.push({
     path: "/shop/wupin/lock",
     query: {
-      "id": record.value.id,
+      recordId: record.value.id,
     }
   })
 }
@@ -621,7 +621,7 @@ const infoBox = ref<HTMLElement>()
     </template>
 
     <template #footer>
-      <div class="footer_btn">
+      <div  class="footer_btn">
         <el-button v-if="safe && record.status === 2" type="danger" @click="stopRepay">
           取消支付
         </el-button>
@@ -653,12 +653,12 @@ const infoBox = ref<HTMLElement>()
           重新申请退货
         </el-button>
         <el-button v-if="safe" type="primary" @click="showTuiHuoLocation">
-          <span v-if="([7, 8, 9, 10, 11].some((i) => i == record.status))">
-            查看退货地址
-          </span>
+        <span v-if="([7, 8, 9, 10, 11].some((i) => i == record.status))">
+          查看退货地址
+        </span>
           <span v-else>
-            查看商家地址
-          </span>
+          查看商家地址
+        </span>
         </el-button>
         <el-button v-if="safe" type="success" @click="showFaHuoLocation">
           查看收货地址
@@ -681,7 +681,7 @@ const infoBox = ref<HTMLElement>()
           </el-text>
         </div>
         <div class="info_box">
-          <el-text v-if="record.classid !== 1 && record.wupin && record.wupin.classOf && record.wupin.classOf.id === record.classid" class="info_text components-center-buyrecord-info-box">
+          <el-text v-if="record.classId !== 1 && record.wupin && record.wupin.classOf && record.wupin.classOf.id === record.classId" class="info_text components-center-buyrecord-info-box">
             商品分类：{{ record.wupin.classOf.name }}
           </el-text>
           <el-text v-else class="info_text components-center-buyrecord-info-box">
@@ -1453,18 +1453,17 @@ const infoBox = ref<HTMLElement>()
   margin-left: 10px;
 }
 
-.footer_btn .el-button {
-  width: calc(max(25%, 10rem) - 10px);
-  margin-right: 2.5px;
-  margin-left: 2.5px;
-  text-align: left;
+.footer_btn > .el-button {
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .footer_btn {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: 5px;
 }
 
 </style>

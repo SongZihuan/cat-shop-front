@@ -7,7 +7,7 @@ export const apiGetWupin = (id: number): Result<Wupin> => {
         id: id,
         name: "商品" + id,
         pic: WupinPic,
-        classid: 2,
+        classId: 2,
         classOf: {
             id: 2,
             name: "商品分类2",

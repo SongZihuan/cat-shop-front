@@ -24,7 +24,7 @@ export const apiGetSearchWupin = (search: string, select: number, page: number, 
             id: i + 1,
             name: "商品" + search + " - " + (i + 1),
             pic: WupinPic,
-            classid: 2,
+            classId: 2,
             classOf: {
                 id: 2,
                 name: "商品分类",

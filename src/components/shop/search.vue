@@ -1,69 +1,68 @@
 <script setup lang="ts">
   import {Search as SearchIcon} from '@element-plus/icons-vue'
   import {apiGetClass, Class, AllClass, apiGetClassLstByPage} from "#/center/class";
+  import { ElMessage } from 'element-plus'
 
   const router = useRouter()
   const route = useRoute()
 
-  const props = defineProps({
-    "select": {
-      type: Number,
-      required: false,
-    },
-    "search": {
-      type: String,
-      required: false,
-    },
-  })
-
   const data = ref({
-        select: props.search,
-        search: props.select,
-  } as { select?: number | undefined, search?: string })
+        select: undefined,
+        search: "",
+  } as { select: number | undefined, search: string })
 
-  const infoController = (info?: any) => {
-    if (!info) {
-      return
+  const infoController = () => {
+    if (typeof route.query.select === "string") {
+      data.value.select = parseInt(route.query.select) || undefined
+    } else {
+      data.value.select = undefined
     }
 
-    data.value = JSON.parse(info as string) as { select?: number, search?: string }
+    if (typeof route.query.search === "string") {
+      data.value.search = route.query.search || ""
+    } else {
+      data.value.search = ""
+    }
+
     getSelectClass()
   }
 
+  const classLstLock = ref(false)
   const getSelectClass = () => {
     if (!data.value || !data.value.select || !classLst.value) {
       data.value.select = undefined
       return
     }
 
+    if (classLstLock.value) {
+      setTimeout(() => getSelectClass(), 100)
+      return
+    }
+
+    classLstLock.value = true
+
     if (classLst.value.every((item) => item.id !== data.value.select)) {
       if (data.value.select === 1) {
         classLst.value = [AllClass].concat(classLst.value)
+        classLstLock.value = false
         return
       }
 
-      apiGetClass(data.value.select).then((res)=>{
-        if (res.data.data.hasfound) {
+      apiGetClass(data.value.select).then((res) => {
+        if (res.data.data.hasfound && res.data.data.class.id === data.value.select) {
           classLst.value.push(res.data.data.class)
         } else {
           data.value.select = undefined
         }
-      })
+      }).finally(() => { classLstLock.value = true })
     }
   }
 
   onMounted(() => {
-    infoController(route.query?.info)
-
-    if (!data.value.search) {
-      data.value.search = props.search
-    }
-
-    if (!data.value.search) {
-      data.value.select = props.select
-    }
-
-    watch(() => route.query?.info, infoController)
+    infoController()
+    watch(() => route.query, () => {
+      infoController()
+    })
   })
 
   const classLst = ref([] as Class[])
@@ -82,13 +81,18 @@
   onClassLstChange()
 
   const onSearch = () => {
+    if (!data.value.select && !data.value.search) {
+      ElMessage({
+        message: '请输入搜索类型或关键词',
+        type: 'warning',
+      })
+      return
+    }
     router.push({
       path: "/shop/search",
       query: {
-        "info": JSON.stringify({
-          select: data.value.select || 0,
-          search: data.value.search || "",
-        })
+        select: data.value.select || 0,
+        search: data.value.search || "",
       }
     })
   }

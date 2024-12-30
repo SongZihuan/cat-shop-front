@@ -29,7 +29,7 @@ export function apiGetClass(id: number): Result<GetClassData> {
                     id: id,
                     name: "商品分类" + id,
                 } as Class,
-                hasfound: id % 2 == 0,
+                hasfound: id % 2 != 0,
             },
         },
         code: 200,

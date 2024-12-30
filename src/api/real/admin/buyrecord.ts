@@ -21,9 +21,9 @@ export const AdminBuyRecordStatus = {
 
 export interface AdminBuyRecord {
     id: number
-    userid: number
-    wupinid: number
-    classid: number
+    userId: number
+    wupinId: number
+    classId: number
     num: number
     price: number
     totalPrice: number
@@ -79,9 +79,9 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
 
         buyRecordLst.value.push({
             id: page * pagesize + i + 1,
-            userid: 1,
-            wupinid: 1,
-            classid: 2,
+            userId: 1,
+            wupinId: 1,
+            classId: 2,
             num: 2,
             price: 5000,
             totalPrice: 9999,
@@ -105,7 +105,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -134,7 +134,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -215,9 +215,9 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
 
         buyRecordLst.value.push({
             id: page * pagesize + i + 1,
-            userid: userId,
-            wupinid: 1,
-            classid: 2,
+            userId: userId,
+            wupinId: 1,
+            classId: 2,
             num: 2,
             price: 5000,
             totalPrice: 9999,
@@ -241,7 +241,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -270,7 +270,7 @@ export function apiAdminGetUserBuyRecordByPage(userId: number, page: number, pag
                 id: 1,
                 name: `商品-${page}-${i}`,
                 pic: wupinPic,
-                classid: 2,
+                classId: 2,
                 classOf: {
                     id: 2,
                     name: "商品分类2",
@@ -338,9 +338,9 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
             code: 0,
             data: {
                 id: id,
-                userid: userId,
-                wupinid: 1,
-                classid: 2,
+                userId: userId,
+                wupinId: 1,
+                classId: 2,
                 num: 2,
                 price: 500,
                 totalPrice: 9999,
@@ -364,7 +364,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
                     id: 1,
                     name: `商品1`,
                     pic: wupinPic,
-                    classid: 2,
+                    classId: 2,
                     classOf: {
                         id: 1,
                         name: "商品分类",
@@ -392,7 +392,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
                     id: 1,
                     name: `商品1`,
                     pic: wupinPic,
-                    classid: 2,
+                    classId: 2,
                     classOf: {
                         id: 1,
                         name: "商品分类",

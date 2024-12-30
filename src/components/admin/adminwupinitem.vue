@@ -33,7 +33,7 @@
     <template #header>
       <el-text class="WupinTitle">
         {{ item.name }} 
-        <span v-if="item.classid && item.classOf && item.classid > 1">
+        <span v-if="item.classId && item.classOf && item.classId > 1">
         （{{item.classOf.name}}）
         </span>
       </el-text>

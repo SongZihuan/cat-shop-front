@@ -8,6 +8,15 @@ import {isAdmin, isRootAdmin} from "@/store/admin"
 
 export const redirect = "redirect"
 
+const notfound = {
+  component: () => import('@/views/system/notfound.vue'),
+  meta: {
+    title: '404-页面不存在',
+    wechat: true,
+    notfound: true,
+  }
+}
+
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
@@ -44,23 +53,23 @@ const routes: RouteRecordRaw[] = [
         path: 'wupin',
         component: () => import('@/views/shop/wupin.vue'),
         meta: {
-          title: '商品售卖页面',
+          title: '商品售卖详情页面',
           wechat: true,
         }
       },
       {
-        path: 'wupin/record',
-        component: () => import('@/views/shop/recordwupin.vue'),
+        path: 'wupin/sale',
+        component: () => import('@/views/shop/wupin.vue'),
         meta: {
-          title: '商品售卖页面',
+          title: '订单商品售卖详情页面',
           wechat: true,
         }
       },
       {
         path: 'wupin/lock',
-        component: () => import('@/views/shop/lockwupin.vue'),
+        component: () => import('@/views/shop/wupin.vue'),
         meta: {
-          title: '商品存档页面',
+          title: '订单商品存档页面',
           wechat: true,
         }
       },
@@ -555,10 +564,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/system.vue'),
     children: [
       {
-        path: "",
-        redirect: "/system/notfound",
-      },
-      {
         path: 'kefu',
         component: () => import('@/views/system/kefu.vue'),
         meta: {
@@ -582,15 +587,6 @@ const routes: RouteRecordRaw[] = [
           wechat: true,
         }
       },
-      {
-        path: 'notfound',
-        component: () => import('@/views/system/notfound.vue'),
-        meta: {
-          title: '404-页面不存在',
-          wechat: true,
-          notfound: true,
-        }
-      },
     ]
   },
   {
@@ -599,7 +595,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:catchAll(.*)',
-    redirect: "/system/notfound",
+    ...notfound
   },
 ]
 

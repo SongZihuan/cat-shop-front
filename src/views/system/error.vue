@@ -66,5 +66,6 @@ onUnmounted(() => {
   --base-card-min-width: #{var(--custom-most-min-width)};
   max-width: #{var(--base-card-width)};
   min-width: var(--base-card-min-width);
+  margin-top: 10vh;
 }
 </style>

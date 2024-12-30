@@ -76,7 +76,4 @@ declare module '@vue/runtime-core' {
     Wupinitem: typeof import('./src/components/shop/wupinitem.vue')['default']
     Wupinlist: typeof import('./src/components/shop/wupinlist.vue')['default']
   }
-  export interface ComponentCustomProperties {
-    vInfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
-  }
 }

@@ -21,7 +21,7 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
             id: i + 1,
             name: "商品" + " - " + (i + 1),
             pic: WupinPic,
-            classid: cl.id,
+            classId: cl.id,
             classOf: cl,
             tag: "爆卖！",
             hotPrice: 9999,

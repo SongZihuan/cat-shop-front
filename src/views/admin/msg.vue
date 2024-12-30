@@ -69,7 +69,7 @@ const toBack = () => {
                         </el-text>
                       </div>
                       <div>
-                        <el-button @click="toUser(item.userid)">
+                        <el-button @click="toUser(item.userId)">
                           查看用户详情
                         </el-button>
                       </div>

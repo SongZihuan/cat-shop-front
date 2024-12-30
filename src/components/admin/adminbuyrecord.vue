@@ -49,13 +49,11 @@ const safe = computed(() => props.safe)
 const xiangqing = computed(() => props.xiangqing)
 
 const onClassClick = () => {
-  record.value && record.value.wupin.classid > 1 && router.push({
+  record.value && record.value.wupin.classId > 1 && router.push({
     path: "/shop/search",
     query: {
-      "info": JSON.stringify({
-        select: record.value.wupin.classid || 0,
-        search: "",
-      })
+      select: record.value.wupin.classId || 0,
+      search: "",
     }
   })
 }
@@ -112,7 +110,7 @@ const startRepay = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostPeoplePay(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostPeoplePay(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -139,7 +137,7 @@ const stopRepay = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostQuXiaoPay(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostQuXiaoPay(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -170,7 +168,7 @@ const confirmDaohuo = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostGouWuDaoHuo(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostGouWuDaoHuo(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -201,7 +199,7 @@ const confirmTuiHuo = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostGouWuTuiHuoDaohuo(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostGouWuTuiHuoDaohuo(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -232,7 +230,7 @@ const quXiao = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostFaHuoQuXiao(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostFaHuoQuXiao(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -263,7 +261,7 @@ const acceptQuXiao = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostAcceptFaHuoQuXiaoDengJi(record.value.userid, record.value.id, true).then((res) => {
+    apiAdminPostAcceptFaHuoQuXiaoDengJi(record.value.userId, record.value.id, true).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -294,7 +292,7 @@ const notAcceptQuXiao = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostAcceptFaHuoQuXiaoDengJi(record.value.userid, record.value.id, false).then((res) => {
+    apiAdminPostAcceptFaHuoQuXiaoDengJi(record.value.userId, record.value.id, false).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -342,7 +340,7 @@ const faHuoDengji = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostFaHuoDengJi(record.value.userid, record.value.id, fahuoDengjiForm.value.kuaidi, fahuoDengjiForm.value.danhao).then((res) => {
+    apiAdminPostFaHuoDengJi(record.value.userId, record.value.id, fahuoDengjiForm.value.kuaidi, fahuoDengjiForm.value.danhao).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -391,7 +389,7 @@ const tuiHuoDengji = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostTuiHuoDengJi(record.value.userid, record.value.id, tuihuoDengjiForm.value.kuaidi, tuihuoDengjiForm.value.danhao).then((res) => {
+    apiAdminPostTuiHuoDengJi(record.value.userId, record.value.id, tuihuoDengjiForm.value.kuaidi, tuihuoDengjiForm.value.danhao).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -462,7 +460,7 @@ const changeUser = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostChangeUser(record.value.userid, record.value.id, changeUserForm.value).then((res) => {
+    apiAdminPostChangeUser(record.value.userId, record.value.id, changeUserForm.value).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -533,7 +531,7 @@ const changeShop = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostChangeShop(record.value.userid, record.value.id, changeShopForm.value).then((res) => {
+    apiAdminPostChangeShop(record.value.userId, record.value.id, changeShopForm.value).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -565,7 +563,7 @@ const acceptTuiHuo = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostTuiHuoAccept(record.value.userid, record.value.id, true).then((res) => {
+    apiAdminPostTuiHuoAccept(record.value.userId, record.value.id, true).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -596,7 +594,7 @@ const notAcceptTuiHuo = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostTuiHuoAccept(record.value.userid, record.value.id, false).then((res) => {
+    apiAdminPostTuiHuoAccept(record.value.userId, record.value.id, false).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -627,7 +625,7 @@ const shenQingAndAcceptTuiHuo = () => {
         type: 'warning',
       }
   ).then(() => {
-    apiAdminPostTuiHuoShenQingAccept(record.value.userid, record.value.id).then((res) => {
+    apiAdminPostTuiHuoShenQingAccept(record.value.userId, record.value.id).then((res) => {
       if (res.data.data.success) {
         ElMessage({
           type: 'success',
@@ -661,7 +659,7 @@ const onXiangQing = () => {
             <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
               <el-text class="wupin_name" @click="onGoWupinConfirm"> {{ record.wupin.name }} </el-text>
             </el-badge>
-            <el-text v-if="record.wupin.classid > 1 && record.wupin.classOf" class="wupin_class_name">
+            <el-text v-if="record.wupin.classId > 1 && record.wupin.classOf" class="wupin_class_name">
               商品来源：
               <el-text class="wupin_class_name_btn" @click="onClassClick"> {{ record.wupin.classOf.name }} > </el-text>
             </el-text>
