@@ -198,51 +198,49 @@ const downClass = () => {
 </script>
 
 <template>
-  <div v-if="classObj" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="margin-top: 10px">
-      <template #header>
-        <el-text style="font-size: 0.8vw;">
-          类别详情
-        </el-text>
-      </template>
-      <div style="margin: 10px 10px 10px 10px; display: flex; justify-content: center">
+  <el-card  v-if="classObj" class="base_card">
+    <template #header>
+      <el-text style="font-size: 0.8vw;">
+        类别详情
+      </el-text>
+    </template>
+    <div style="margin: 10px 10px 10px 10px; display: flex; justify-content: center">
+      <div>
         <div>
-          <div>
-            <el-text class="default_text"> 类别ID：</el-text>
-            <el-text class="default_text"> {{ classObj.id }} </el-text>
-          </div>
-          <div>
-            <el-text class="default_text"> 类别名称：</el-text>
-            <el-text class="default_text"> {{ classObj.name }} </el-text>
-          </div>
-          <div>
-            <el-text class="default_text"> 是否展示：</el-text>
-            <el-text v-if="classObj.show" class="default_text"> 展示 </el-text>
-            <el-text v-else class="default_text"> 不展示 </el-text>
-          </div>
+          <el-text class="default_text"> 类别ID：</el-text>
+          <el-text class="default_text"> {{ classObj.id }} </el-text>
+        </div>
+        <div>
+          <el-text class="default_text"> 类别名称：</el-text>
+          <el-text class="default_text"> {{ classObj.name }} </el-text>
+        </div>
+        <div>
+          <el-text class="default_text"> 是否展示：</el-text>
+          <el-text v-if="classObj.show" class="default_text"> 展示 </el-text>
+          <el-text v-else class="default_text"> 不展示 </el-text>
         </div>
       </div>
-      <template #footer>
-        <el-button-group>
-          <el-button type="warning" plain size="large" @click="changeName">
-            修改名字
-          </el-button>
-          <el-button v-if="classObj.show" type="danger" plain size="large" @click="stopShow">
-            取消显示
-          </el-button>
-          <el-button v-else type="success" plain size="large" @click="startShow">
-            打开显示
-          </el-button>
-          <el-button v-if="!classObj.down" type="success" plain size="large" @click="downClass">
-            下架商品
-          </el-button>
-          <el-button v-else type="danger" plain size="large" @click="upClass">
-            重新上架
-          </el-button>
-        </el-button-group>
-      </template>
-    </el-card>
-  </div>
+    </div>
+    <template #footer>
+      <el-button-group>
+        <el-button type="warning" plain size="large" @click="changeName">
+          修改名字
+        </el-button>
+        <el-button v-if="classObj.show" type="danger" plain size="large" @click="stopShow">
+          取消显示
+        </el-button>
+        <el-button v-else type="success" plain size="large" @click="startShow">
+          打开显示
+        </el-button>
+        <el-button v-if="!classObj.down" type="success" plain size="large" @click="downClass">
+          下架商品
+        </el-button>
+        <el-button v-else type="danger" plain size="large" @click="upClass">
+          重新上架
+        </el-button>
+      </el-button-group>
+    </template>
+  </el-card>
 </template>
 
 <style scoped lang="scss">

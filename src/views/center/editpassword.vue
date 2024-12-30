@@ -8,7 +8,7 @@ const route = useRoute()
 const userStore = useUserStore()
 if (!isLogin()) {
   router.push({
-    path: "/shop/login",
+    path: "/user/shop/login",
     query: {
       redirect: encodeURIComponent(route.fullPath)
     }
@@ -44,7 +44,7 @@ const allCheck = computed(() => codeCheck.value && oldPasswordCheck.value && pas
 
 const goHome = () => {
   router.push({
-    path: "/center/user"
+    path: "/user/center/profile"
   })
 }
 
@@ -60,7 +60,7 @@ const update = () => {
         message: "更新成功",
       })
       router.push({
-        path: "/shop/home"  // 已经退出，无法返回/center/user
+        path: "/user/shop/home"  // 已经退出，无法返回/center/user
       })
     }, () => {
       resetCode()

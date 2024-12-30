@@ -8,13 +8,13 @@ const router = useRouter()
 
 const toHome = () => {
   router.push({
-    "path": "/shop/home",
+    "path": "/user/shop/home",
   })
 }
 
 const toCenter = () => {
   router.push({
-    "path": "/center/user",
+    "path": "/user/center/profile",
   })
 }
 

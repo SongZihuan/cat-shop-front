@@ -13,7 +13,7 @@
 
   const onClick = () => {
     router.push({
-      path: "/shop/wupin",
+      path: "/user/shop/wupin",
       query: {
         wupinId: item.value?.id || 0,
       }
@@ -32,12 +32,18 @@
 <template>
   <el-card class="WupinItem">
     <template #header>
-      <el-text class="WupinTitle">
-        {{ item.name }} 
-        <span v-if="item.classId && item.classOf && item.classId > 1">
-        （{{item.classOf.name}}）
-        </span>
-      </el-text>
+      <div style="display: flow-root">
+        <div style="float: left">
+          <el-text class="WupinTitle">
+            {{ item.name }}
+          </el-text>
+        </div>
+        <div v-if="item.classId && item.classOf && item.classId > 1" style="float: right">
+          <el-text class="WupinTitle">
+            {{item.classOf.name}}
+          </el-text>
+        </div>
+      </div>
     </template>
     <div class="WupinItemPic">
       <el-image

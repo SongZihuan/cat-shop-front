@@ -140,34 +140,32 @@ const stopShow = (classId: number, name: string) => {
 </script>
 
 <template>
-  <div v-if="isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; min-height: 70vh; width: 80vw; justify-content: center; margin-top: 10px">
-      <el-table :data="classLst" style="width: 77vw" height="60vh">
-        <el-table-column prop="id" label="商品分类ID" />
-        <el-table-column prop="name" label="商品分类名称" />
-        <el-table-column label="修改名称" >
-          <template #default="{row}">
-            <el-button type="primary" plain @click="changeName(row.id, row.name)">
-              点击修改
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="显示" >
-          <template #default="{row}">
-            <el-button v-if="row.show" type="danger" plain @click="stopShow(row.id, row.name)">
-              关闭显示
-            </el-button>
-            <el-button v-else type="success" plain @click="startShow(row.id, row.name)">
-              开启显示
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-      </div>
-    </el-card>
-  </div>
+  <el-card v-if="isAdmin()" class="base_card">
+    <el-table :data="classLst" style="width: 77vw" height="60vh">
+      <el-table-column prop="id" label="商品分类ID" />
+      <el-table-column prop="name" label="商品分类名称" />
+      <el-table-column label="修改名称" >
+        <template #default="{row}">
+          <el-button type="primary" plain @click="changeName(row.id, row.name)">
+            点击修改
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="显示" >
+        <template #default="{row}">
+          <el-button v-if="row.show" type="danger" plain @click="stopShow(row.id, row.name)">
+            关闭显示
+          </el-button>
+          <el-button v-else type="success" plain @click="startShow(row.id, row.name)">
+            开启显示
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div style="display: flex; justify-content: center; margin-top: 10px;">
+      <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+    </div>
+  </el-card>
   <div v-else></div>
 </template>
 

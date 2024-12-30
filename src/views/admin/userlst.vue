@@ -65,80 +65,78 @@ const toInfo = (id: number) => {
 </script>
 
 <template>
-  <div v-if="isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; min-height: 70vh; width: 80vw; justify-content: center; margin-top: 10px">
-      <el-table :data="userLst" style="width: 77vw" height="60vh">
-        <el-table-column prop="id" label="用户ID" />
-        <el-table-column label="类型" >
-          <template #default="{row}">
-            {{ AdminUserType[row.type] || "未知" }}
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" >
-          <template #default="{row}">
-            {{ AdminUserStatus[row.status] || "未知" }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="name" label="昵称" />
-        <el-table-column prop="phone" label="手机号" />
-        <el-table-column prop="location" label="地址" />
-        <el-table-column label="头像" >
-          <template #default="{ row }">
-            <el-button size="small" plain type="success" :disabled="(!configStore.config?.avatar) || configStore.config.avatar.length === 0" @click="openAvatar(row.avatar)">
-              点击查看头像
-            </el-button>
-          </template>
-        </el-table-column>
-        <el-table-column label="总消费金额" >
-          <template #default="{ row }">
-            ￥{{ (row.totalPrice / 100).toFixed(2) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="totalBuy" label="总购物次数" />
-        <el-table-column prop="totalGood" label="总购买件数" />
-        <el-table-column prop="totalShouHuo" label="总收货次数" />
-        <el-table-column prop="totalPingJia" label="总评价次数" />
-        <el-table-column label="平均消费金额" >
-          <template #default="{ row }">
-            <span v-if="row.pricePre">
-              ￥{{ (row.pricePre / 100).toFixed(2) || "0.00" }}
-            </span>
-            <span v-else>
-              ￥0.00
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="评价率" >
-          <template #default="{ row }">
-            <span v-if="row.pingjiaPre">
-              {{ row.pingjiaPre.toFixed(2) || 0 }}%
-            </span>
-            <span v-else>
-              0%
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="好评率" >
-          <template #default="{ row }">
-            <span v-if="row.pingjiaPre">
-              {{ row.goodPre.toFixed(2) || 0 }}%
-            </span>
-            <span v-else>
-              0%
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="详情" >
-          <template #default="{ row }">
-            <el-button plain type="primary" size="small" @click="toInfo(row.id)"> 查看详情 </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-      </div>
-    </el-card>
-  </div>
+  <el-card v-if="isAdmin()" class="base_card">
+    <el-table :data="userLst" style="width: 100%" height="100%">
+      <el-table-column prop="id" label="用户ID" />
+      <el-table-column label="类型" >
+        <template #default="{row}">
+          {{ AdminUserType[row.type] || "未知" }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" >
+        <template #default="{row}">
+          {{ AdminUserStatus[row.status] || "未知" }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="name" label="昵称" />
+      <el-table-column prop="phone" label="手机号" />
+      <el-table-column prop="location" label="地址" />
+      <el-table-column label="头像" >
+        <template #default="{ row }">
+          <el-button size="small" plain type="success" :disabled="(!configStore.config?.avatar) || configStore.config.avatar.length === 0" @click="openAvatar(row.avatar)">
+            点击查看头像
+          </el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="总消费金额" >
+        <template #default="{ row }">
+          ￥{{ (row.totalPrice / 100).toFixed(2) }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="totalBuy" label="总购物次数" />
+      <el-table-column prop="totalGood" label="总购买件数" />
+      <el-table-column prop="totalShouHuo" label="总收货次数" />
+      <el-table-column prop="totalPingJia" label="总评价次数" />
+      <el-table-column label="平均消费金额" >
+        <template #default="{ row }">
+          <span v-if="row.pricePre">
+            ￥{{ (row.pricePre / 100).toFixed(2) || "0.00" }}
+          </span>
+          <span v-else>
+            ￥0.00
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="评价率" >
+        <template #default="{ row }">
+          <span v-if="row.pingjiaPre">
+            {{ row.pingjiaPre.toFixed(2) || 0 }}%
+          </span>
+          <span v-else>
+            0%
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="好评率" >
+        <template #default="{ row }">
+          <span v-if="row.pingjiaPre">
+            {{ row.goodPre.toFixed(2) || 0 }}%
+          </span>
+          <span v-else>
+            0%
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column label="详情" >
+        <template #default="{ row }">
+          <el-button plain type="primary" size="small" @click="toInfo(row.id)"> 查看详情 </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div style="display: flex; justify-content: center; margin-top: 10px;">
+      <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+    </div>
+  </el-card>
   <div v-else></div>
 
   <el-dialog

@@ -8,155 +8,159 @@ import {isAdmin, isRootAdmin} from "@/store/admin"
 
 export const redirect = "redirect"
 
-const notfound = {
-  component: () => import('@/views/system/notfound.vue'),
-  meta: {
-    title: '404-页面不存在',
-    wechat: true,
-    notfound: true,
-  }
-}
-
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/shop/home'
+    redirect: '/user'
   },
   {
-    path: '/shop',
-    component: () => import('@/views/shop.vue'),
-    children: [
-      {
-        path: '',
-        redirect: "/shop/home"
-      },
-      {
-        path: 'home',
-        component: () => import('@/views/shop/home.vue'),
-        meta: {
-          title: '主页',
-          wechat: true,
-        }
-      },
-      {
-        path: 'search',
-        component: () => import('@/views/shop/search.vue'),
-        meta: {
-          title: '搜索',
-        }
-      },
-      {
-        path: 'wupin/list',
-        redirect: "/shop/search"
-      },
-      {
-        path: 'wupin',
-        component: () => import('@/views/shop/wupin.vue'),
-        meta: {
-          title: '商品售卖详情页面',
-          wechat: true,
-        }
-      },
-      {
-        path: 'wupin/sale',
-        component: () => import('@/views/shop/wupin.vue'),
-        meta: {
-          title: '订单商品售卖详情页面',
-          wechat: true,
-        }
-      },
-      {
-        path: 'wupin/lock',
-        component: () => import('@/views/shop/wupin.vue'),
-        meta: {
-          title: '订单商品存档页面',
-          wechat: true,
-        }
-      },
-      {
-        path: 'login',
-        component: () => import('@/views/shop/login.vue'),
-        meta: {
-          title: '登录',
-          wechat: true,
-        }
-      },
-      {
-        path: 'regirster',
-        component: () => import('@/views/shop/regirster.vue'),
-        meta: {
-          title: '注册',
-          wechat: true,
-        }
-      },
-    ],
-  },
-  {
-    path: '/center',
+    path: "/user",
+    component: () => import('@/front.vue'),
+    meta: {
+      title: '前台',
+    },
     children: [
       {
         path: "",
-        redirect: "/center/user",
+        redirect: "/user/shop"
       },
       {
-        path: 'user',
-        component: () => import('@/views/center/profile.vue'),
-        meta: {
-          title: '个人中心',
-          xauth: true,
-          wechat: true,
-        }
+        path: 'shop',
+        component: () => import('@/views/user/shop.vue'),
+        children: [
+          {
+            path: '',
+            redirect: "/user/shop/home"
+          },
+          {
+            path: 'home',
+            component: () => import('@/views/shop/home.vue'),
+            meta: {
+              title: '主页',
+              wechat: true,
+            }
+          },
+          {
+            path: 'search',
+            component: () => import('@/views/shop/search.vue'),
+            meta: {
+              title: '搜索',
+            }
+          },
+          {
+            path: 'wupin/list',
+            redirect: "/user/shop/search"
+          },
+          {
+            path: 'wupin',
+            component: () => import('@/views/shop/wupin.vue'),
+            meta: {
+              title: '商品售卖详情页面',
+              wechat: true,
+            }
+          },
+          {
+            path: 'wupin/sale',
+            component: () => import('@/views/shop/wupin.vue'),
+            meta: {
+              title: '订单商品售卖详情页面',
+              wechat: true,
+            }
+          },
+          {
+            path: 'wupin/lock',
+            component: () => import('@/views/shop/wupin.vue'),
+            meta: {
+              title: '订单商品存档页面',
+              wechat: true,
+            }
+          },
+          {
+            path: 'login',
+            component: () => import('@/views/shop/login.vue'),
+            meta: {
+              title: '登录',
+              wechat: true,
+            }
+          },
+          {
+            path: 'regirster',
+            component: () => import('@/views/shop/regirster.vue'),
+            meta: {
+              title: '注册',
+              wechat: true,
+            }
+          },
+        ],
       },
       {
-        path: 'user/edit',
-        component: () => import('@/views/center/edituser.vue'),
-        meta: {
-          title: '编辑信息',
-          xauth: true,
-          wechat: true,
-        }
-      },
-      {
-        path: 'user/password',
-        component: () => import('@/views/center/editpassword.vue'),
-        meta: {
-          title: '重新设置密码',
-          xauth: true,
-          wechat: true,
-        }
-      },
-      {
-        path: 'buyrecordlist',
-        component: () => import('@/views/center/buyrecordlst.vue'),
-        meta: {
-          title: '购物记录',
-          xauth: true,
-          wechat: true,
-        }
-      },
-      {
-        path: 'buyrecord',
-        component: () => import('@/views/center/buyrecord.vue'),
-        meta: {
-          title: '购物商品详情页面',
-          xauth: true,
-          wechat: true,
-        }
-      },
-      {
-        path: 'shoppingbag',
-        component: () => import('@/views/center/shoppingbag.vue'),
-        meta: {
-          title: '购物车',
-          xauth: true,
-          wechat: true,
-        }
+        path: 'center',
+        children: [
+          {
+            path: "",
+            redirect: "/user/center/profile",
+          },
+          {
+            path: 'profile',
+            component: () => import('@/views/center/profile.vue'),
+            meta: {
+              title: '个人中心',
+              xauth: true,
+              wechat: true,
+            }
+          },
+          {
+            path: 'profile/edit',
+            component: () => import('@/views/center/edituser.vue'),
+            meta: {
+              title: '编辑信息',
+              xauth: true,
+              wechat: true,
+            }
+          },
+          {
+            path: 'profile/password',
+            component: () => import('@/views/center/editpassword.vue'),
+            meta: {
+              title: '重新设置密码',
+              xauth: true,
+              wechat: true,
+            }
+          },
+          {
+            path: 'buyrecordlist',
+            component: () => import('@/views/center/buyrecordlst.vue'),
+            meta: {
+              title: '购物记录',
+              xauth: true,
+              wechat: true,
+            }
+          },
+          {
+            path: 'buyrecord',
+            component: () => import('@/views/center/buyrecord.vue'),
+            meta: {
+              title: '购物商品详情页面',
+              xauth: true,
+              wechat: true,
+            }
+          },
+          {
+            path: 'shoppingbag',
+            component: () => import('@/views/center/shoppingbag.vue'),
+            meta: {
+              title: '购物车',
+              xauth: true,
+              wechat: true,
+            }
+          },
+        ]
       },
     ]
   },
   {
     path: '/admin',
-    component: () => import('@/views/admin.vue'),
+    component: () => import('@/back.vue'),
     meta: {
       title: '后台',
       admin: true,
@@ -527,7 +531,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/test',
-    component: () => import('@/views/test.vue'),
+    component: () => import('@/front.vue'),
     children: [
       {
         path: "",
@@ -561,7 +565,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/system',
-    component: () => import('@/views/system.vue'),
+    component: () => import('@/front.vue'),
     children: [
       {
         path: 'kefu',
@@ -595,7 +599,12 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:catchAll(.*)',
-    ...notfound
+    component: () => import('@/notfound.vue'),
+    meta: {
+      title: '404-页面不存在',
+      wechat: true,
+      notfound: true,
+    }
   },
 ]
 
@@ -615,7 +624,7 @@ router.beforeEach((to, from, nextFn) => {
 
   if (to.meta.xauth && to.meta.xauth === true && !isLogin()) {
     next({
-      path: "/shop/login",
+      path: "/user/shop/login",
       query: {
         [redirect]: encodeURIComponent(to.fullPath)
       }
@@ -626,7 +635,7 @@ router.beforeEach((to, from, nextFn) => {
   if (to.meta.admin && to.meta.admin === true) {
     if (!isLogin()) {
       next({
-        path: "/shop/login",
+        path: "/user/shop/login",
         query: {
           [redirect]: encodeURIComponent(to.fullPath)
         }
@@ -648,7 +657,7 @@ router.beforeEach((to, from, nextFn) => {
   if (to.meta.rootAdmin && to.meta.rootAdmin === true) {
     if (!isLogin()) {
       next({
-        path: "/shop/login",
+        path: "/user/shop/login",
         query: {
           [redirect]: encodeURIComponent(to.fullPath)
         }

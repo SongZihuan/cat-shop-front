@@ -12,7 +12,7 @@
 
   const onClickClass = () => {
     router.push({
-      path: "/shop/search",
+      path: "/user/shop/search",
       query: {
         select: item.value.id || 0,
         search: "",

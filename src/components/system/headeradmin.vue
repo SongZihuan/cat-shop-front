@@ -11,7 +11,7 @@ const configStore = useConfigStore()
 
 const toHome = () => {
   router.push({
-    path: "/shop/home"
+    path: "/user/shop/home"
   })
 }
 

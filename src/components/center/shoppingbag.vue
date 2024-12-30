@@ -31,7 +31,7 @@ const totalPrice = computed(() => {
 
 const onWupinClick = () => {
   record.value && !record.value.down && router.push({
-    path: "/shop/wupin",
+    path: "/user/shop/wupin",
     query: {
       wupinId: record.value.wupin.id,
     }
@@ -70,7 +70,7 @@ const onClickBag = () => {
 
 const onSameClick = () => {
   record.value && router.push({
-    path: "/shop/search",
+    path: "/user/shop/search",
     query: {
       select: record.value.wupin.classId || 0,
       search: record.value.wupin.name || "",
@@ -150,102 +150,100 @@ const wupinNameClass = computed(() => {
             />
           </div>
           <div style="margin-left: 10px; height: 20vh">
-            <el-scrollbar height="20vh">
-              <div style="display: flow-root">
-                <div class="price_box" style="float: left">
-                  <div v-if="record.down">
-                    <el-text class="wupin_down_price">
-                      商品已下架
-                      <br>
-                      <el-text v-if="facePrice > 0" class="wupin_down_price wupin_down_price_line_through">
-                        售价：￥{{ (facePrice / 100).toFixed(2) }}
-                      </el-text>
-                      <br>
-                      <el-text v-if="realPrice > 0 && facePrice != realPrice" class="wupin_down_price wupin_down_price_line_through">
-                        原价：￥{{ (realPrice / 100).toFixed(2) }}
-                      </el-text>
+            <div style="display: flow-root">
+              <div class="price_box" style="float: left">
+                <div v-if="record.down">
+                  <el-text class="wupin_down_price">
+                    商品已下架
+                    <br>
+                    <el-text v-if="facePrice > 0" class="wupin_down_price wupin_down_price_line_through">
+                      售价：￥{{ (facePrice / 100).toFixed(2) }}
                     </el-text>
-                  </div>
-                  <div v-if="facePrice == 0">
-                    <el-text class="wupin_hot_price">
-                      现在：免费抢购
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
-                        原价：￥{{ (realPrice / 100).toFixed(2) }}
-                      </el-text>
+                    <br>
+                    <el-text v-if="realPrice > 0 && facePrice != realPrice" class="wupin_down_price wupin_down_price_line_through">
+                      原价：￥{{ (realPrice / 100).toFixed(2) }}
                     </el-text>
-                  </div>
-                  <div v-else-if="facePrice < realPrice">
-                    <el-text class="wupin_hot_price">
-                      促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
-                        原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                      </el-text>
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
-                        惊喜：{{ ((facePrice / realPrice) * 10).toFixed(1) }} 折扣
-                      </el-text>
-                      <br>
-                      <el-text class="record_info">
-                        放入购物车时间：{{ formatDate(record.time) }}
-                      </el-text>
+                  </el-text>
+                </div>
+                <div v-if="facePrice == 0">
+                  <el-text class="wupin_hot_price">
+                    现在：免费抢购
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
+                      原价：￥{{ (realPrice / 100).toFixed(2) }}
                     </el-text>
-                  </div>
-                  <div v-else-if="facePrice > realPrice">
-                    <!--              不应该出现此情况-->
-                    <el-text class="wupin_sb_price">
-                      冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
-                        原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                      </el-text>
-                      <br>
-                      <el-text class="record_info">
-                        放入购物车时间：{{ formatDate(record.time) }}
-                      </el-text>
+                  </el-text>
+                </div>
+                <div v-else-if="facePrice < realPrice">
+                  <el-text class="wupin_hot_price">
+                    促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_hot_real_price wupin_hot_real_price_line_through">
+                      原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                     </el-text>
-                  </div>
-                  <div v-else-if="facePrice == realPrice">
-                    <el-text class="wupin_real_price">
-                      售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
+                      惊喜：{{ ((facePrice / realPrice) * 10).toFixed(1) }} 折扣
                     </el-text>
                     <br>
                     <el-text class="record_info">
                       放入购物车时间：{{ formatDate(record.time) }}
                     </el-text>
-                  </div>
-                  <div v-else-if="realPrice == 0">
-                    <!--              不应该出现此情况-->
-                    <el-text class="wupin_sb_price">
-                      冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
-                        原价：免费送
-                      </el-text>
-                      <br>
-                      <el-text class="record_info">
-                        放入购物车时间：{{ formatDate(record.time) }}
-                      </el-text>
+                  </el-text>
+                </div>
+                <div v-else-if="facePrice > realPrice">
+                  <!--              不应该出现此情况-->
+                  <el-text class="wupin_sb_price">
+                    冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
+                      原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                     </el-text>
-                  </div>
-                  <div v-else>
-                    <!--              不应该出现此情况-->
-                    <el-text class="wupin_real_price">
-                      售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-                      <br>
-                      <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
-                        原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
-                      </el-text>
-                      <br>
-                      <el-text class="record_info">
-                        放入购物车时间：{{ formatDate(record.time) }}
-                      </el-text>
+                    <br>
+                    <el-text class="record_info">
+                      放入购物车时间：{{ formatDate(record.time) }}
                     </el-text>
-                  </div>
+                  </el-text>
+                </div>
+                <div v-else-if="facePrice == realPrice">
+                  <el-text class="wupin_real_price">
+                    售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                  </el-text>
+                  <br>
+                  <el-text class="record_info">
+                    放入购物车时间：{{ formatDate(record.time) }}
+                  </el-text>
+                </div>
+                <div v-else-if="realPrice == 0">
+                  <!--              不应该出现此情况-->
+                  <el-text class="wupin_sb_price">
+                    冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
+                      原价：免费送
+                    </el-text>
+                    <br>
+                    <el-text class="record_info">
+                      放入购物车时间：{{ formatDate(record.time) }}
+                    </el-text>
+                  </el-text>
+                </div>
+                <div v-else>
+                  <!--              不应该出现此情况-->
+                  <el-text class="wupin_real_price">
+                    售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
+                    <br>
+                    <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
+                      原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
+                    </el-text>
+                    <br>
+                    <el-text class="record_info">
+                      放入购物车时间：{{ formatDate(record.time) }}
+                    </el-text>
+                  </el-text>
                 </div>
               </div>
-            </el-scrollbar>
+            </div>
           </div>
         </div>
       <template #footer>

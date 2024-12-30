@@ -3,11 +3,13 @@ import useConfigStore from "@/store/config"
 import { ElMessageBox } from 'element-plus'
 
 const configStore = useConfigStore()
-const showAD = ref({
-  pic: configStore.config?.adpic,
-  text: configStore.config?.ad,
-  header: configStore.config?.adtitle,
-  url: configStore.config?.adurl
+const showAD = computed(() => {
+  return {
+    pic: configStore.config.adpic || "",
+    text: configStore.config.ad || "",
+    header: configStore.config.adtitle || "",
+    url: configStore.config.adurl || "",
+  }
 })
 
 const adDiv = ref(null as HTMLElement | null)

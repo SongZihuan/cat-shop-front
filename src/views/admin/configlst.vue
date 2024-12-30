@@ -200,103 +200,101 @@ const deleteConfig = (key: string) => {
 </script>
 
 <template>
-  <div v-if="config && isRootAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; min-height: 70vh; width: 80vw; justify-content: center; margin-top: 10px">
-      <el-table :data="configKeys" style="width: 77vw" height="70vh">
-        <el-table-column label="配置项" >
-          <template #default="{ row }">
-            <el-text>
-              {{ row }}
-            </el-text>
-          </template>
-        </el-table-column>
-        <el-table-column label="配置项类型" >
-          <template #default="{ row }">
-            <el-text>
-              {{ configtypename[configtype[row]] || "未知" }}
-            </el-text>
-          </template>
-        </el-table-column>
-        <el-table-column label="配置项含义" >
-          <template #default="{ row }">
-            <el-text>
-              {{ configinfo[row] || "未知" }}
-            </el-text>
-          </template>
-        </el-table-column>
-        <el-table-column label="配置值" >
-          <template #default="{ row }">
-            <el-button v-if="configtype[row] === 'pic|must' || configtype[row] === 'pic'" :disabled="!config[row]" @click="openPic(config && config[row])">
-              查看图片
-            </el-button>
-            <el-text v-else>
-              {{ config[row] }}
-            </el-text>
-          </template>
-        </el-table-column>
-        <el-table-column label="更新" >
-          <template #default="{ row }">
-            <div v-if="configtype[row] === 'pic|must' || configtype[row] === 'pic'">
-              <el-upload
-                  ref="pictureUpload"
-                  v-model:file-list="pictureLst"
-                  action="#"
-                  accept=".jpg,.jpeg,.png"
-                  :auto-upload="false"
-                  :multiple="false"
-                  :limit="1"
-                  :on-exceed="handleExceed"
-                  :show-file-list="false"
-                  :0n-change="updatePicture(row)"
-              >
-                <el-tooltip
-                    effect="dark"
-                    placement="bottom"
-                >
-                  <el-button type="primary" plain>
-                    <el-icon><Edit /></el-icon>
-                    上传商品图片
-                  </el-button>
-                  <template #content>
-                    <el-text style="color: white">
-                      仅限jpg/png文件，不超过500KB
-                    </el-text>
-                  </template>
-                </el-tooltip>
-              </el-upload>
-            </div>
-            <div v-else-if="configtype[row] === 'string|must' || configtype[row] === 'string'">
-              <el-button type="primary" plain @click="openUpdateString(row)">
-                <el-icon><Edit /></el-icon>
-                更新文本
-              </el-button>
-            </div>
-            <div v-else>
-              <el-button type="primary" plain @click="openUpdateText(row)">
-                <el-icon><Edit /></el-icon>
-                更新文本域
-              </el-button>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="删除" >
-          <template #default="{ row }">
-            <el-button
-                v-if="configtype[row] === 'text' || configtype[row] === 'string' || configtype[row] === 'pic'"
-                type="danger"
-                plain
-                @click="deleteConfig(row)"
+  <el-card v-if="config && isRootAdmin()" class="base_card">
+    <el-table :data="configKeys" style="width: 77vw" height="70vh">
+      <el-table-column label="配置项" >
+        <template #default="{ row }">
+          <el-text>
+            {{ row }}
+          </el-text>
+        </template>
+      </el-table-column>
+      <el-table-column label="配置项类型" >
+        <template #default="{ row }">
+          <el-text>
+            {{ configtypename[configtype[row]] || "未知" }}
+          </el-text>
+        </template>
+      </el-table-column>
+      <el-table-column label="配置项含义" >
+        <template #default="{ row }">
+          <el-text>
+            {{ configinfo[row] || "未知" }}
+          </el-text>
+        </template>
+      </el-table-column>
+      <el-table-column label="配置值" >
+        <template #default="{ row }">
+          <el-button v-if="configtype[row] === 'pic|must' || configtype[row] === 'pic'" :disabled="!config[row]" @click="openPic(config && config[row])">
+            查看图片
+          </el-button>
+          <el-text v-else>
+            {{ config[row] }}
+          </el-text>
+        </template>
+      </el-table-column>
+      <el-table-column label="更新" >
+        <template #default="{ row }">
+          <div v-if="configtype[row] === 'pic|must' || configtype[row] === 'pic'">
+            <el-upload
+                ref="pictureUpload"
+                v-model:file-list="pictureLst"
+                action="#"
+                accept=".jpg,.jpeg,.png"
+                :auto-upload="false"
+                :multiple="false"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :show-file-list="false"
+                :0n-change="updatePicture(row)"
             >
-              删除
+              <el-tooltip
+                  effect="dark"
+                  placement="bottom"
+              >
+                <el-button type="primary" plain>
+                  <el-icon><Edit /></el-icon>
+                  上传商品图片
+                </el-button>
+                <template #content>
+                  <el-text style="color: white">
+                    仅限jpg/png文件，不超过500KB
+                  </el-text>
+                </template>
+              </el-tooltip>
+            </el-upload>
+          </div>
+          <div v-else-if="configtype[row] === 'string|must' || configtype[row] === 'string'">
+            <el-button type="primary" plain @click="openUpdateString(row)">
+              <el-icon><Edit /></el-icon>
+              更新文本
             </el-button>
-            <el-text v-else>
-              不可删除
-            </el-text>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
-  </div>
+          </div>
+          <div v-else>
+            <el-button type="primary" plain @click="openUpdateText(row)">
+              <el-icon><Edit /></el-icon>
+              更新文本域
+            </el-button>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="删除" >
+        <template #default="{ row }">
+          <el-button
+              v-if="configtype[row] === 'text' || configtype[row] === 'string' || configtype[row] === 'pic'"
+              type="danger"
+              plain
+              @click="deleteConfig(row)"
+          >
+            删除
+          </el-button>
+          <el-text v-else>
+            不可删除
+          </el-text>
+        </template>
+      </el-table-column>
+    </el-table>
+  </el-card>
   <div v-else></div>
 
   <el-dialog

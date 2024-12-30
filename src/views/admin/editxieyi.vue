@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {isAdmin} from "@/store/admin"
+import {isAdmin, isRootAdmin} from "@/store/admin"
 import {apiAdminGetXieyi, apiAdminPostUpdateXieyi} from "#/admin/xieyi"
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 import { IToolbarConfig } from '@wangeditor/editor'
@@ -90,38 +90,34 @@ const updateXieYi = () => {
 </script>
 
 <template>
-  <div v-if="isAdmin()" id="outside_box">
-    <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-      <el-card style="display: flex; justify-content: center; margin-top: 10px; height: 70vh; width: 50vw;">
-        <div style="width: 100%; height: 100%; margin-top: 18px">
-          <Clear style="width: 100%; height: 90%; margin-top: 18px">
-            <div id="dialogBox" style="width: 100%; height: 100%; display: flex; justify-content: center;">
-              <div id="editorBox">
-                <Toolbar
-                    style="border-bottom: 1px solid #ccc"
-                    :editor="editorRef"
-                    :default-config="toolbarConfig"
-                    :mode="editorMode"
-                />
-                <Editor
-                    v-model="xieyi"
-                    style="height: 80%; overflow-y: hidden;"
-                    :default-config="editorConfig"
-                    :mode="editorMode"
-                    @onCreated="handleEditCreated"
-                />
-              </div>
-            </div>
-          </Clear>
-          <div style="width: 100%; display: flex; justify-content: center;">
-            <el-button type="success" size="large" @click="updateXieYi">
-              提交
-            </el-button>
+  <el-card v-if="isRootAdmin()" class="base_card">
+    <div style="width: 100%; height: 100%; margin-top: 18px">
+      <Clear style="width: 100%; height: 90%; margin-top: 18px">
+        <div id="dialogBox" style="width: 100%; height: 100%; display: flex; justify-content: center;">
+          <div id="editorBox">
+            <Toolbar
+                style="border-bottom: 1px solid #ccc"
+                :editor="editorRef"
+                :default-config="toolbarConfig"
+                :mode="editorMode"
+            />
+            <Editor
+                v-model="xieyi"
+                style="height: 80%; overflow-y: hidden;"
+                :default-config="editorConfig"
+                :mode="editorMode"
+                @onCreated="handleEditCreated"
+            />
           </div>
         </div>
-      </el-card>
+      </Clear>
+      <div style="width: 100%; display: flex; justify-content: center;">
+        <el-button type="success" size="large" @click="updateXieYi">
+          提交
+        </el-button>
+      </div>
     </div>
-  </div>
+  </el-card>
   <div v-else></div>
 </template>
 <style scoped lang="scss">

@@ -14,7 +14,7 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
   const userStore = useUserStore()
   if (!isLogin()) {
     router.push({
-      path: "/shop/login",
+      path: "/user/shop/login",
       query: {
         redirect: encodeURIComponent(route.fullPath)
       }
@@ -42,7 +42,7 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
   const goHome = () => {
     router.push({
-      path: "/shop/home"
+      path: "/user/shop/home"
     })
   }
 
@@ -85,13 +85,13 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
 
   const goEdit = () => {
     router.push({
-      path: "/center/user/edit"
+      path: "/user/center/profile/edit"
     })
   }
 
   const goPassword = () => {
     router.push({
-      path: "/center/user/password"
+      path: "/user/center/profile/password"
     })
   }
 

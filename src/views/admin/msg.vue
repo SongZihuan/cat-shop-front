@@ -45,58 +45,52 @@ const toBack = () => {
 </script>
 
 <template>
-  <div v-if="isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; height: 70vh; width: 60vw; justify-content: center; margin-top: 10px">
-      <div v-if="msgLst && msgLst.length > 0">
-        <el-scrollbar height="60vh">
-          <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-          </div>
-          <div style="width: 55vw; display: flex; justify-content: center">
-            <div style="width: 100%;">
-              <el-scrollbar>
-                <div v-for="(item, index) in msgLst" :key="index" style="margin-left: 30px; margin-right: 30px">
-                  <el-card style="margin-bottom: 5px">
-                    <div style="width: 50vw; font-size: 0.8vw; font-weight: bold;">
-                      <el-text>
-                        {{ item.msg }}
-                      </el-text>
-                    </div>
-                    <div style="width: 50vw; text-align: right">
-                      <div>
-                        <el-text style="font-size: 0.5vw">
-                          留言时间：{{ formatDate(item.time) }}
-                        </el-text>
-                      </div>
-                      <div>
-                        <el-button @click="toUser(item.userId)">
-                          查看用户详情
-                        </el-button>
-                      </div>
-                    </div>
-                  </el-card>
+  <el-card v-if="isAdmin()" class="base_card">
+    <div v-if="msgLst && msgLst.length > 0">
+      <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+      </div>
+      <div style="width: 55vw; display: flex; justify-content: center">
+        <div style="width: 100%;">
+          <div v-for="(item, index) in msgLst" :key="index" style="margin-left: 30px; margin-right: 30px">
+            <el-card style="margin-bottom: 5px">
+              <div style="width: 50vw; font-size: 0.8vw; font-weight: bold;">
+                <el-text>
+                  {{ item.msg }}
+                </el-text>
+              </div>
+              <div style="width: 50vw; text-align: right">
+                <div>
+                  <el-text style="font-size: 0.5vw">
+                    留言时间：{{ formatDate(item.time) }}
+                  </el-text>
                 </div>
-              </el-scrollbar>
-            </div>
+                <div>
+                  <el-button @click="toUser(item.userId)">
+                    查看用户详情
+                  </el-button>
+                </div>
+              </div>
+            </el-card>
           </div>
-          <div style="display: flex; justify-content: center; margin-top: 10px;">
-            <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-          </div>
-        </el-scrollbar>
+        </div>
       </div>
-      <div v-else>
-        <el-result
-            icon="info"
-            title="该用户暂时还没有留言哦"
-            sub-title="请用户留言了再来看吧！"
-        >
-          <template #extra>
-            <el-button type="primary" @click="toBack">到我的中心</el-button>
-          </template>
-        </el-result>
+      <div style="display: flex; justify-content: center; margin-top: 10px;">
+        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
       </div>
-    </el-card>
-  </div>
+    </div>
+    <div v-else>
+      <el-result
+          icon="info"
+          title="该用户暂时还没有留言哦"
+          sub-title="请用户留言了再来看吧！"
+      >
+        <template #extra>
+          <el-button type="primary" @click="toBack">到我的中心</el-button>
+        </template>
+      </el-result>
+    </div>
+  </el-card>
   <div v-else></div>
 </template>
 

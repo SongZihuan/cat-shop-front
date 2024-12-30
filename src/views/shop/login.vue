@@ -68,7 +68,7 @@ const allCheck = computed(() => codeCheck.value && phoneCheck.value && passwordC
 
 const toRegirst = () => {
   router.push({
-    path: "/shop/regirster",
+    path: "/user/shop/regirster",
     query: route.query,
   })
 }
@@ -155,7 +155,7 @@ const notAcceptXieyi = () => {
             <el-button type="primary" :disabled="!allCheck" @click="login">
               登录
             </el-button>
-            <el-button type="success" @click="toRegirst">
+            <el-button v-if="!allCheck" type="success" @click="toRegirst">
               还没有账号？先去注册
             </el-button>
           </el-button-group>
@@ -193,7 +193,7 @@ const notAcceptXieyi = () => {
       </div>
     </template>
 
-    <el-scrollbar height="48vh">
+    <el-scrollbar height="50vh">
       <div id="info_box" class="info_box">
         <div v-html="configStore.xieyi"></div>
       </div>

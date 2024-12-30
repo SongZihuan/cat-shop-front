@@ -126,14 +126,14 @@ const onClickBag = () => {
 const onGoRecord = () => {
   if (mode.value === nowrecordmode) {
     router.push({
-      path: "/center/buyrecord",
+      path: "/user/center/buyrecord",
       query: {
         id: nowRecordId.value,
       }
     })
   } else if (mode.value === recordmode) {
     router.push({
-      path: "/center/buyrecord",
+      path: "/user/center/buyrecord",
       query: {
         id: recordId.value,
       }
@@ -143,7 +143,7 @@ const onGoRecord = () => {
 
 const onSameClick = () => {
   wupin.value && router.push({
-    path: "/shop/search",
+    path: "/user/shop/search",
     query: {
       select: wupin.value.classId || 0,
       search: wupin.value.name || "",
@@ -328,7 +328,7 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
         </el-scrollbar>
       </div>
       <div class="right_box">
-        <el-scrollbar height="70vh">
+        <el-scrollbar>
           <div style="padding-right: 5px">
             <div id="info_box" class="info_box">
               <div v-html="wupin.info"></div>

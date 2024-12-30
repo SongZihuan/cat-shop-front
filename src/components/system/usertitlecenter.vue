@@ -12,13 +12,13 @@ const route = useRoute()
 
 const toHome = () => {
   router.push({
-    "path": "/shop/home",
+    "path": "/user/shop/home",
   })
 }
 
 const toCenter = () => {
   router.push({
-    "path": "/center/user",
+    "path": "/user/center/profile",
   })
 }
 
@@ -38,13 +38,13 @@ const toAdmin = () => {
 
 const toBuyRecord = () => {
   router.push({
-    "path": "/center/buyrecordlist",
+    "path": "/user/center/buyrecordlist",
   })
 }
 
 const toBag = () => {
   router.push({
-    "path": "/center/shoppingbag",
+    "path": "/user/center/shoppingbag",
   })
 }
 
@@ -62,7 +62,7 @@ const toAboutUs = () => {
 
 const toLogin = () => {
   router.push({
-    "path": "/shop/login",
+    "path": "/user/shop/login",
     "query": {
       "redirect": encodeURIComponent(route.fullPath),
     },
@@ -72,7 +72,7 @@ const toLogin = () => {
 const toNewLogin = () => {
   if (route.meta.xauth && route.meta.xauth === true && !isLogin()) {
     router.push({
-      path: "/shop/login",
+      path: "/user/shop/login",
       query: {
         redirect: encodeURIComponent(route.fullPath)
       }
@@ -82,7 +82,7 @@ const toNewLogin = () => {
 
 const toRegirster = () => {
   router.push({
-    "path": "/shop/regirster",
+    "path": "/user/shop/regirster",
     "query": {
       "redirect": encodeURIComponent(route.fullPath),
     },

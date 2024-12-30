@@ -69,7 +69,7 @@ const onClickBag = () => {
 
 const onSameClick = () => {
   record.value && router.push({
-    path: "/shop/search",
+    path: "/user/shop/search",
     query: {
       select: record.value.wupin.classId || 0,
       search: record.value.wupin.name || "",

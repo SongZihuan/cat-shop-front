@@ -13,7 +13,7 @@ const router = useRouter()
 
 const toLogin = () => {
   router.push({
-    path: "/shop/login",
+    path: "/user/shop/login",
     query: route.query,
   })
 }
@@ -83,7 +83,7 @@ const register = () => {
       goRedirect()
     } else {
       router.push({
-        path: "/shop/login",
+        path: "/user/shop/login",
         query: {
           redirect: encodeURIComponent(route.fullPath)
         }
@@ -176,7 +176,7 @@ const notAcceptXieyi = () => {
             <el-button type="success" :disabled="!allCheck" @click="register">
               注册并登录
             </el-button>
-            <el-button type="primary" @click="toLogin">
+            <el-button v-if="!allCheck" type="primary" @click="toLogin">
               已有账号？直接登录
             </el-button>
           </el-button-group>
@@ -218,7 +218,7 @@ const notAcceptXieyi = () => {
       </div>
     </template>
 
-    <el-scrollbar height="48vh">
+    <el-scrollbar height="50vh">
       <div id="info_box" class="info_box">
         <div v-html="configStore.xieyi"></div>
       </div>

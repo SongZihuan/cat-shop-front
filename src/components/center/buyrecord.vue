@@ -90,7 +90,7 @@ const onGoWupinConfirm = () => {
 
 const onGoWupin = () => {
   record.value && !record.value.down && router.push({
-    path: "/shop/wupin/sale",
+    path: "/user/shop/wupin/sale",
     query: {
       nowRecordId: record.value.id,
     }
@@ -99,7 +99,7 @@ const onGoWupin = () => {
 
 const onGoLockWupin = () => {
   record.value && router.push({
-    path: "/shop/wupin/lock",
+    path: "/user/shop/wupin/lock",
     query: {
       recordId: record.value.id,
     }
@@ -108,7 +108,7 @@ const onGoLockWupin = () => {
 
 const onXiangQing = () => {
   record.value && router.push({
-    path: "/center/buyrecord",
+    path: "/user/center/buyrecord",
     query: {
       "id": record.value.id,
     }

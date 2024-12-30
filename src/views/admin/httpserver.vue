@@ -71,47 +71,45 @@ const stop = () => {
 </script>
 
 <template>
-  <div v-if="isRootAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <div style="display: flex; justify-content: center; margin-bottom: 10px">
-        <el-text style="font-size: 1vw">{{ subtitle }}</el-text>
+  <el-card v-if="isRootAdmin()" class="base_card">
+    <div style="display: flex; justify-content: center; margin-bottom: 10px">
+      <el-text style="font-size: 1vw">{{ subtitle }}</el-text>
+    </div>
+    <el-form :model="form" label-width="auto" style="width: 15vw">
+      <el-form-item>
+        <template #label>
+          <el-text>账号密码</el-text>
+        </template>
+        <el-input v-model="form.password" type="password" show-password />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>系统密钥</el-text>
+        </template>
+        <el-input v-model="form.secret" type="password" show-password />
+      </el-form-item>
+    </el-form>
+    <div style="display: flex; width: 15vw; justify-content: center">
+      <el-button-group>
+        <el-button :disabled="!allCheck" @click="restart">
+          重启后端
+        </el-button>
+        <el-button :disabled="!allCheck" @click="stop">
+          关闭后端
+        </el-button>
+      </el-button-group>
+    </div>
+    <div style="width: 15vw; margin-top: 5px">
+      <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="新密码必须长度大于8！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <el-form :model="form" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>账号密码</el-text>
-          </template>
-          <el-input v-model="form.password" type="password" show-password />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>系统密钥</el-text>
-          </template>
-          <el-input v-model="form.secret" type="password" show-password />
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center">
-        <el-button-group>
-          <el-button :disabled="!allCheck" @click="restart">
-            重启后端
-          </el-button>
-          <el-button :disabled="!allCheck" @click="stop">
-            关闭后端
-          </el-button>
-        </el-button-group>
+      <div v-if="!secretCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="密钥长度必须大于8！！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="新密码必须长度大于8！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!secretCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="密钥长度必须大于8！！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-      </div>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
   <div v-else></div>
 </template>
 

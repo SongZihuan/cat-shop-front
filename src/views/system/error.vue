@@ -7,7 +7,7 @@ const router = useRouter()
 
 const goHome = () => {
   router.push({
-    path: "/shop/home"
+    path: "/user/shop/home"
   })
 }
 

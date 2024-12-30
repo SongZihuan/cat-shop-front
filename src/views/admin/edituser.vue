@@ -6,7 +6,7 @@ import useAdminUserStore, {
   AdminUserStatus, AdminUserType
 } from "@/store/admin/user"
 import pushTo from "@/views/admin/router_push"
-import {isAdmin, isRootAdmin} from "@/store/admin"
+import {hasPermission, isAdmin, isDeleteUser, isRootAdmin} from "@/store/admin"
 import {isEmail} from "@/utils/str"
 
 const router = useRouter()
@@ -41,9 +41,7 @@ const toBack = () => {
 
 let timeoutID: NodeJS.Timeout | number | undefined = undefined
 const backSec = ref(6)
-const isBack = ref(false)
 const backTimer = () => {
-  isBack.value = true
   if (backSec.value == 0) {
     toBack()
     return
@@ -73,25 +71,7 @@ const onChangeUser = () => {
         email: res.email,
         type: res.type,
       }
-      if (user.value.type === 3) {
-        if (!isRootAdmin()) {
-          backTimer()
-        }
-        userStatusLst.value = {
-          1: "正常",
-        }
-        userTypeLst.value = {
-          3: "根管理员",
-        }
-        ub.value.status = 1
-        if (res.status !== 1) {
-          ElMessage({
-            type: 'warning',
-            message: "根管理员状态错误，已自动修正"
-          })
-        }
-      }
-      if (user.value.status === 3) {
+      if (isDeleteUser(user.value) || !hasPermission(user.value)) {
         backTimer()
       }
     }, () => {
@@ -149,146 +129,143 @@ const update = () => {
 </script>
 
 <template>
-  <div v-if="user && isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card v-if="user.status === 3" style="margin-top: 10px">
-      <el-result
-          icon="error"
-          title="用户已被删除"
-          sub-title="用户已被删除，无法修改其信息。"
-      >
-        <template #extra>
-          <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+  <el-card v-if="user && isAdmin() && isDeleteUser(user)" class="base_class">
+    <el-result
+        icon="error"
+        title="用户已被删除"
+        sub-title="用户已被删除，无法修改其信息。"
+    >
+      <template #extra>
+        <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+      </template>
+    </el-result>
+  </el-card>
+  <el-card v-else-if="user && isAdmin() && !hasPermission(user)" class="base_class">
+    <el-result
+        icon="error"
+        title="权限不足"
+        sub-title="您的权限不足以修改他的用户喜喜。"
+    >
+      <template #extra>
+        <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+      </template>
+    </el-result>
+  </el-card>
+  <el-card v-else-if="user && isAdmin()" style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
+    <el-form :model="ub" label-width="auto" style="width: 15vw">
+      <el-form-item>
+        <template #label>
+          <el-text>昵称</el-text>
         </template>
-      </el-result>
-    </el-card>
-    <el-card v-else-if="user.type === 3 && !isRootAdmin()" style="margin-top: 10px">
-      <el-result
-          icon="error"
-          title="权限不足"
-          sub-title="您的权限不足以修改他的用户喜喜。"
-      >
-        <template #extra>
-          <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
+        <el-input
+            v-model="ub.name"
+            maxlength="10"
+            minlength="1"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>微信</el-text>
         </template>
-      </el-result>
-    </el-card>
-    <el-card v-else style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-form :model="ub" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>昵称</el-text>
-          </template>
-          <el-input
-              v-model="ub.name"
-              maxlength="10"
-              minlength="1"
-              show-word-limit
-              clearable
+        <el-input
+            v-model="ub.wechat"
+            maxlength="30"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>邮箱</el-text>
+        </template>
+        <el-input
+            v-model="ub.email"
+            maxlength="30"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>地址</el-text>
+        </template>
+        <el-input v-model="ub.location" minlength="0" maxlength="150" show-word-limit/>
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>状态</el-text>
+        </template>
+        <el-select
+            v-model="ub.status"
+            placeholder="状态"
+            size="large"
+        >
+          <el-option
+              v-for="(item, i) in userStatusLst"
+              :key="i"
+              :label="item"
+              :value="Number(i).valueOf()"
+              :disabled="(Number(i).valueOf() === 3 && !isRootAdmin()) || (Number(i).valueOf() !== 3 && (user && user.status === 3))"
           />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>微信</el-text>
-          </template>
-          <el-input
-              v-model="ub.wechat"
-              maxlength="30"
-              show-word-limit
-              clearable
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>类型</el-text>
+        </template>
+        <el-select
+            v-model="ub.type"
+            placeholder="类型"
+            size="large"
+        >
+          <el-option
+              v-for="(item, i) in userTypeLst"
+              :key="i"
+              :label="item"
+              :value="Number(i).valueOf()"
+              :disabled="Number(i).valueOf() === 3"
           />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>邮箱</el-text>
-          </template>
-          <el-input
-              v-model="ub.email"
-              maxlength="30"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>地址</el-text>
-          </template>
-          <el-input v-model="ub.location" minlength="0" maxlength="150" show-word-limit/>
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>状态</el-text>
-          </template>
-          <el-select
-              v-model="ub.status"
-              placeholder="状态"
-              size="large"
-          >
-            <el-option
-                v-for="(item, i) in userStatusLst"
-                :key="i"
-                :label="item"
-                :value="Number(i).valueOf()"
-                :disabled="(Number(i).valueOf() === 3 && !isRootAdmin()) || (Number(i).valueOf() !== 3 && (user && user.status === 3))"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>类型</el-text>
-          </template>
-          <el-select
-              v-model="ub.type"
-              placeholder="类型"
-              size="large"
-          >
-            <el-option
-                v-for="(item, i) in userTypeLst"
-                :key="i"
-                :label="item"
-                :value="Number(i).valueOf()"
-                :disabled="Number(i).valueOf() === 3"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center">
-        <el-button :disabled="!allCheck" @click="update">
-          更新
-        </el-button>
+        </el-select>
+      </el-form-item>
+    </el-form>
+    <div style="display: flex; width: 15vw; justify-content: center">
+      <el-button :disabled="!allCheck" @click="update">
+        更新
+      </el-button>
+    </div>
+    <div style="width: 15vw; margin-top: 5px">
+      <div v-if="!checkStatus" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的状态！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!checkStatus" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的状态！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkType" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的类型！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请编辑信息！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!rootAdminCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="根管理员状态错误！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!deleteCheck" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="已删除的用户不能恢复！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
+      <div v-if="!checkType" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的类型！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-    </el-card>
-  </div>
-  <div v-else></div>
+      <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请编辑信息！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!rootAdminCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="根管理员状态错误！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!deleteCheck" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="已删除的用户不能恢复！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+    </div>
+  </el-card>
 </template>
 
 <style scoped lang="scss">

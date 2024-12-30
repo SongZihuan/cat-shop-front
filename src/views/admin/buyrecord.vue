@@ -80,11 +80,11 @@ const reload = () => {
 </script>
 
 <template>
-  <div v-if="user && record && isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
+  <el-card v-if="user && record && isAdmin()" class="base_card">
     <div style="width: 80%;">
       <AdminBuyRecord :record="record" :safe="true" :xiangqing="false" :adminuser="true" @reload="reload"></AdminBuyRecord>
     </div>
-  </div>
+  </el-card>
   <div v-else></div>
 </template>
 

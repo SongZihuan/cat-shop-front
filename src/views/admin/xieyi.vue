@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {isAdmin} from "@/store/admin"
+import {isAdmin, isRootAdmin} from "@/store/admin"
 import {apiAdminGetXieyi} from "#/admin/xieyi"
 import pushTo from "@/views/admin/router_push"
 
@@ -32,25 +32,14 @@ const toEdit = () => {
 </script>
 
 <template>
-  <div v-if="isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card v-if="xieyi" style="display: flex; min-height: 50vh; width: 50vw; justify-content: center; margin-top: 10px">
-      <el-scrollbar height="48vh">
-        <div id="info_box" class="info_box">
-          <div v-html="xieyi"></div>
-        </div>
-      </el-scrollbar>
-    </el-card>
-    <el-result
-        v-else
-        icon="warning"
-        title="暂无协议"
-        sub-title="协议目前是空白的。"
-    >
-      <template #extra>
-        <el-button type="primary" @click="toEdit">前往编辑</el-button>
-      </template>
-    </el-result>
-  </div>
+  <el-card v-if="isAdmin()" class="base_card">
+    <div id="info_box" class="info_box">
+      <div v-html="xieyi"></div>
+    </div>
+    <template #footer>
+      <el-button v-if="isRootAdmin()" @click="toEdit"> 去编辑 </el-button>
+    </template>
+  </el-card>
   <div v-else></div>
 </template>
 <style scoped lang="scss">

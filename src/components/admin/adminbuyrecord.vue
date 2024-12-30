@@ -50,7 +50,7 @@ const xiangqing = computed(() => props.xiangqing)
 
 const onClassClick = () => {
   record.value && record.value.wupin.classId > 1 && router.push({
-    path: "/shop/search",
+    path: "/user/shop/search",
     query: {
       select: record.value.wupin.classId || 0,
       search: "",

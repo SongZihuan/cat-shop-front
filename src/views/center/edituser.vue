@@ -9,7 +9,7 @@ const route = useRoute()
 const userStore = useUserStore()
 if (!isLogin()) {
   router.push({
-    path: "/shop/login",
+    path: "/user/shop/login",
     query: {
       redirect: encodeURIComponent(route.fullPath)
     }
@@ -67,7 +67,7 @@ const allCheck = computed(() => checkLocation.value && checkWeChat.value && code
 
 const goHome = () => {
   router.push({
-    path: "/center/user"
+    path: "/user/center/profile"
   })
 }
 
@@ -83,7 +83,7 @@ const update = () => {
         message: "更新成功",
       })
       router.push({
-        path: "/center/user"
+        path: "/user/center/profile"
       })
     }, () => {
       resetCode()

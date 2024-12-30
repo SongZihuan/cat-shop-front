@@ -89,7 +89,7 @@
       return
     }
     router.push({
-      path: "/shop/search",
+      path: "/user/shop/search",
       query: {
         select: data.value.select || 0,
         search: data.value.search || "",

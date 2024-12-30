@@ -90,55 +90,53 @@ const update = () => {
 </script>
 
 <template>
-  <div v-if="classObj && isAdmin()" style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-    <el-card style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px">
-      <el-form :model="form" label-width="auto" style="width: 15vw">
-        <el-form-item>
-          <template #label>
-            <el-text>名字</el-text>
-          </template>
-          <el-input
-              v-model="form.name"
-              maxlength="10"
-              minlength="1"
-              show-word-limit
-              clearable
-          />
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>
-              是否显示
-            </el-text>
-          </template>
-          <el-checkbox v-model="form.show" label=""/>
-        </el-form-item>
-        <el-form-item>
-          <template #label>
-            <el-text>
-              是否下架
-            </el-text>
-          </template>
-          <el-checkbox v-model="form.down" label="" @change="form.down ? (form.show = false) : 0"/>
-        </el-form-item>
-      </el-form>
-      <div style="display: flex; width: 15vw; justify-content: center">
-        <el-button :disabled="!allCheck" @click="update">
-          跟新
-        </el-button>
+  <el-card v-if="classObj && isAdmin()" class="base_card">
+    <el-form :model="form" label-width="auto" style="width: 15vw">
+      <el-form-item>
+        <template #label>
+          <el-text>名字</el-text>
+        </template>
+        <el-input
+            v-model="form.name"
+            maxlength="10"
+            minlength="1"
+            show-word-limit
+            clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>
+            是否显示
+          </el-text>
+        </template>
+        <el-checkbox v-model="form.show" label=""/>
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>
+            是否下架
+          </el-text>
+        </template>
+        <el-checkbox v-model="form.down" label="" @change="form.down ? (form.show = false) : 0"/>
+      </el-form-item>
+    </el-form>
+    <div style="display: flex; width: 15vw; justify-content: center">
+      <el-button :disabled="!allCheck" @click="update">
+        跟新
+      </el-button>
+    </div>
+    <div style="width: 15vw; margin-top: 5px">
+      <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-      <div style="width: 15vw; margin-top: 5px">
-        <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
-        <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-          <el-alert title="下架商品需要取消显示！" :closable="false" type="warning" center show-icon>
-          </el-alert>
-        </div>
+      <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="下架商品需要取消显示！" :closable="false" type="warning" center show-icon>
+        </el-alert>
       </div>
-    </el-card>
-  </div>
+    </div>
+  </el-card>
   <div v-else></div>
 </template>
 
