@@ -405,6 +405,10 @@ const waterMarkGap = ref([120, 150] as [number, number])
 .center_class {
   display: flex;
   justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  min-height: #{var(--main-outside-height)};
 }
 
 </style>

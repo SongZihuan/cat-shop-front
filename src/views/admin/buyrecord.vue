@@ -80,7 +80,7 @@ const reload = () => {
 </script>
 
 <template>
-  <div v-if="record && record.wupin" class="base">
+  <div v-if="record && record.wupin" class="base_card admin_root_main_base_card">
     <AdminBuyRecord :zhifutishi="true" :record="record as AdminBuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></AdminBuyRecord>
   </div>
   <div v-else>
@@ -94,7 +94,7 @@ const reload = () => {
 </template>
 
 <style scoped lang="scss">
-.base {
+.base_card {
   display: flex;
   justify-content: center;
   width: 60%;
