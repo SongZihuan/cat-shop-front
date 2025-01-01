@@ -242,7 +242,7 @@ const routes: RouteRecordRaw[] = [
         path: 'user/buy/list',
         component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
-          title: '用户订单列表',
+          title: '用户购物记录',
           admin: true,
         },
       },
@@ -461,7 +461,7 @@ const routes: RouteRecordRaw[] = [
         path: 'buyrecord/list',
         component: () => import('@/views/admin/allbuyrecordlst.vue'),
         meta: {
-          title: '订单列表',
+          title: '购物记录',
           admin: true,
         },
       },
@@ -469,7 +469,7 @@ const routes: RouteRecordRaw[] = [
         path: 'buyrecord/info',
         component: () => import('@/views/admin/allbuyrecord.vue'),
         meta: {
-          title: '订单列表',
+          title: '购物记录',
           admin: true,
         },
       },

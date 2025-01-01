@@ -90,7 +90,7 @@ const updateXieYi = () => {
 </script>
 
 <template>
-  <el-card v-if="isRootAdmin()" class="base_card">
+  <el-card v-if="isRootAdmin()" class="base_card admin_root_main_base_card">
     <div style="width: 100%; height: 100%; margin-top: 18px">
       <Clear style="width: 100%; height: 90%; margin-top: 18px">
         <div id="dialogBox" style="width: 100%; height: 100%; display: flex; justify-content: center;">

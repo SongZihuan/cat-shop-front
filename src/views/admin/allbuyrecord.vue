@@ -57,7 +57,7 @@ const reload = () => {
 </script>
 
 <template>
-  <el-card v-if="record && isAdmin()" class="base_card">
+  <el-card v-if="record && isAdmin()" class="base_card admin_root_main_base_card">
     <div style="width: 80%;">
       <AdminBuyRecord :record="record" :safe="true" :xiangqing="false" :adminuser="false" @reload="reload"></AdminBuyRecord>
     </div>

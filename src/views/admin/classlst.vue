@@ -140,7 +140,7 @@ const stopShow = (classId: number, name: string) => {
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="base_card">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
     <el-table :data="classLst" style="width: 77vw" height="60vh">
       <el-table-column prop="id" label="商品分类ID" />
       <el-table-column prop="name" label="商品分类名称" />

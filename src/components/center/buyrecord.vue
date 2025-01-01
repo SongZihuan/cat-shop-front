@@ -64,18 +64,6 @@ const onGoWupinConfirm = () => {
     // NO-THING-TO-DO
   } else if (record.value.down) {
     ElMessageBox.confirm(
-        `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
-        '温馨提示',
-        {
-          confirmButtonText: '确认',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }
-    ).then(() => {
-      onGoWupin()
-    })
-  } else {
-    ElMessageBox.confirm(
         `是否确认前往商品 ${record.value.wupin.name} 的购买时备份信息页面（商品已经下架）？`,
         '温馨提示',
         {
@@ -85,6 +73,18 @@ const onGoWupinConfirm = () => {
         }
     ).then(() => {
       onGoLockWupin()
+    })
+  } else {
+    ElMessageBox.confirm(
+        `是否确认前往商品 ${record.value.wupin.name} 的售卖页面？`,
+        '温馨提示',
+        {
+          confirmButtonText: '确认',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+    ).then(() => {
+      onGoWupin()
     })
   }
 }
@@ -1222,8 +1222,7 @@ const infoBox = ref<HTMLElement>()
 
 <style scoped lang="scss">
 .base_card {
-  --base-card-width: calc(#{var(--custom-little-width)} - 2vw);
-  width: #{var(--base-card-width)};
+  width: 98%;
   min-height: 0;
 }
 
@@ -1268,7 +1267,7 @@ const infoBox = ref<HTMLElement>()
 
 .wupin_name {
   display: inline-block;
-  font-size: 1.5vw;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-right: 5px;
   vertical-align: bottom;

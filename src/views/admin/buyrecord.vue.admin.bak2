@@ -80,26 +80,15 @@ const reload = () => {
 </script>
 
 <template>
-  <div v-if="record && record.wupin" class="base">
-    <AdminBuyRecord :zhifutishi="true" :record="record as AdminBuyRecordData" :safe="true" :xiangqing="false" @reload="reload"></AdminBuyRecord>
-  </div>
-  <div v-else>
-    <el-result
-        icon="warning"
-        title="此商品已下架"
-        sub-title="欢迎到别处去看看吧"
-    >
-    </el-result>
-  </div>
+  <el-card v-if="user && record && isAdmin()" class="base_card admin_root_main_base_card">
+    <div style="width: 80%;">
+      <AdminBuyRecord :record="record" :safe="true" :xiangqing="false" :adminuser="true" @reload="reload"></AdminBuyRecord>
+    </div>
+  </el-card>
+  <div v-else></div>
 </template>
 
 <style scoped lang="scss">
-.base {
-  display: flex;
-  justify-content: center;
-  width: 60%;
-  min-height: 0;
-}
 
 .wupin_name {
   display: inline-block;

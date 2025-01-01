@@ -254,7 +254,7 @@ const openEdit = () => {
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="base_card">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
     <div style="margin-left: 20px; margin-right: 20px; width: 36vw">
       <el-form :model="form" label-width="auto" style="width: 35vw">
         <el-form-item>

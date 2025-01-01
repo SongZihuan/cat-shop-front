@@ -32,7 +32,7 @@ const toEdit = () => {
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="base_card">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
     <div id="info_box" class="info_box">
       <div v-html="xieyi"></div>
     </div>

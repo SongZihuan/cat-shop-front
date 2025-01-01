@@ -65,8 +65,8 @@ const toInfo = (id: number) => {
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="base_card">
-    <el-table :data="userLst" style="width: 100%" height="100%">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
+    <el-table :data="userLst" style="width: 100%" height="100%" :scrollbar-tabindex="3">
       <el-table-column prop="id" label="用户ID" />
       <el-table-column label="类型" >
         <template #default="{row}">

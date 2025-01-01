@@ -15,20 +15,16 @@
   // header 10vh + 3px
   // footer 7vh + 3px
   const bodyHeight = computed(() => showFooter.value ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)` : `calc(100vh - ${headerDiv.value.height}px)`)
-  const bodyWidth = computed(() => "85vw")
-  const bodyLittleWidth = computed(() => "60vw")
-  const bodyMinWidth = computed(() => "35vw")
-  const bodyMostMinWidth = computed(() => "20vw")
 </script>
 
 <template>
-  <div id="home">
-    <div class="header">
+  <div id="front_home">
+    <div id="front_header">
       <Header ref="headerDiv"></Header>
     </div>
-    <div id="out_body">
-      <el-scrollbar>
-        <div id="body">
+    <div id="front_out_body">
+      <el-scrollbar class="front_scroll" :tabindex="1">
+        <div id="front_body">
           <slot></slot>
         </div>
       </el-scrollbar>
@@ -42,21 +38,21 @@
 </template>
 
 <style lang="scss">
-#home {
+#front_home {
   --custom-height: v-bind(bodyHeight);
-  --custom-width: v-bind(bodyWidth);
-  --custom-little-width: v-bind(bodyLittleWidth);
-  --custom-min-width: v-bind(bodyMinWidth);
-  --custom-most-min-width: v-bind(bodyMostMinWidth);
+  --custom-width: 85vw;
+  --custom-little-width: 60vw;
+  --custom-min-width: 35vw;
+  --custom-most-min-width: 20vw;
 }
 </style>
 
 <style scoped lang="scss">
-  #home {
+  #front_home {
     width: 100%;
   }
 
-  #out_body {
+  #front_out_body {
     display: flex;
     justify-content: center;
 
@@ -64,46 +60,17 @@
     height: #{var(--custom-height)};
   }
 
-  #body {
+  .front_scroll {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  #front_body {
     display: flex;
     justify-content: center;
 
     width: #{var(--custom-width)};
     min-height: 0;
-  }
-
-  #logo {
-    float: left;
-  }
-
-  .avatar_logo {
-    height: 8vh;
-    width: 8vh;
-    margin: 0 0 0 0;
-    vertical-align: middle;
-  }
-
-  .title {
-    font-size: 5vh;
-    font-weight: bold;
-    margin-left: 10px;
-    vertical-align: middle;
-  }
-
-  .subtitle {
-    font-size: 1.8vh;
-    font-weight: normal;
-    margin-left: 5px;
-    vertical-align: middle;
-  }
-
-  .title_box {
-    padding-top: 1vh;
-  }
-
-  .extrainfo{
-    font-size: 2vh;
-    margin-right: 10px;
-    vertical-align: middle;
   }
 </style>

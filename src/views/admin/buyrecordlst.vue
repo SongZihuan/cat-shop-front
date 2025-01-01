@@ -1,11 +1,16 @@
 <script setup lang="ts">
 import {BuyRecordStatus} from "#/center/buyrecord"
-import AdminBuyRecord from "@/components/admin/adminbuyrecord.vue"
 import {isAdmin} from "@/store/admin"
 import useAdminUserStore, {AdminUser} from "@/store/admin/user"
 import {apiAdminGetUserBuyRecordByPage} from "#/admin/buyrecord"
 import pushTo from "@/views/admin/router_push"
 import { ElMessage } from "element-plus"
+import AdminBuyRecord from "@/components/admin/adminbuyrecord.vue"
+
+const activeModel = ref("1")
+const dataInfo = ref({} as any)
+const currentPage = ref<{ [key: string]: number }>({})
+
 
 const router = useRouter()
 const route = useRoute()
@@ -27,10 +32,6 @@ const userAdminStore = useAdminUserStore()
 
 const userId = ref(Number(route.query?.userId).valueOf() || 0)
 const user = ref(null as AdminUser | null)
-
-const activeModel = ref("1")
-const dataInfo = ref({} as any)
-const currentPage = ref<{ [key: string]: number }>({})
 
 const onChangeUser = () => {
   userId.value = Number(route.query?.userId).valueOf() || 0
@@ -64,7 +65,6 @@ const changePage = (status: number | string) => {
   apiAdminGetUserBuyRecordByPage(userId.value, page, 20, Number(status).valueOf()).then((res) => {
     dataInfo.value[status] = {
       data: res.data.data.list,
-      pagesizze:20,
       total: res.data.data.total,
       maxcount: res.data.data.maxcount,
       pagesize: 20,
@@ -77,50 +77,60 @@ const changePage = (status: number | string) => {
   })
 }
 
-const toHome = () => {
-  pushTo(router, route, "/admin/user/info")
-}
 </script>
 
 <template>
-  <el-card v-if="user && isAdmin()" class="baseprice">
-    <el-tabs v-model="activeModel" style="width: 75vw" :stretch="true" @tab-change="changePage(activeModel)">
-      <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status as unknown as string" :name="index">
-       <div v-if="dataInfo[index]?.data && dataInfo[index].data.length > 0">
-         <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px;">
-           <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
-         </div>
-         <div style="width: 100%; display: flex; justify-content: center">
-           <div style="width: 100%;">
-               <div v-for="(record, idx) in dataInfo[index]?.data || {}" :key="idx" style="margin-top: 10px; width: 100%;">
-                 <AdminBuyRecord :record="record" :safe="false" :xiangqing="true" :adminuser="true"> </AdminBuyRecord>
-               </div>
-           </div>
-         </div>
-         <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-           <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
-         </div>
-       </div>
-        <div v-else>
-          <el-result
-              icon="info"
-              title="在此处您没有任何销售记录"
-              sub-title="欢迎到别处去看看吧"
-          >
-            <template #extra>
-              <el-button type="primary" @click="toHome">到我的中心</el-button>
-            </template>
-          </el-result>
-        </div>
-      </el-tab-pane>
-    </el-tabs>
+  <el-card class="base_card admin_root_main_base_card">
+    <div class="box">
+      <el-tabs v-model="activeModel" @tab-change="changePage(activeModel)">
+        <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status as unknown as string" :name="index">
+          <div v-if="(dataInfo[index]?.maxcount || 0) > 0">
+            <div style="display: flex; justify-content: center">
+              <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
+            </div>
+            <div style="width: 100%; display: flex; justify-content: center">
+              <div style="width: 100%;">
+                <div v-for="(record, idx) in dataInfo[index]?.data || {}" :key="idx" style="margin-top: 10px; width: 100%;">
+                  <AdminBuyRecord :record="record" :safe="false" :xiangqing="true"> </AdminBuyRecord>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: center">
+              <el-pagination v-model:current-page="currentPage[index]" class="pager" background layout="prev, pager, next" :page-size="dataInfo[index]?.pgesize || 20" :total="dataInfo[index]?.maxcount || 0" @change="changePage(index)" />
+            </div>
+          </div>
+          <div v-else>
+            <el-result
+                icon="success"
+                title="在此处您没有任何销售记录"
+                sub-title="欢迎到别处去看看吧"
+            >
+              <template #extra>
+                <el-button type="primary">到我的中心</el-button>
+              </template>
+            </el-result>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </div>
   </el-card>
-  <div v-else></div>
 </template>
 
 <style scoped lang="scss">
+.box {
+  display: flow-root;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
 .pager {
   margin-bottom: 5px;
   margin-top: 5px;
 }
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 </style>

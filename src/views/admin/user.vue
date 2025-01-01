@@ -128,7 +128,7 @@ const goPhone = () => {
 </script>
 
 <template>
-  <el-card v-if="user && isAdmin()" class="base_card">
+  <el-card v-if="user && isAdmin()" class="base_card admin_root_main_base_card">
     <template #header>
       <div class="header_box">
         <div class="title">

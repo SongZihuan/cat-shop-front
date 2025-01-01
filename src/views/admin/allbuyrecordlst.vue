@@ -43,7 +43,7 @@ changePage(activeModel.value)
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="base_card">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
     <el-tabs v-model="activeModel" style="width: 75vw" :stretch="true" @tab-change="changePage(activeModel)">
       <el-tab-pane v-for="(status, index) in BuyRecordStatus" :key="index" :hidden="!dataInfo[index]" :label="status as unknown as string" :name="index">
         <div v-if="dataInfo[index]?.data && dataInfo[index].data.length > 0">

@@ -71,7 +71,7 @@ const stop = () => {
 </script>
 
 <template>
-  <el-card v-if="isRootAdmin()" class="base_card">
+  <el-card v-if="isRootAdmin()" class="base_card admin_root_main_base_card">
     <div style="display: flex; justify-content: center; margin-bottom: 10px">
       <el-text style="font-size: 1vw">{{ subtitle }}</el-text>
     </div>

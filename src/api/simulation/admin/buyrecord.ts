@@ -160,7 +160,7 @@ export function apiAdminGetBuyRecordByPage(page: number, pagesize: number, statu
                 show: true,
             },
             user: {
-                name: "用户",
+                name: "用户121",
                 phone: "17322061610",
                 location: "广东广州",
                 wechat: "1234",

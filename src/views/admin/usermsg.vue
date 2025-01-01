@@ -63,7 +63,7 @@ const onChange = () => {
 </script>
 
 <template>
-  <el-card v-if="user && isAdmin()" class="base_card">
+  <el-card v-if="user && isAdmin()" class="base_card admin_root_main_base_card">
     <div v-if="msgLst && msgLst.length > 0" class="msg_box">
       <div class="inner_box">
         <div class="page_box">

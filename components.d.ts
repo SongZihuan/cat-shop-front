@@ -11,6 +11,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     Ad: typeof import('./src/components/shop/ad.vue')['default']
     Adminbuyrecord: typeof import('./src/components/admin/adminbuyrecord.vue')['default']
+    Adminbuyrecord2: typeof import('./src/components/admin/adminbuyrecord2.vue')['default']
     Adminmsg: typeof import('./src/components/admin/adminmsg.vue')['default']
     Adminsearch: typeof import('./src/components/admin/adminsearch.vue')['default']
     Adminshoppingbag: typeof import('./src/components/admin/adminshoppingbag.vue')['default']

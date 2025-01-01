@@ -47,7 +47,7 @@ changePage()
 </script>
 
 <template>
-  <el-card class="base_card">
+  <el-card class="base_card admin_root_main_base_card">
     <el-scrollbar>
       <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
         <div style="width: 65%;">

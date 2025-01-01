@@ -84,7 +84,7 @@
 </script>
 
 <template>
-  <el-card v-if="wupin" class="base_card">
+  <el-card v-if="wupin" class="base_card admin_root_main_base_card">
     <div style="display: inline-block; width: 15vw; height: 70vh; margin-right: 20px; margin-left: 20px">
       <div style="padding-right: 5px">
         <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 100%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>

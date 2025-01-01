@@ -63,7 +63,7 @@ const onChange = () => {
 </script>
 
 <template>
-  <el-card v-if="user && isAdmin()" class="base_card">
+  <el-card v-if="user && isAdmin()" class="base_card admin_root_main_base_card">
     <div v-if="shoppingbagLst && shoppingbagLst.length > 0">
       <div>
         <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px;">

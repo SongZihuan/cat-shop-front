@@ -90,7 +90,7 @@ const update = () => {
 </script>
 
 <template>
-  <el-card v-if="classObj && isAdmin()" class="base_card">
+  <el-card v-if="classObj && isAdmin()" class="base_card admin_root_main_base_card">
     <el-form :model="form" label-width="auto" style="width: 15vw">
       <el-form-item>
         <template #label>

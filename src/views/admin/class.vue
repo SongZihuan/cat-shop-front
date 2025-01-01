@@ -198,7 +198,7 @@ const downClass = () => {
 </script>
 
 <template>
-  <el-card  v-if="classObj" class="base_card">
+  <el-card  v-if="classObj" class="base_card admin_root_main_base_card">
     <template #header>
       <el-text style="font-size: 0.8vw;">
         类别详情

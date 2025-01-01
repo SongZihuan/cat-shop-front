@@ -200,7 +200,7 @@ const deleteConfig = (key: string) => {
 </script>
 
 <template>
-  <el-card v-if="config && isRootAdmin()" class="base_card">
+  <el-card v-if="config && isRootAdmin()" class="base_card admin_root_main_base_card">
     <el-table :data="configKeys" style="width: 77vw" height="70vh">
       <el-table-column label="配置项" >
         <template #default="{ row }">
