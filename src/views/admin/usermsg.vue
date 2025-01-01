@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {isAdmin} from "@/store/admin"
 import useAdminUserStore, {AdminUser} from "@/store/admin/user"
-import {AdminMsg, apiAdminGetUserMsg} from "#/admin/msg"
-import {formatDate} from "@/utils/time"
+import {AdminMsg as AdminMsgType, apiAdminGetUserMsg} from "#/admin/msg"
+import AdminMsg from "@/components/admin/adminmsg.vue"
 import pushTo from "@/views/admin/router_push"
 
 const router = useRouter()
@@ -32,7 +32,7 @@ const pagesize = ref(20)
 if (page.value < 1) {
   page.value = 1
 }
-const msgLst = ref([] as AdminMsg[])
+const msgLst = ref([] as AdminMsgType[])
 
 const onChangeUser = () => {
   userId.value = Number(route.query?.userId).valueOf() || 0
@@ -64,30 +64,19 @@ const onChange = () => {
 
 <template>
   <el-card v-if="user && isAdmin()" class="base_card">
-    <div v-if="msgLst && msgLst.length > 0">
-      <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-      </div>
-      <div style="width: 55vw; display: flex; justify-content: center">
-        <div style="width: 100%;">
-          <div v-for="(item, index) in msgLst" :key="index" style="margin-left: 30px; margin-right: 30px">
-            <el-card style="margin-bottom: 5px">
-              <div style="width: 50vw; font-size: 0.8vw; font-weight: bold;">
-                <el-text>
-                  {{ item.msg }}
-                </el-text>
-              </div>
-              <div style="width: 50vw; text-align: right">
-                <el-text style="font-size: 0.5vw">
-                  留言时间：{{ formatDate(item.time) }}
-                </el-text>
-              </div>
-            </el-card>
+    <div v-if="msgLst && msgLst.length > 0" class="msg_box">
+      <div class="inner_box">
+        <div class="page_box">
+          <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        </div>
+        <div>
+          <div v-for="(item, index) in msgLst" :key="index" class="msg_item">
+            <AdminMsg :msg="item.msg" :user-id="item.userId" :user="item.username" :time="item.time"></AdminMsg>
           </div>
         </div>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        <div class="page_box">
+          <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        </div>
       </div>
     </div>
     <div v-else>
@@ -106,5 +95,28 @@ const onChange = () => {
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  width: 70%;
+}
 
+.msg_box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.inner_box {
+  width: 85%;
+}
+
+.page_box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.msg_item {
+  margin-bottom: 20px;
+}
 </style>

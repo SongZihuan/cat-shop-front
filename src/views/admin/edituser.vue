@@ -2,8 +2,8 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useAdminUserStore, {
   AdminUser,
-  AdminUserBase,
-  AdminUserStatus, AdminUserType
+  AdminUserBase, AdminUserType,
+  RootAdminUserStatus, RootAdminUserType, AdminUserStatus
 } from "@/store/admin/user"
 import pushTo from "@/views/admin/router_push"
 import {hasPermission, isAdmin, isDeleteUser, isRootAdmin} from "@/store/admin"
@@ -25,6 +25,8 @@ const userAdminStore = useAdminUserStore()
 
 const userId = ref(Number(route.query?.userId).valueOf() || 0)
 const user = ref(null as AdminUser | null)
+const userStatusLst = ref(isRootAdmin() ? RootAdminUserStatus : AdminUserStatus as { [key: number]: string })
+const userTypeLst = ref(isRootAdmin() ? RootAdminUserType : AdminUserType as { [key: number]: string })
 
 const ub = ref({
   name: "",
@@ -50,11 +52,12 @@ const backTimer = () => {
   backSec.value -= 1
   timeoutID = setTimeout(backTimer, 1000)
 }
-backTimer()
 
 onUnmounted(() => {
   timeoutID && clearTimeout(timeoutID)
 })
+
+const userIsRoot = ref(false)
 
 const onChangeUser = () => {
   userId.value = Number(route.query?.userId).valueOf() || 0
@@ -63,15 +66,36 @@ const onChangeUser = () => {
   if (userId.value) {
     userAdminStore.getUser(userId.value).then((res) => {
       user.value = res as AdminUser
-      ub.value = {
-        name: res.name,
-        location: res.location,
-        status: res.status,
-        wechat: res.wechat,
-        email: res.email,
-        type: res.type,
+
+      if (user.value.type === 3) {
+        // 状态恢复
+        user.value.status = 1
+        ub.value = {
+          name: res.name,
+          location: res.location,
+          status: 1,
+          wechat: res.wechat,
+          email: res.email,
+          type: 3,
+        }
+        userIsRoot.value = true
+      } else {
+        ub.value = {
+          name: res.name,
+          location: res.location,
+          status: res.status,
+          wechat: res.wechat,
+          email: res.email,
+          type: res.type,
+        }
+        userIsRoot.value = false
       }
+
       if (isDeleteUser(user.value) || !hasPermission(user.value)) {
+        backTimer()
+      }
+
+      if (!userStatusLst.value?.[user.value.status] || !userTypeLst.value?.[user.value.type]) {
         backTimer()
       }
     }, () => {
@@ -86,16 +110,15 @@ watch(() => route.query?.userId, onChangeUser)
 onChangeUser()
 
 const hasChange = computed(() => {
-  return ub.value.type !== user.value?.type && ub.value.name !== user.value?.name || ub.value.location !== user.value?.location || ub.value.status !== user.value?.status || ub.value.wechat !== user.value?.wechat || ub.value.email !== user.value?.email
+  return ub.value.type !== user.value?.type || ub.value.name !== user.value?.name || ub.value.location !== user.value?.location || ub.value.status !== user.value?.status || ub.value.wechat !== user.value?.wechat || ub.value.email !== user.value?.email
 })
-
-const userStatusLst = ref(AdminUserStatus as { [key: number]: string })
-const userTypeLst = ref(AdminUserType as { [key: number]: string })
 
 const deleteCheck = computed(() => !(user.value && user.value.status === 3 && ub.value.status !== 3))
 const rootAdminCheck = computed(() => !(user.value && user.value.type === 3 && ub.value.status !== 1))
 const checkName = computed(() => ub.value.name && ub.value.name.length > 0 && ub.value.name.length <= 10)
 const checkStatus = computed(() => !Object.keys(userStatusLst).some((v) => Number(v).valueOf() === ub.value.status))
+const checkRootType = computed(() => userIsRoot.value ? ub.value.type === 3 : true)
+const checkRootStatus = computed(() => userIsRoot.value ? ub.value.status === 1 : true)
 const checkType = computed(() => !Object.keys(userTypeLst).some((v) => Number(v).valueOf() === ub.value.type))
 const checkEmail = computed(() => {
   if (!ub.value.email) {
@@ -103,9 +126,17 @@ const checkEmail = computed(() => {
   }
   return isEmail(ub.value.email)
 })
+
+// checkRootType.value && checkRootStatus.value 不纳入检查
 const allCheck = computed(() => checkType.value && checkEmail.value && checkStatus.value && checkName.value && hasChange.value && rootAdminCheck.value && deleteCheck.value)
 
 const update = () => {
+  if (userIsRoot) {
+    // 恒定值
+    ub.value.type = 3
+    ub.value.status = 1
+  }
+
   ElMessageBox.confirm('您是否确定更新你的用户信息', '提示', {
     confirmButtonText: '确定更新',
     cancelButtonText: '取消更新',
@@ -116,7 +147,7 @@ const update = () => {
         type: 'success',
         message: "更新成功",
       })
-      toBack()
+      onChangeUser()
     }, () => {
       ElMessage({
         type: 'error',
@@ -198,16 +229,30 @@ const update = () => {
           <el-text>状态</el-text>
         </template>
         <el-select
+            v-if="userIsRoot"
             v-model="ub.status"
             placeholder="状态"
             size="large"
+            :disabled="true"
+        >
+          <el-option
+              :key="1"
+              label="正常"
+              :value="1"
+          />
+        </el-select>
+        <el-select
+            v-else
+            v-model="ub.status"
+            placeholder="状态"
+            size="large"
+            :disabled="Object.keys(userStatusLst).length <= 1"
         >
           <el-option
               v-for="(item, i) in userStatusLst"
               :key="i"
               :label="item"
               :value="Number(i).valueOf()"
-              :disabled="(Number(i).valueOf() === 3 && !isRootAdmin()) || (Number(i).valueOf() !== 3 && (user && user.status === 3))"
           />
         </el-select>
       </el-form-item>
@@ -216,16 +261,30 @@ const update = () => {
           <el-text>类型</el-text>
         </template>
         <el-select
+            v-if="userIsRoot"
             v-model="ub.type"
             placeholder="类型"
             size="large"
+            :disabled="true"
+        >
+          <el-option
+              :key="3"
+              label="根管理员"
+              :value="3"
+          />
+        </el-select>
+        <el-select
+            v-else
+            v-model="ub.type"
+            placeholder="类型"
+            size="large"
+            :disabled="Object.keys(userTypeLst).length <= 1"
         >
           <el-option
               v-for="(item, i) in userTypeLst"
               :key="i"
               :label="item"
               :value="Number(i).valueOf()"
-              :disabled="Number(i).valueOf() === 3"
           />
         </el-select>
       </el-form-item>
@@ -262,6 +321,14 @@ const update = () => {
       </div>
       <div v-if="!deleteCheck" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="已删除的用户不能恢复！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!checkRootStatus" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="根用户状态错误！" :closable="false" type="warning" center show-icon>
+        </el-alert>
+      </div>
+      <div v-if="!checkRootType" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="根用户类型错误！" :closable="false" type="warning" center show-icon>
         </el-alert>
       </div>
     </div>

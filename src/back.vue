@@ -22,11 +22,10 @@ if (!isAdmin()) {
   })
 }
 
-const active = ref("")
 const pathPointer = "admin"
-const basePath = "/" + pathPointer
+const basePath = "/" + pathPointer + "/"
 
-const changePage = () => {
+const active = computed(() => {
   if (!route.path.startsWith(basePath)) {
     router.push({
       path: "/system/error",
@@ -34,6 +33,7 @@ const changePage = () => {
         msg: "页面错误"
       }
     })
+    return "/user/list"
   }
 
   const routePath = (route.meta.vpath || route.path || "/") as string
@@ -45,13 +45,11 @@ const changePage = () => {
         msg: "页面错误"
       }
     })
+    return "/user/list"
   }
 
-  active.value = routePath.slice(routePath.length, routePath.length)
-}
-
-watch(() => route.path, changePage)
-changePage()
+  return routePath.slice(basePath.length, routePath.length)
+})
 
 const userAdminStore = useAdminUserStore()
 const userStore = useUserStore()
@@ -164,8 +162,7 @@ const defaultOpeneds = ref([
 ])
 
 const onClick = (event: MenuItemRegistered) => {
-  const path = basePath + "/" + (event.index || "admin/user/list")
-  pushTo(router, route, path)
+  pushTo(router, route, basePath + (event.index || "user/list"))
 }
 
 const userNaame = computed(() => userStore?.user?.name || "未知用户")

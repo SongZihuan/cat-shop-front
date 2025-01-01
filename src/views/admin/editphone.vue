@@ -32,7 +32,6 @@ const backTimer = () => {
   backSec.value -= 1
   timeoutID = setTimeout(backTimer, 1000)
 }
-backTimer()
 
 onUnmounted(() => {
   timeoutID && clearTimeout(timeoutID)
@@ -55,7 +54,7 @@ const onChangeUser = () => {
     userAdminStore.getUser(userId.value).then((res) => {
       user.value = res as AdminUser
       form.value.newPhone = user.value.phone
-      if (isDeleteUser(user.value) || hasPermission(user.value)) {
+      if (isDeleteUser(user.value) || !hasPermission(user.value)) {
         backTimer()
       }
     }, () => {
@@ -84,7 +83,7 @@ const update = () => {
         type: 'success',
         message: "更新成功",
       })
-      toBack()
+      onChangeUser()
     }, () => {
       ElMessage({
         type: 'error',

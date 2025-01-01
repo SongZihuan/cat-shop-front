@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useAdminUserStore, {AdminUser, AdminUserStatus, AdminUserType} from "@/store/admin/user"
+import useAdminUserStore, {AdminUser, RootAdminUserStatus, RootAdminUserType} from "@/store/admin/user"
 import useConfigStore from "@/store/config"
 import {isAdmin} from "@/store/admin"
 import { ElMessage } from "element-plus"
@@ -70,12 +70,12 @@ const toInfo = (id: number) => {
       <el-table-column prop="id" label="用户ID" />
       <el-table-column label="类型" >
         <template #default="{row}">
-          {{ AdminUserType[row.type] || "未知" }}
+          {{ RootAdminUserType[row.type] || "未知" }}
         </template>
       </el-table-column>
       <el-table-column label="状态" >
         <template #default="{row}">
-          {{ AdminUserStatus[row.status] || "未知" }}
+          {{ RootAdminUserStatus[row.status] || "未知" }}
         </template>
       </el-table-column>
       <el-table-column prop="name" label="昵称" />

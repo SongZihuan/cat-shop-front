@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import {isAdmin} from "@/store/admin"
-import {AdminMsg, apiAdminGetMsg} from "#/admin/msg"
-import {formatDate} from "@/utils/time"
-import pushTo from "@/views/admin/router_push"
+import {AdminMsg as AdminMsgType, apiAdminGetMsg} from "#/admin/msg"
+import AdminMsg from "@/components/admin/adminmsg.vue"
 
 const router = useRouter()
 const route = useRoute()
@@ -22,7 +21,7 @@ const pagesize = ref(20)
 if (page.value < 1) {
   page.value = 1
 }
-const msgLst = ref([] as AdminMsg[])
+const msgLst = ref([] as AdminMsgType[])
 
 const onChange = () => {
   apiAdminGetMsg(page.value, pagesize.value).then((res) => {
@@ -32,61 +31,33 @@ const onChange = () => {
 }
 onChange()
 
-const toUser = (userId: number) => {
-  userId && pushTo(router, route, "/admin/user/info", {
-    userId: userId,
-  })
-}
-
-const toBack = () => {
-  pushTo(router, route, "/admin/user/list")
-}
-
 </script>
 
 <template>
   <el-card v-if="isAdmin()" class="base_card">
-    <div v-if="msgLst && msgLst.length > 0">
-      <div style="display: flex; justify-content: center; margin-bottom: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
-      </div>
-      <div style="width: 55vw; display: flex; justify-content: center">
-        <div style="width: 100%;">
-          <div v-for="(item, index) in msgLst" :key="index" style="margin-left: 30px; margin-right: 30px">
-            <el-card style="margin-bottom: 5px">
-              <div style="width: 50vw; font-size: 0.8vw; font-weight: bold;">
-                <el-text>
-                  {{ item.msg }}
-                </el-text>
-              </div>
-              <div style="width: 50vw; text-align: right">
-                <div>
-                  <el-text style="font-size: 0.5vw">
-                    留言时间：{{ formatDate(item.time) }}
-                  </el-text>
-                </div>
-                <div>
-                  <el-button @click="toUser(item.userId)">
-                    查看用户详情
-                  </el-button>
-                </div>
-              </div>
-            </el-card>
+    <div v-if="msgLst && msgLst.length > 0" class="msg_box">
+      <div class="inner_box">
+        <div class="page_box">
+          <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        </div>
+        <div>
+          <div v-for="(item, index) in msgLst" :key="index" class="msg_item">
+            <AdminMsg :msg="item.msg" :user-id="item.userId" :user="item.username" :time="item.time"></AdminMsg>
           </div>
         </div>
-      </div>
-      <div style="display: flex; justify-content: center; margin-top: 10px;">
-        <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        <div class="page_box">
+          <el-pagination v-model:current-page="page" class="pager" background layout="prev, pager, next" :page-size="pagesize" :total="maxcount || 0" @change="onChange" />
+        </div>
       </div>
     </div>
     <div v-else>
       <el-result
           icon="info"
-          title="该用户暂时还没有留言哦"
-          sub-title="请用户留言了再来看吧！"
+          title="暂时还没有用户留言哦"
+          sub-title="请有用户留言了再来看吧！"
       >
         <template #extra>
-          <el-button type="primary" @click="toBack">到我的中心</el-button>
+          <el-button type="primary">到我的中心</el-button>
         </template>
       </el-result>
     </div>
@@ -95,5 +66,28 @@ const toBack = () => {
 </template>
 
 <style scoped lang="scss">
+.base_card {
+  width: 70%;
+}
 
+.msg_box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.inner_box {
+  width: 85%;
+}
+
+.page_box {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.msg_item {
+  margin-bottom: 20px;
+}
 </style>

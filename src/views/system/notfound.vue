@@ -83,8 +83,6 @@ onUnmounted(() => {
             <el-text class="info_text">
               页面资源链接：{{ url }}
             </el-text>
-            {{ isFromAdmin }}
-            {{ path }}
           </div>
         </div>
       </template>

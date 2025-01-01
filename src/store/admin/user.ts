@@ -12,14 +12,23 @@ import {ElMessage} from "element-plus";
 
 export const AdminUserType = {
     1: "新用户",
-    2: "挂利用",
-    3: "根管理员",
 }
 
 export const AdminUserStatus = {
     1: "正常",
     2: "冻结",
+}
+
+export const RootAdminUserType = {
+    1: "新用户",
+    2: "管理员",
     3: "根管理员",
+}
+
+export const RootAdminUserStatus = {
+    1: "正常",
+    2: "冻结",
+    3: "删除",
 }
 
 export interface AdminUserId {
@@ -85,11 +94,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                 user.avatar = configStore.config?.avatar
             }
 
-            if (!Object.keys(AdminUserStatus).some((v) => Number(v).valueOf() === user.type)) {
+            if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.type)) {
                 user.type = 1
             }
 
-            if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.status)) {
+            if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.status)) {
                 user.status = 1
             }
 
@@ -122,11 +131,11 @@ const useAdminUserStore = defineStore("useAdminUserStore", () => {
                     user.avatar = configStore.config?.avatar
                 }
 
-                if (!Object.keys(AdminUserType).some((v) => Number(v).valueOf() === user.type)) {
+                if (!Object.keys(RootAdminUserType).some((v) => Number(v).valueOf() === user.type)) {
                     user.type = 1
                 }
 
-                if (!Object.keys(AdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
+                if (!Object.keys(RootAdminUserStatus).some((v) => Number(v).valueOf() === user.status)) {
                     user.status = 1
                 }
 

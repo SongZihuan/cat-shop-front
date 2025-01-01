@@ -214,73 +214,99 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
                   </div>
                 </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    <el-icon><Iphone /></el-icon>
-                    电话：
-                    {{ userStore.user.phone ? userStore.user.phone : "暂无" }}
-                  </el-text>
-                </div>
+                <div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      <el-icon><User /></el-icon>
+                      用户名：
+                      {{ userStore.user.name ? userStore.user.name : "暂无" }}
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    <el-icon><Location /></el-icon>
-                    地址：
-                    {{ userStore.user.location ? userStore.user.location : "暂无" }}
-                  </el-text>
-                </div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      <el-icon><Iphone /></el-icon>
+                      电话：
+                      {{ userStore.user.phone ? userStore.user.phone : "暂无" }}
+                    </el-text>
+                  </div>
 
-                <el-divider border-style="solid" content-position="left" style="margin-top: 50px;">
-                  消费统计
-                </el-divider>
+                  <div v-if="userStore.user.wechat" class="user_info_box">
+                    <el-text class="user_info_text">
+                      <el-icon><Service /></el-icon>
+                      微信：
+                      {{ userStore.user.wechat }}
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    消费物品总件数：{{ userStore.user.totalJian >= 0 ? userStore.user.totalJian : 0 }} 件
-                  </el-text>
-                </div>
+                  <div v-if="userStore.user.email" class="user_info_box">
+                    <el-text class="user_info_text">
+                      <el-icon><Notebook /></el-icon>
+                      邮箱：
+                      {{ userStore.user.email }}
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    消费总次数：{{ userStore.user.totalBuy >= 0 ? userStore.user.totalBuy : 0 }} 次
-                  </el-text>
-                </div>
+                  <div v-if="userStore.user.location" class="user_info_box">
+                    <el-text class="user_info_text">
+                      <el-icon><Location /></el-icon>
+                      地址：
+                      {{ userStore.user.location }}
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    消费总金额：
-                    ￥{{ userStore.user.totalPrice >= 0 ? (userStore.user.totalPrice / 100).toFixed(2) : "0.00" }}
-                  </el-text>
-                </div>
+                  <el-divider border-style="solid" content-position="left" style="margin-top: 30px;">
+                    消费统计
+                  </el-divider>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    收货总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
-                  </el-text>
-                </div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      消费物品总件数：{{ userStore.user.totalJian >= 0 ? userStore.user.totalJian : 0 }} 件
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    总评价次数：{{ userStore.user.totalPingJia >= 0 ? userStore.user.totalPingJia : 0 }} 次
-                  </el-text>
-                </div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      消费总次数：{{ userStore.user.totalBuy >= 0 ? userStore.user.totalBuy : 0 }} 次
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    消费好评次数：{{ userStore.user.totalGood >= 0 ? userStore.user.totalGood : 0 }} 次
-                  </el-text>
-                </div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      消费总金额：
+                      ￥{{ userStore.user.totalPrice >= 0 ? (userStore.user.totalPrice / 100).toFixed(2) : "0.00" }}
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    消费好评率：{{ userStore.user.goodPre.toFixed(2) }} %
-                  </el-text>
-                </div>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      收货总次数：{{ userStore.user.totalShouHuo >= 0 ? userStore.user.totalShouHuo : 0 }} 次
+                    </el-text>
+                  </div>
 
-                <div class="user_info_box">
-                  <el-text class="user_info_text">
-                    平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
-                  </el-text>
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      总评价次数：{{ userStore.user.totalPingJia >= 0 ? userStore.user.totalPingJia : 0 }} 次
+                    </el-text>
+                  </div>
+
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      消费好评次数：{{ userStore.user.totalGood >= 0 ? userStore.user.totalGood : 0 }} 次
+                    </el-text>
+                  </div>
+
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      消费好评率：{{ userStore.user.goodPre.toFixed(2) }} %
+                    </el-text>
+                  </div>
+
+                  <div class="user_info_box">
+                    <el-text class="user_info_text">
+                      平均每笔交易金额：￥{{ (userStore.user.pricePre / 100).toFixed(2) }}
+                    </el-text>
+                  </div>
                 </div>
               </div>
             </div>
