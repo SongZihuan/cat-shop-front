@@ -165,7 +165,12 @@ const buy = () => {
     return
   }
 
-  byn.value.open(wupin.value, num.value)
+  if (!byn.value.openWithNew(wupin.value, num.value)) {
+    ElMessage({
+      type: 'warning',
+      message: "系统出现了问题，请重试。"
+    })
+  }
 }
 
 const headerCustomer = ref<HTMLElement>()

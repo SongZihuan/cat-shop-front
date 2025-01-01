@@ -11,9 +11,16 @@ import {
   buyRecordId,
   apiPostTestPay
 } from "#/center/pay"
+import {PAY_ERROR, PAY_FAIL, PAY_SUCCESS} from "@/winmsg/pay";
+import {EventMsg} from "@/winmsg/winmsg";
 
   const route = useRoute()
   const router = useRouter()
+
+  const backevent = computed(() => route.query.backevent || "")
+  const backdata = computed(() => (route.query.backdata && typeof route.query.backdata === "string" && JSON.parse(route.query.backdata)) || {})
+
+  const recordId = ref(route.query?.[buyRecordId] || 0)
 
   const Type = ref(route.query?.[type] || alipay as string)
   const payname = ref("在线支付工具")
@@ -33,26 +40,205 @@ import {
     paytypename.value = "网络商品下单"
   }
 
-  const goRedirect = () => {
-    const redirectPath = route.query?.[redirect]
-    if (typeof redirectPath === "string" && redirectPath.length > 0) {
-      const p = decodeURIComponent(redirectPath)
-      if (p.startsWith("http")) {
-        window.location.href = p
+  const goSafeRedirect = (redirectPath: string | null | undefined = ""): boolean => {
+    if (redirectPath) {
+      redirectPath = route.query[redirect] as unknown as string || ""
+    }
+
+    if (typeof redirectPath !== "string") {
+      redirectPath = ""
+    } else if (redirectPath.length === 0) {
+      if (redirectPath.startsWith("https://") || redirectPath.startsWith("https://")) {
+        // 没问题
+      } else if (redirectPath.startsWith("/")) {
+        redirectPath = window.location.origin + redirectPath
       } else {
-        window.location.href = window.location.origin + p
+        redirectPath = ""
       }
     } else {
+      redirectPath = ""
+    }
+
+    if (isHrefMode.value) {
+      if (redirectPath === "") {
+        if (safeGoBack(PAY_SUCCESS, {
+          redirect: "",
+          recordId: recordId.value,
+        })) {
+          return true
+        }
+      } else {
+        window.location.href = redirectPath
+        return true
+      }
+    }
+
+    if (window.opener) {
+      window.opener.postMessage({
+        event: PAY_SUCCESS,
+        data: {
+          redirect: redirectPath,
+          recordId: recordId.value,
+        }
+      } as EventMsg, "*")
+
+      window.close()
+      return true
+    }
+
+    if (safeGoBack(PAY_SUCCESS, {
+      redirect: redirectPath,
+      recordId: recordId.value,
+    })) {
+      return true
+    }
+
+    return false
+  }
+  
+  const safeGoBack = (eventType: string = PAY_FAIL, eventData: any = undefined): boolean => {
+    if (window.history.length > 1) {
+      window.history.go(-1)
+    } else if (document.referrer) {
+      const backUrl = new URL(document.referrer)
+  
+      if (backUrl.origin !== window.location.origin) {// 同源才跳转
+        return false
+      }
+  
+      if (backUrl.searchParams.has("backevent") || backUrl.searchParams.has("backdata")) {// 不允许存在此参数
+        return false
+      }
+  
+      backUrl.searchParams.set("backevent", eventType)
+      eventData && backUrl.searchParams.set("backdata", JSON.stringify(safeGoBack(eventData)))
+
+      console.log("safe back")
+      window.location.href = backUrl.href
+      return true
+    }
+  
+    return false
+  }
+  
+  const goRedirectAsFront = (redirectPath: string = "") => {
+    if (goSafeRedirect(redirectPath)) {
+      return
+    }
+
+    router.push({
+      path: "/user/shop/home"
+    })
+  }
+
+  const goRedirect = () => {
+    if (backevent.value) {
+      goRedirectAsBack()
+    } else {
+      goRedirectAsFront()
+    }
+  }
+
+  const goRedirectAsBack = () => {
+    console.log("TAG go back", backdata.value)
+    if (goSafeRedirect(backdata.value.redirect)) {
+      // 正常
+    } else if (backdata.value.recordId !== 0) {
       router.push({
-        "path": "/home",
+        path: "/user/center/buyrecord",
+        query: {
+          id: backdata.value.recordId,
+        }
+      })
+    } else {
+      router.push({
+        path: "/system/error",
+        query: {
+          msg: "交易过程顺利，但貌似遇到一点问题",
+        }
+      })
+    }
+}
+  
+  const goBack = () => {
+    if (isHrefMode.value) {
+      if (safeGoBack()) {
+        // 成功返回
+      } else if (!safeGoBack()) {
+        router.push({
+          path: "/system/error",
+          query: {
+            msg: "交易系统异常",
+          }
+        })
+      }
+    } else if (window.opener) {
+      window.opener.postMessage({
+        event: PAY_FAIL
+      } as EventMsg, "*")
+      
+      window.close()
+    } else {
+      router.push({
+        path: "/system/error",
+        query: {
+          msg: "交易系统异常",
+        }
       })
     }
   }
 
-  const goHome = () => {
+const goodGoBack = () => {
+  if (isHrefMode.value) {
+    if (safeGoBack()) {
+      // 成功返回
+    } else if (!safeGoBack()) {
+      router.push({
+        path: "/user/shop/home",
+      })
+    }
+  } else if (window.opener) {
+    window.opener.postMessage({
+      event: PAY_FAIL
+    } as EventMsg, "*")
+
+    window.close()
+  } else {
     router.push({
-      "path": "/user/shop/home",
+      path: "/user/shop/home",
     })
+  }
+}
+
+  const goError = () => {
+    if (isHrefMode.value) {
+      // 检查是否有历史记录可以回退
+      if (window.history.length > 1) {
+        window.history.back()
+      } else if (document.referrer) {
+        window.location.href = document.referrer
+      } else {
+        router.push({
+          path: "/system/error",
+          query: {
+            msg: "交易系统异常",
+          }
+        })
+      }
+    } else if (window.opener) {
+      window.opener.postMessage({
+        event: PAY_ERROR
+      } as EventMsg, "*")
+      
+      window.close()
+    } else {
+      router.push({
+        path: "/system/error",
+        query: {
+          msg: "交易系统异常",
+        }
+      })
+    }
   }
 
   const goKefu = () => {
@@ -61,34 +247,46 @@ import {
     })
   }
 
-  const status = ref(1)
-  const paynow = () => {
-    const bid = ref(route.query?.[buyRecordId] || 0)
-    if (!bid.value) {
-      status.value = 2
-      backTimer(goHome)
-      return
-    }
+  const status = ref(0)
 
-    apiPostTestPay(bid.value as number).then((res) => {
-      if (res.data.data.success) {
-        status.value = 3
-        backTimer(goRedirect)
-      } else {
-        status.value = 2
-        backTimer(goHome)
-      }
-    }, () => {
-      status.value = 2
-      backTimer(goHome)
-    })
+  const paysuccess = (url: string = "") => {
+    status.value = 3
+    backTimer(() => goRedirectAsFront(url))
+  }
+
+  const paybacksuccess = () => {
+    status.value = 3
+    backTimer(() => goRedirectAsBack())
+  }
+  
+  const payfail = () => {
+    status.value = 2
+    backTimer(goBack)
+  }
+
+  const systemfail = () => {
+    status.value = 4
+    backTimer(goError)
+  }
+
+  const paynow = () => {
+    status.value = 1
+    setTimeout(() => {
+      apiPostTestPay(recordId.value as number).then((res) => {
+        if (res.data.data.success) {
+          paysuccess()
+        } else {
+          payfail()
+        }
+      }, () => {
+        payfail()
+      })
+    }, getRandomInt(1000) * 5)
   }
 
   function getRandomInt(max: number) {
     return Math.floor(Math.random() * max)
   }
-
-  setTimeout(() => paynow(), getRandomInt(300) * 10)
 
   let timeoutID: NodeJS.Timeout | number | undefined = undefined
   const backSec = ref(6)
@@ -102,6 +300,28 @@ import {
     timeoutID = setTimeout(() => backTimer(backFn), 1000)
   }
 
+  const isHrefMode = computed(() => route.query.ishref && route.query.ishref === "true")
+
+  onMounted(() => {
+    if (backevent.value) {
+      if (backevent.value === PAY_FAIL) {
+        systemfail()
+      } else if (backevent.value === PAY_FAIL) {
+        payfail()
+      } else if (backevent.value === PAY_SUCCESS) {
+        paybacksuccess()
+      } else {
+        systemfail()
+      }
+    } else if (!recordId.value) {
+      systemfail()
+    } else if (!isHrefMode.value && !window.opener) {
+      systemfail()
+    } else {
+      paynow()
+    }
+  })
+
   onUnmounted(() => {
     timeoutID && clearTimeout(timeoutID)
   })
@@ -112,7 +332,35 @@ import {
   <el-card class="base_card">
     <div class="box">
       <el-result
-          v-if="status === 1"
+          v-if="status === 0"
+          icon="info"
+      >
+        <template #title>
+          <el-text style="font-size: 1.2vw">
+            请耐心等待
+          </el-text>
+        </template>
+        <template #sub-title>
+          <el-text style="font-size: 0.8vw">
+            我们正在准备支付系统，请耐心等待。
+          </el-text>
+        </template>
+        <template #extra>
+          <el-button-group>
+            <el-tooltip
+                effect="dark"
+                content="交易正在进行，无法取消。"
+                placement="bottom"
+            >
+              <el-button type="danger" size="large" @click="goodGoBack">
+                取消交易
+              </el-button>
+            </el-tooltip>
+          </el-button-group>
+        </template>
+      </el-result>
+      <el-result
+          v-else-if="status === 1"
           icon="info"
       >
         <template #title>
@@ -157,7 +405,7 @@ import {
         </template>
         <template #extra>
           <el-button-group>
-            <el-button type="warning" size="large" @click="goHome">
+            <el-button type="warning" size="large" @click="goBack">
               返回首页
               （{{ backSec > 5 ? 5 : backSec }}s）
             </el-button>
@@ -190,6 +438,27 @@ import {
         </template>
       </el-result>
       <el-result
+          v-else-if="status === 4"
+          icon="success"
+      >
+        <template #title>
+          <el-text style="font-size: 1.2vw">
+            交易系统错误。
+          </el-text>
+        </template>
+        <template #sub-title>
+          <el-text style="font-size: 0.8vw">
+            交易系统错误，我们将带你返回。
+          </el-text>
+        </template>
+        <template #extra>
+          <el-button type="success" size="large" @click="goError">
+            返回商户
+            （{{ backSec > 5 ? 5 : backSec }}s）
+          </el-button>
+        </template>
+      </el-result>
+      <el-result
           v-else
           icon="error"
       >
@@ -206,7 +475,7 @@ import {
         </template>
         <template #extra>
           <el-button-group>
-            <el-button type="warning" size="large" @click="goHome">
+            <el-button type="warning" size="large" @click="goError">
               返回首页
               （{{ backSec > 5 ? 5 : backSec }}s）
             </el-button>

@@ -48,14 +48,9 @@ declare module '@vue/runtime-core' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
-    ElTable: typeof import('element-plus/es')['ElTable']
-    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElTabPane: typeof import('element-plus/es')['ElTabPane']
-    ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
     Footer: typeof import('./src/components/system/footer.vue')['default']
     Header: typeof import('./src/components/system/header.vue')['default']
     Headeradmin: typeof import('./src/components/system/headeradmin.vue')['default']
@@ -68,9 +63,11 @@ declare module '@vue/runtime-core' {
     Shoppingbag: typeof import('./src/components/center/shoppingbag.vue')['default']
     Usertitleadmin: typeof import('./src/components/system/usertitleadmin.vue')['default']
     Usertitlecenter: typeof import('./src/components/system/usertitlecenter.vue')['default']
-    VanList: typeof import('vant/es')['List']
     Wechat: typeof import('./src/components/system/wechat.vue')['default']
     Wupinitem: typeof import('./src/components/shop/wupinitem.vue')['default']
     Wupinlist: typeof import('./src/components/shop/wupinlist.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

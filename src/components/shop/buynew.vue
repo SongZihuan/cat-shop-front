@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { ElMessage } from "element-plus"
-import {apiPostAliNewPay, apiPostAliNewPayWithShop, LocationForUser, apiPostWechatNewPay, apiPostWechatNewPayWithShop} from "#/center/pay"
+import {
+  apiPostAliNewPay,
+  apiPostAliNewPayWithShop,
+  LocationForUser,
+  apiPostWechatNewPay,
+  apiPostWechatNewPayWithShop,
+} from "#/center/pay"
 import {Wupin} from "@/store/hotwupin"
 import useUserStore from "@/store/user"
 import {isEmail, isMobile} from "@/utils/str"
 import {getFacePrice, getTotalPrice} from "@/utils/price"
 import {ShopRecord} from "#/center/shoppingbag"
+import {PAY_ERROR, PAY_FAIL, PAY_SUCCESS} from "@/winmsg/pay";
+import timeoutP from "ccz/timeout"
+
+const router = useRouter()
 
 const wupin = ref({} as Wupin)
 const num = ref(1 as number)
@@ -20,6 +30,18 @@ const totalPrice = computed(() => {
 
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * max)
+}
+
+const resetForm = () => {
+  form.value = {
+    password: "",
+    name: userStore.user.name,
+    phone: userStore.user.phone,
+    location: userStore.user.location,
+    wechat: userStore.user?.wechat,
+    email: userStore.user?.email,
+    remark: "",
+  }
 }
 
 const a = ref(getRandomInt(10))
@@ -58,113 +80,295 @@ const emailCheck = computed(() => {
 })
 const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkName.value && checkLocation.value && phoneCheck.value && emailCheck.value)
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const doAliPay = () => {
-  const location = {
-    name: form.value.name,
-    phone: form.value.phone,
-    location: form.value.location,
-  } as LocationForUser
-
-  if (shoprecord.value) {
-    return apiPostAliNewPayWithShop(window.location.href, shoprecord.value, location).then((res) => {
-      if (!res.data.data.url) {
-        ElMessage({
-          type: "error",
-          message: "支付失败，请重试",
-        })
-      } else {
-        close()
-        window.location.href = res.data.data.url
-      }
-    })
+  const isLoading = ref(false)
+  const onBeforeClose = (done: ()=>void) => {
+    if (isLoading.value) {
+      return
+    }
+    done()
   }
 
-  return apiPostAliNewPay(window.location.href, wupin.value, num.value, location).then((res) => {
-    if (!res.data.data.url) {
+  const doAliPayWithRequests = async (res) => {
+    if (!res.data.data.success || !res.data.data.url) {
       ElMessage({
         type: "error",
-        message: "支付失败，请重试",
+        message: "尝试支付失败1",
       })
-    } else {
-      close()
-      window.location.href = res.data.data.url
+      return Promise.reject(1)
     }
-  })
-}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let redirect = res.data.data.url as string | undefined
+    const recordId = parseInt(res.data.data.recordId)
+
+    if (recordId === 0) {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败2",
+      })
+      return Promise.reject(2)
+    }
+
+    if (typeof redirect !== "string") {
+      return Promise.reject(3)
+    } else if (redirect.startsWith("https://") || redirect.startsWith("http://")) {
+      // 没问题
+    } else if (redirect.startsWith("/")) {
+      redirect = window.location.origin + redirect
+    } else {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败3",
+      })
+      return Promise.reject(3)
+    }
+
+    let redirectOrigin = ""
+    try {
+      const redirectUrl = new URL(redirect)
+      if (redirectUrl.searchParams.has("ishref")) {
+        ElMessage({
+          type: "error",
+          message: "尝试支付失败4",
+        })
+        return Promise.reject(4)
+      }
+      redirectOrigin = redirectUrl.origin
+    } catch (e) {
+      return Promise.reject(4)
+    }
+
+    window.open(redirect)
+
+    let handleFinish = false
+    const handle = (event) => {
+      if (event.origin !== redirectOrigin) {
+        return
+      }
+
+      const eventType = event.data.event
+      const eventData = event.data.data
+
+      if (eventType === PAY_ERROR) {
+        ElMessage({
+          type: "error",
+          message: "交易系统异常",
+        })
+      } else if (eventType === PAY_FAIL) {
+        ElMessage({
+          type: "error",
+          message: "交易失败",
+        })
+      } else if (eventType === PAY_SUCCESS) {
+        const url = eventData.redirect
+        if (url && (url.startsWith("https://") || url.startsWith("http://"))) {
+          window.location.href = url
+        } else if (url && url.startsWith("/")) {
+          window.location.href = window.location.origin + url
+        } else if (recordId !== 0) {
+          ElMessage({
+            type: "success",
+            message: "交易完成",
+          })
+
+          router.push({
+            path: "/user/center/buyrecord",
+            query: {
+              id: recordId,
+            }
+          })
+        } else {
+          ElMessage({
+            type: "error",
+            message: "尝试支付失败",
+          })
+        }
+      } else {
+        ElMessage({
+          type: "error",
+          message: "交易系统异常",
+        })
+      }
+
+      handleFinish = true
+    }
+
+    window.addEventListener('message', handle)
+
+    for (let i = 0; i < 30; i++) {
+      await timeoutP(1000)
+      if (handleFinish) {
+        break
+      }
+    }
+
+    if (!handleFinish) {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败",
+      })
+      Promise.reject(6)
+    }
+
+    window.removeEventListener('message', handle)
+
+    return Promise.resolve(5)
+  }
+
+  const _doAliPay = () => {
+    const location = {
+      name: form.value.name,
+      phone: form.value.phone,
+      location: form.value.location,
+    } as LocationForUser
+
+    if (shoprecord.value) {
+      // window open 测试无redirect直接跳转
+      return apiPostAliNewPayWithShop(shoprecord.value, location)
+    }
+
+    // window open 测试有redirect直接跳转
+    return apiPostAliNewPay(window.location.href, wupin.value, num.value, location)
+  }
+
+  const doAliPay = () => {
+    startLoading()
+    _doAliPay().then((res) => doAliPayWithRequests(res)).then(() => stopLoadingSuccess()).catch(() => stopLoadingFail()).finally(() => stopLoadingFail())
+  }
+
+  const doWechatPayRequests = (res) => {
+    if (!res.data.data.success || !res.data.data.url) {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败1",
+      })
+      return Promise.reject(1)
+    }
+
+    let redirect = res.data.data.url as string | undefined
+    const recordId = parseInt(res.data.data.recordId)
+    if (recordId === 0) {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败2",
+      })
+      return Promise.reject(2)
+    }
+
+    if (typeof redirect !== "string") {
+      return Promise.reject(3)
+    } else if (redirect.startsWith("https://") || redirect.startsWith("http://")) {
+      // 没问题
+    } else if (redirect.startsWith("/")) {
+      redirect = window.location.origin + redirect
+    } else {
+      ElMessage({
+        type: "error",
+        message: "尝试支付失败3",
+      })
+      return Promise.reject(3)
+    }
+
+    let redirectUrl: URL | null = null
+    try {
+      redirectUrl = new URL(redirect)
+      if (redirectUrl.searchParams.has("ishref")) {
+        ElMessage({
+          type: "error",
+          message: "尝试支付失败4",
+        })
+        return Promise.reject(4)
+      }
+    } catch (e) {
+      return Promise.reject(4)
+    }
+
+    redirectUrl.searchParams.set("ishref", "true")
+    window.location.href = redirectUrl.href
+
+    return Promise.resolve()
+  }
+
+  const _doWeChatPay = () => {
+    const location = {
+      name: form.value.name,
+      phone: form.value.phone,
+      location: form.value.location,
+    } as LocationForUser
+
+    if (shoprecord.value) {
+      // window open 测试无redirect直接跳转
+      return apiPostWechatNewPayWithShop(shoprecord.value, location)
+    }
+
+    // window open 测试有redirect直接跳转
+    return apiPostWechatNewPay(window.location.href, wupin.value, num.value, location)
+  }
+
 const doWeChatPay = () => {
-  const location = {
-    name: form.value.name,
-    phone: form.value.phone,
-    location: form.value.location,
-  } as LocationForUser
-
-  if (shoprecord.value) {
-    return apiPostWechatNewPayWithShop(window.location.href, shoprecord.value, location).then((res) => {
-      if (!res.data.data.url) {
-        ElMessage({
-          type: "error",
-          message: "支付失败，请重试",
-        })
-      } else {
-        close()
-        window.location.href = res.data.data.url
-      }
-    })
-  }
-
-  return apiPostWechatNewPay(window.location.href, wupin.value, num.value, location).then((res) => {
-    if (!res.data.data.url) {
-      ElMessage({
-        type: "error",
-        message: "支付失败，请重试",
-      })
-    } else {
-      close()
-      window.location.href = res.data.data.url
-    }
-  })
+  startLoading()
+  _doWeChatPay().then((res) => doWechatPayRequests(res)).then(() => stopLoadingSuccess()). catch(() => stopLoadingFail()). finally(() => stopLoadingFail())
 }
 
-const open = (wp: Wupin, n: number) => {
-  if (!wp || wp.id === 0) {
-    return
-  } else if (n < 1) {
-    return
-  }
-  
-  wupin.value = wp
-  num.value = n
-  shoprecord.value = null
-  
+const open = () => {
+  resetForm()
   resetCode()
   model.value = true
 }
 
-const close = () => {
-  model.value = false
+const openWithNew = (wp: Wupin, n: number): boolean => {
+  if (!wp || wp.id === 0) {
+    return false
+  } else if (n < 1) {
+    return false
+  }
+
+  wupin.value = wp
+  num.value = n
+  shoprecord.value = null
+
+  open()
+  return true
 }
 
-const openWithShop = (record: ShopRecord) => {
+const openWithShop = (record: ShopRecord): boolean => {
   if (!record || !record.wupin || record.wupin.id === 0) {
-    return
-  } else if (record.num < 1) {
-    return
+    return false
+  } else if (record.num <= 0) {
+    return false
   }
 
   wupin.value = record.wupin
   num.value = record.num
   shoprecord.value = record
 
-  resetCode()
-  model.value = true
+  open()
+  return true
+}
+
+const startLoading = () => {
+  if (model.value) {
+    isLoading.value = true
+  }
+}
+
+const stopLoadingSuccess = () => {
+  isLoading.value = false
+  model.value = false
+}
+
+const stopLoadingFail = () => {
+  isLoading.value = false
+}
+
+const close = () => {
+  if (isLoading.value) {
+    model.value = true
+  }
 }
 
 defineExpose({
   openWithShop,
-  open,
+  openWithNew,
   close,
 })
 
@@ -175,16 +379,18 @@ defineExpose({
       v-model="model"
       width="25%"
       destroy-on-close
+      :before-close="onBeforeClose"
   >
     <template #title>
       <div style="width: 100%; display: flex; justify-content: center">
         <el-text style="font-size: 1vw">
           在线购买
+          {{ isLoading }} {{ model }}
         </el-text>
       </div>
     </template>
 
-    <div style="width: 100%; display: flex; justify-content: center">
+    <div v-loading="isLoading" style="width: 100%; display: flex; justify-content: center">
       <div>
         <div class="repay_box">
           <div class="repay_info">
@@ -286,11 +492,11 @@ defineExpose({
         </div>
         <div style="width: 15vw; margin-top: 5px; display: flex; justify-content: center">
           <el-button-group>
-            <el-button type="info">取消支付</el-button>
-            <el-button :disabled="!allCheck" type="primary" @click="doAliPay">
+            <el-button :disabled="isLoading" type="info">取消支付</el-button>
+            <el-button :disabled="!allCheck || isLoading" type="primary" @click="doAliPay">
               支付宝支付
             </el-button>
-            <el-button :disabled="!allCheck" type="success" @click="doWeChatPay">
+            <el-button :disabled="!allCheck || isLoading" type="success" @click="doWeChatPay">
               微信支付
             </el-button>
           </el-button-group>
@@ -324,6 +530,7 @@ defineExpose({
       </div>
     </div>
   </el-dialog>
+  <div></div>
 </template>
 
 <style scoped lang="scss">

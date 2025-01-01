@@ -17,20 +17,10 @@ export const shoprecordId = buyRecordId
 export const redirect = "redirect"
 export const paytype = "paytype"
 
-export interface AliRepayData {
-    url: string
-}
-
-export interface WechatRepayData {
-    url: string
-}
-
-export interface AliPayData {
-    url: string
-}
-
-export interface WechatPayData {
-    url: string
+export interface PayData {
+    url?: string
+    recordId?: number
+    success: boolean
 }
 
 export interface LocationForUser {
@@ -43,12 +33,14 @@ export interface LocationForUser {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<AliPayData> => {
+export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
-                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(alipay) + `&${wupinId}=` + encodeURIComponent(wupin.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(newpay),
+                success: true,
+                recordId: 2,
+                url: window.location.protocol + "//127.0.0.1:" + window.location.port + testPayPath + `?${type}=` + encodeURIComponent(alipay) + `&${wupinId}=` + encodeURIComponent(wupin.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(newpay),
             }
         },
         status: 200,
@@ -56,12 +48,15 @@ export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<WechatPayData> => {
+export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
-                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(wechat) + `&${wupinId}=` + encodeURIComponent(wupin.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(newpay),
+                success: true,
+                recordId: 2,
+                // 测试不同源
+                url: window.location.protocol + "//127.0.0.1:" + window.location.port + testPayPath + `?${type}=` + encodeURIComponent(wechat) + `&${wupinId}=` + encodeURIComponent(wupin.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(newpay),
             }
         },
         status: 200,
@@ -69,12 +64,14 @@ export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: numbe
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostAliNewPayWithShop = (redirectTo: string, shoprecord: ShopRecord, location: LocationForUser): Result<AliPayData> => {
+export const apiPostAliNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
-                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(alipay) + `&${shoprecordId}=` + encodeURIComponent(shoprecord.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(shoppingbagpay),
+                success: true,
+                recordId: 2,
+                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(alipay) + `&${shoprecordId}=` + encodeURIComponent(shoprecord.id) + `&${paytype}=` + encodeURIComponent(shoppingbagpay),
             }
         },
         status: 200,
@@ -82,23 +79,27 @@ export const apiPostAliNewPayWithShop = (redirectTo: string, shoprecord: ShopRec
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostWechatNewPayWithShop = (redirectTo: string, shoprecord: ShopRecord, location: LocationForUser): Result<WechatPayData> => {
+export const apiPostWechatNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
-                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(wechat) + `&${shoprecordId}=` + encodeURIComponent(shoprecord.id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(shoppingbagpay),
+                success: true,
+                recordId: 2,
+                url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(wechat) + `&${shoprecordId}=` + encodeURIComponent(shoprecord.id) + `&${paytype}=` + encodeURIComponent(shoppingbagpay),
             }
         },
         status: 200,
     })
 }
 
-export const apiPostAliRepay = (id: number, redirectTo: string): Result<AliRepayData> => {
+export const apiPostAliRepay = (id: number, redirectTo: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
+                success: true,
+                recordId: 2,
                 url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(alipay) + `&${buyRecordId}=` + encodeURIComponent(id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(repay),
             }
         },
@@ -106,11 +107,13 @@ export const apiPostAliRepay = (id: number, redirectTo: string): Result<AliRepay
     })
 }
 
-export const apiPostWechatRepay = (id: number, redirectTo: string): Result<WechatRepayData> => {
+export const apiPostWechatRepay = (id: number, redirectTo: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
             data: {
+                success: true,
+                recordId: 2,
                 url: window.location.origin + testPayPath + `?${type}=` + encodeURIComponent(wechat) + `&${buyRecordId}=` + encodeURIComponent(id) + `&${redirect}=` + encodeURIComponent(redirectTo) + `&${paytype}=` + encodeURIComponent(repay),
             }
         },

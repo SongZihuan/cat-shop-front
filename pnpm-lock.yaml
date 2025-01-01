@@ -26,6 +26,9 @@ dependencies:
   axios:
     specifier: ^1.3.6
     version: 1.3.6
+  ccz:
+    specifier: ^0.1.0
+    version: 0.1.0
   crypto-es:
     specifier: 1.2.7
     version: 1.2.7
@@ -1422,6 +1425,10 @@ packages:
   /caniuse-lite@1.0.30001687:
     resolution: {integrity: sha512-0S/FDhf4ZiqrTUiQ39dKeUjYRjkv7lOZU1Dgif2rIqrTzX/1wV2hfKu9TOm1IHkdSijfLswxTFzl/cvir+SLSQ==}
     dev: true
+
+  /ccz@0.1.0:
+    resolution: {integrity: sha512-adrf07gpCfU6Fj00IiKgCk2gYils1zauhc2j0DBDLus+IrlM3bZ1P4QVTuhnecJDz5i6c6oZ+X0nLVuZOtU3kw==}
+    dev: false
 
   /chalk@4.1.2:
     resolution: {integrity: sha512-oKnbhFyRIXpUuez8iBMmyEa4nbj4IOQyuhc/wy9kY7/WVPcwIO9VA668Pu8RkO7+0G76SLROeyw9CpQ061i4mA==}
