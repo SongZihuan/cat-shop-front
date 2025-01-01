@@ -11,7 +11,7 @@ import {
 } from "#/center/user"
 
 export const UserTypeList = {
-    1: "",//无显示
+    1: "普通客户",//无显示
     2: "管理员",
     3: "根管理员",
 }

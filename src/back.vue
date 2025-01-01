@@ -8,6 +8,7 @@ import {AdminClass, apiAdminGetClass} from "#/admin/class"
 import {AdminBuyRecord as AdminBuyRecordData, apiAdminGetBuyRecordInfo} from "#/admin/buyrecord"
 import {MenuItemRegistered} from "element-plus"
 import pushTo from "@/views/admin/router_push";
+import useUserStore, {UserTypeList} from "@/store/user";
 
 const router = useRouter()
 const route = useRoute()
@@ -53,6 +54,7 @@ watch(() => route.path, changePage)
 changePage()
 
 const userAdminStore = useAdminUserStore()
+const userStore = useUserStore()
 
 const userId = ref(0)
 const user = ref(null as AdminUser | null)
@@ -165,6 +167,22 @@ const onClick = (event: MenuItemRegistered) => {
   const path = basePath + "/" + (event.index || "admin/user/list")
   pushTo(router, route, path)
 }
+
+const userNaame = computed(() => userStore?.user?.name || "未知用户")
+const userPhone = computed(() => userStore?.user?.phone || "000-0000-0000")
+const userType = computed(() => userStore?.user?.type || 1)
+const userTypeName = computed(() => UserTypeList?.[userType.value] || "普通用户")
+
+const waterMarkFont = reactive({
+  color: 'rgba(0, 0, 0, 0.20)',
+  fontSize: 20,
+})
+
+const waterMarkContent = ref(computed(() => [
+  userNaame.value, userPhone.value, userTypeName.value
+]))
+
+const waterMarkGap = ref([120, 150] as [number, number])
 
 </script>
 
@@ -285,15 +303,15 @@ const onClick = (event: MenuItemRegistered) => {
           </el-menu>
         </el-scrollbar>
       </div>
-      <div class="main">
-        <div class="main_middle">
-          <div class="main_inner">
-            <div class="inner_child">
-              <router-view />
+        <div class="main">
+          <div class="main_middle">
+            <div class="main_inner">
+              <el-watermark :font="waterMarkFont" :content="waterMarkContent" :rotate="-22" :gap="waterMarkGap" class="inner_child">
+                <router-view />
+              </el-watermark>
             </div>
           </div>
         </div>
-      </div>
     </div>
   </BaseBack>
   <div v-else></div>

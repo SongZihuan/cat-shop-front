@@ -56,6 +56,7 @@ declare module '@vue/runtime-core' {
     ElText: typeof import('element-plus/es')['ElText']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
+    ElWatermark: typeof import('element-plus/es')['ElWatermark']
     Footer: typeof import('./src/components/system/footer.vue')['default']
     Header: typeof import('./src/components/system/header.vue')['default']
     Headeradmin: typeof import('./src/components/system/headeradmin.vue')['default']
