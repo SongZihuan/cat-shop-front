@@ -421,7 +421,7 @@ defineExpose({
       width="25%"
       destroy-on-close
       :before-close="onBeforeClose"
-      top="5vh"
+      top="4vh"
   >
     <template #title>
       <div style="width: 100%; display: flex; justify-content: center">
