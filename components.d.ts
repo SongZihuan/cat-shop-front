@@ -63,6 +63,7 @@ declare module '@vue/runtime-core' {
     Shoppingbag: typeof import('./src/components/center/shoppingbag.vue')['default']
     Usertitleadmin: typeof import('./src/components/system/usertitleadmin.vue')['default']
     Usertitlecenter: typeof import('./src/components/system/usertitlecenter.vue')['default']
+    VanList: typeof import('vant/es')['List']
     Wechat: typeof import('./src/components/system/wechat.vue')['default']
     Wupinitem: typeof import('./src/components/shop/wupinitem.vue')['default']
     Wupinlist: typeof import('./src/components/shop/wupinlist.vue')['default']

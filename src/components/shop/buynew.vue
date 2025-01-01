@@ -306,7 +306,7 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
 
 const doWeChatPay = () => {
   startLoading()
-  _doWeChatPay().then((res) => doWechatPayRequests(res)).then(() => stopLoadingSuccess()). catch(() => stopLoadingFail()). finally(() => stopLoadingFail())
+  _doWeChatPay().then((res) => doWechatPayRequests(res)).finally(() => stopLoadingFailTimeout())
 }
 
 const open = () => {
@@ -358,6 +358,13 @@ const stopLoadingSuccess = () => {
 
 const stopLoadingFail = () => {
   isLoading.value = false
+}
+
+const stopLoadingFailTimeout = (t: number = 1500) => {
+  setTimeout(() => {
+    isLoading.value = false
+    model.value = false
+  }, t)
 }
 
 const close = () => {

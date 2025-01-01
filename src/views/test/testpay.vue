@@ -40,7 +40,63 @@ import {EventMsg} from "@/winmsg/winmsg";
     paytypename.value = "网络商品下单"
   }
 
-  const goSafeRedirect = (redirectPath: string | null | undefined = ""): boolean => {
+const goSafeRedirectBack = (redirectPath: string | null | undefined = ""): boolean => {
+  if (redirectPath) {
+    redirectPath = route.query[redirect] as unknown as string || ""
+  }
+
+  if (typeof redirectPath !== "string") {
+    redirectPath = ""
+  } else if (redirectPath.length === 0) {
+    if (redirectPath.startsWith("https://") || redirectPath.startsWith("https://")) {
+      // 没问题
+    } else if (redirectPath.startsWith("/")) {
+      redirectPath = window.location.origin + redirectPath
+    } else {
+      redirectPath = ""
+    }
+  } else {
+    redirectPath = ""
+  }
+
+  if (isHrefMode.value) {
+    if (redirectPath === "") {
+      if (safeGoBack(PAY_SUCCESS, {
+        redirect: "",
+        recordId: recordId.value,
+      }, false)) {
+        return true
+      }
+    } else {
+      window.location.href = redirectPath
+      return true
+    }
+  }
+
+  if (window.opener) {
+    window.opener.postMessage({
+      event: PAY_SUCCESS,
+      data: {
+        redirect: redirectPath,
+        recordId: recordId.value,
+      }
+    } as EventMsg, "*")
+
+    window.close()
+    return true
+  }
+
+  if (safeGoBack(PAY_SUCCESS, {
+    redirect: redirectPath,
+    recordId: recordId.value,
+  }, false)) {
+    return true
+  }
+
+  return false
+}
+
+  const goSafeRedirectFront = (redirectPath: string | null | undefined = "") => {
     if (redirectPath) {
       redirectPath = route.query[redirect] as unknown as string || ""
     }
@@ -64,13 +120,20 @@ import {EventMsg} from "@/winmsg/winmsg";
         if (safeGoBack(PAY_SUCCESS, {
           redirect: "",
           recordId: recordId.value,
-        })) {
-          return true
+        }, true)) {
+          // 可以
+        } else {
+          router.push({
+            path: "/user/center/buyrecord",
+            query: {
+              id: recordId.value,
+            }
+          })
         }
       } else {
         window.location.href = redirectPath
-        return true
       }
+      return
     }
 
     if (window.opener) {
@@ -83,22 +146,28 @@ import {EventMsg} from "@/winmsg/winmsg";
       } as EventMsg, "*")
 
       window.close()
-      return true
+      return
     }
 
     if (safeGoBack(PAY_SUCCESS, {
       redirect: redirectPath,
       recordId: recordId.value,
-    })) {
-      return true
+    }, true)) {
+      return
     }
 
-    return false
+    router.push({
+      path: "/user/center/buyrecord",
+      query: {
+        id: recordId.value,
+      }
+    })
   }
   
-  const safeGoBack = (eventType: string = PAY_FAIL, eventData: any = undefined): boolean => {
-    if (window.history.length > 1) {
+  const safeGoBack = (eventType: string = PAY_FAIL, eventData: any = undefined, notHistory: boolean = false): boolean => {
+    if (window.history.length > 1 && !notHistory) {
       window.history.go(-1)
+      return true
     } else if (document.referrer) {
       const backUrl = new URL(document.referrer)
   
@@ -120,28 +189,21 @@ import {EventMsg} from "@/winmsg/winmsg";
   
     return false
   }
-  
-  const goRedirectAsFront = (redirectPath: string = "") => {
-    if (goSafeRedirect(redirectPath)) {
-      return
-    }
 
-    router.push({
-      path: "/user/shop/home"
-    })
+const goRedirect = () => {
+  if (backevent.value) {
+    goRedirectAsBack()
+  } else {
+    goRedirectAsFront()
   }
+}
 
-  const goRedirect = () => {
-    if (backevent.value) {
-      goRedirectAsBack()
-    } else {
-      goRedirectAsFront()
-    }
+  const goRedirectAsFront = (redirectPath: string = "") => {
+    goSafeRedirectFront(redirectPath)
   }
 
   const goRedirectAsBack = () => {
-    console.log("TAG go back", backdata.value)
-    if (goSafeRedirect(backdata.value.redirect)) {
+    if (goSafeRedirectBack(backdata.value.redirect)) {
       // 正常
     } else if (backdata.value.recordId !== 0) {
       router.push({
