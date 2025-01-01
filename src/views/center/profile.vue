@@ -78,7 +78,7 @@ import {apiGetUserBuyRecordLst} from "@/api/simulation/center/buyrecord"
       title: '支付提示',
       message: '支付失败，请尝试重新支付',
       type: 'warning',
-      duration: 0,
+      duration: 5000,
       position: 'top-left',
     })
   }

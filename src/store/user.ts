@@ -60,6 +60,11 @@ export const hasLoad = () => {
     return typeof userStore.user === "object" && Object.keys(userStore.user).length > 0
 }
 
+export const getPasswordHsh = async (password: string) => {
+    const configStore = useConfigStore()
+    return await sha256((`${configStore.config?.passwordfronthash}::${password}>>`))
+}
+
 const useUserStore = defineStore("userStore", () => {
     const user = ref({} as User)
 
@@ -142,8 +147,6 @@ const useUserStore = defineStore("userStore", () => {
     }
 
     const register = async (phone1: string, password: string) => {
-        const configStore = useConfigStore()
-
         if (isLogin()) {
             return Promise.reject("已登录")
         }
@@ -156,7 +159,7 @@ const useUserStore = defineStore("userStore", () => {
             return Promise.reject()
         }
 
-        const passwordHash = await sha256((`${configStore.config?.passwordfronthash}::${password}>>`))
+        const passwordHash = await getPasswordHsh(password)
 
         apiPostRegisterGetXToken(phone1, passwordHash).then((res) => {
             if (!res.data.data.xtoken || !res.data.data.success) {

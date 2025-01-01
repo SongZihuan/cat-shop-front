@@ -2,7 +2,7 @@
 import {BuyRecord as BuyRecordData} from "#/center/buyrecord"
 import {formatDate} from "@/utils/time"
 import {ElNotification} from "element-plus"
-import {apiPostAliRepay, apiPostWechatRepay, LocationForUser} from "#/center/pay"
+import {LocationForUser} from "#/center/pay"
 import { ElMessageBox, ElMessage } from 'element-plus'
 import {
   apiPostGouWuPingJia,
@@ -16,6 +16,7 @@ import useUserStore from "@/store/user"
 import {isEmail, isMobile} from "@/utils/str"
 import useConfigStore from "@/store/config"
 import {AdminBuyRecordStatus} from "#/admin/buyrecord"
+import BuyNew from "@/components/shop/buynew.vue";
 
 const configStore = useConfigStore()
 const router = useRouter()
@@ -52,7 +53,7 @@ onMounted(() => {
       title: '支付提示',
       message: '支付失败，请尝试重新支付',
       type: 'warning',
-      duration: 0,
+      duration: 5000,
       position: 'top-left',
     })
   }
@@ -131,23 +132,6 @@ const answer = computed(() => a.value + b.value)
 const question = computed(() => `${a.value} + ${b.value}`)
 const codeCheck = computed(() => Number(code.value).valueOf() === answer.value)
 
-const repayModel = ref(false)
-const repayForm = ref({
-  password: "",
-})
-
-const repayPasswordCheck = computed(() => repayForm.value.password && repayForm.value.password.length > 0)// 登录阶段不检查密码
-const repayAllCheck = computed(() => codeCheck.value && repayPasswordCheck.value)
-
-const startRepay = () => {
-  if (!record.value || record.value.status !== 2) {
-    return
-  }
-
-  resetCode()
-  repayModel.value = true
-}
-
 const stopRepay = () => {
   ElMessageBox.confirm(
       '你尚未支付成功，是否取消支付？',
@@ -175,42 +159,21 @@ const stopRepay = () => {
   })
 }
 
-const doAliRepay = () => {
-  if (!record.value || record.value.status !== 2) {
+const byn = ref(null as any)
+const startRepay = () => {
+  if (!byn.value) {
+    ElMessage({
+      type: 'warning',
+      message: "系统出现了问题，请重试。"
+    })
     return
   }
 
-  return apiPostAliRepay(record.value.id, window.location.href).then((res) => {
-    if (!res.data.data.url) {
-      ElMessage({
-        type: "error",
-        message: "支付失败，请重试",
-      })
-      emits("reload")
-    } else {
-      repayModel.value = false
-      window.location.href = res.data.data.url
-    }
-  })
-}
-
-const doWeChatRepay = () => {
-  if (!record.value || record.value.status !== 2) {
+  if (record.value.num <= 0) {
     return
   }
 
-  return apiPostWechatRepay(record.value.id, window.location.href).then((res) => {
-    if (!res.data.data.url) {
-      ElMessage({
-        type: "error",
-        message: "支付失败，请重试",
-      })
-      emits("reload")
-    } else {
-      repayModel.value = false
-      window.location.href = res.data.data.url
-    }
-  })
+  byn.value.openWithRepay(record.value)
 }
 
 const confirmDaohuo = () => {
@@ -809,86 +772,7 @@ const infoBox = ref<HTMLElement>()
       </template>
     </el-result>
   </div>
-  <el-dialog
-      v-model="repayModel"
-      width="25%"
-      destroy-on-close
-  >
-    <template #title>
-      <div style="width: 100%; display: flex; justify-content: center">
-        <el-text style="font-size: 1vw">
-          重新支付订单
-        </el-text>
-      </div>
-    </template>
-
-    <div style="width: 100%; display: flex; justify-content: center">
-      <div>
-        <div class="repay_box">
-          <div class="repay_info">
-            <el-text>
-              购买数量：{{ record.num }} 件
-            </el-text>
-          </div>
-          <div class="repay_info">
-            <el-text>
-              商品单价：￥{{ ((record.price / 100).toFixed(2)) }}
-            </el-text>
-          </div>
-          <div class="repay_info">
-            <el-text class="pay_price">
-              付款金额：￥{{ ((record.totalPrice / 100).toFixed(2)) }}
-            </el-text>
-          </div>
-        </div>
-        <el-divider style="margin-top: 30px"></el-divider>
-        <div>
-          <el-form :model="repayForm" label-width="auto" style="width: 15vw">
-            <el-form-item>
-              <template #label>
-                <el-text>账号密码</el-text>
-              </template>
-              <el-input v-model="repayForm.password" type="password" show-password clearable />
-            </el-form-item>
-            <el-form-item>
-              <template #label>
-                <el-text>验证码</el-text>
-              </template>
-              <el-input v-model="code" clearable>
-                <template #append>
-                  <el-text>
-                    {{ question }}
-                  </el-text>
-                </template>
-              </el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div style="width: 15vw; margin-top: 5px; display: flex; justify-content: center">
-          <el-button-group>
-            <el-button type="info" @click="repayModel = false">取消支付</el-button>
-            <el-button :disabled="!repayAllCheck" type="primary" @click="doAliRepay">
-              支付宝支付
-            </el-button>
-            <el-button :disabled="!repayAllCheck" type="success" @click="doWeChatRepay">
-              微信支付
-            </el-button>
-          </el-button-group>
-        </div>
-        <div style="width: 15vw; margin-top: 5px">
-          <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-          <div v-if="!repayPasswordCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入密码！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-        </div>
-      </div>
-    </div>
-  </el-dialog>
-
+  <BuyNew ref="byn"></BuyNew>
   <el-dialog
       v-model="tuihuoDengjiModel"
       width="25%"
@@ -901,7 +785,6 @@ const infoBox = ref<HTMLElement>()
         </el-text>
       </div>
     </template>
-
     <div style="width: 100%; display: flex; justify-content: center">
       <div>
         <div class="location_info">

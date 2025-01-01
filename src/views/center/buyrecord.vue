@@ -11,6 +11,7 @@ const record = ref(null as BuyRecordData | null)
 const reload = () => {
   apiGetBuyRecordInfo(recordId.value as number).then((res) => {
     record.value = res.data.data as BuyRecordData
+    record.value.status = 2
   }).catch(() => {
     router.push({
       path: "/system/error",

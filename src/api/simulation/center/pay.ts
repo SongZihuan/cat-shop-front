@@ -33,7 +33,7 @@ export interface LocationForUser {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<PayData> => {
+export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
@@ -48,7 +48,7 @@ export const apiPostAliNewPay = (redirectTo: string, wupin: Wupin, num: number, 
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser): Result<PayData> => {
+export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: number, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
@@ -64,7 +64,7 @@ export const apiPostWechatNewPay = (redirectTo: string, wupin: Wupin, num: numbe
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostAliNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser): Result<PayData> => {
+export const apiPostAliNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
@@ -79,7 +79,7 @@ export const apiPostAliNewPayWithShop = (shoprecord: ShopRecord, location: Locat
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const apiPostWechatNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser): Result<PayData> => {
+export const apiPostWechatNewPayWithShop = (shoprecord: ShopRecord, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
@@ -93,7 +93,8 @@ export const apiPostWechatNewPayWithShop = (shoprecord: ShopRecord, location: Lo
     })
 }
 
-export const apiPostAliRepay = (id: number, redirectTo: string): Result<PayData> => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const apiPostAliRepay = (id: number, redirectTo: string, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,
@@ -107,7 +108,8 @@ export const apiPostAliRepay = (id: number, redirectTo: string): Result<PayData>
     })
 }
 
-export const apiPostWechatRepay = (id: number, redirectTo: string): Result<PayData> => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const apiPostWechatRepay = (id: number, redirectTo: string, location: LocationForUser, password: string): Result<PayData> => {
     return Promise.resolve({
         data: {
             code: 0,

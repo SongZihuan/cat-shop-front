@@ -5,21 +5,22 @@ import {
   apiPostAliNewPayWithShop,
   LocationForUser,
   apiPostWechatNewPay,
-  apiPostWechatNewPayWithShop,
+  apiPostWechatNewPayWithShop, apiPostAliRepay, apiPostWechatRepay,
 } from "#/center/pay"
 import {Wupin} from "@/store/hotwupin"
-import useUserStore from "@/store/user"
-import {isEmail, isMobile} from "@/utils/str"
+import useUserStore, {getPasswordHsh} from "@/store/user"
 import {getFacePrice, getTotalPrice} from "@/utils/price"
 import {ShopRecord} from "#/center/shoppingbag"
 import {PAY_ERROR, PAY_FAIL, PAY_SUCCESS} from "@/winmsg/pay";
 import timeoutP from "ccz/timeout"
+import {BuyRecord} from "#/center/buyrecord";
 
 const router = useRouter()
 
 const wupin = ref({} as Wupin)
 const num = ref(1 as number)
 const shoprecord = ref({} as ShopRecord | null)
+const buyrecord = ref({} as BuyRecord | null)
 
 const facePrice = computed(() => {
   return getFacePrice(wupin.value?.hotPrice, wupin.value?.realPrice)
@@ -68,17 +69,8 @@ const form = ref({
   remark: "",
 })
 
-const checkLocation = computed(() => form.value.location && form.value.location.length > 0)
-const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
 const passwordCheck = computed(() => form.value.password && form.value.password.length > 0)// 登录阶段不检查密码
-const phoneCheck = computed(() => isMobile(form.value.phone))
-const emailCheck = computed(() => {
-  if (!form.value.email) {
-    return true
-  }
-  return isEmail(form.value.email)
-})
-const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkName.value && checkLocation.value && phoneCheck.value && emailCheck.value)
+const allCheck = computed(() => passwordCheck.value && codeCheck.value)
 
   const isLoading = ref(false)
   const onBeforeClose = (done: ()=>void) => {
@@ -214,20 +206,24 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
     return Promise.resolve(5)
   }
 
-  const _doAliPay = () => {
+  const _doAliPay = async () => {
     const location = {
       name: form.value.name,
       phone: form.value.phone,
       location: form.value.location,
     } as LocationForUser
 
+    if (buyrecord.value) {
+      return apiPostAliRepay(buyrecord.value.id, window.location.href, location, await getPasswordHsh(form.value.password))
+    }
+
     if (shoprecord.value) {
       // window open 测试无redirect直接跳转
-      return apiPostAliNewPayWithShop(shoprecord.value, location)
+      return apiPostAliNewPayWithShop(shoprecord.value, location, await getPasswordHsh(form.value.password))
     }
 
     // window open 测试有redirect直接跳转
-    return apiPostAliNewPay(window.location.href, wupin.value, num.value, location)
+    return apiPostAliNewPay(window.location.href, wupin.value, num.value, location, await getPasswordHsh(form.value.password))
   }
 
   const doAliPay = () => {
@@ -239,7 +235,7 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
     if (!res.data.data.success || !res.data.data.url) {
       ElMessage({
         type: "error",
-        message: "尝试支付失败1",
+        message: "尝试支付失败",
       })
       return Promise.reject(1)
     }
@@ -249,7 +245,7 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
     if (recordId === 0) {
       ElMessage({
         type: "error",
-        message: "尝试支付失败2",
+        message: "尝试支付失败",
       })
       return Promise.reject(2)
     }
@@ -263,7 +259,7 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
     } else {
       ElMessage({
         type: "error",
-        message: "尝试支付失败3",
+        message: "尝试支付失败",
       })
       return Promise.reject(3)
     }
@@ -274,7 +270,7 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
       if (redirectUrl.searchParams.has("ishref")) {
         ElMessage({
           type: "error",
-          message: "尝试支付失败4",
+          message: "尝试支付失败",
         })
         return Promise.reject(4)
       }
@@ -288,20 +284,25 @@ const allCheck = computed(() => codeCheck.value && passwordCheck.value && checkN
     return Promise.resolve()
   }
 
-  const _doWeChatPay = () => {
+  const _doWeChatPay = async () => {
     const location = {
       name: form.value.name,
       phone: form.value.phone,
       location: form.value.location,
     } as LocationForUser
 
+    if (buyrecord.value) {
+      // window open 测试无redirect直接跳转
+      return apiPostWechatRepay(buyrecord.value.id, window.location.href, location, await getPasswordHsh(form.value.password))
+    }
+
     if (shoprecord.value) {
       // window open 测试无redirect直接跳转
-      return apiPostWechatNewPayWithShop(shoprecord.value, location)
+      return apiPostWechatNewPayWithShop(shoprecord.value, location, await getPasswordHsh(form.value.password))
     }
 
     // window open 测试有redirect直接跳转
-    return apiPostWechatNewPay(window.location.href, wupin.value, num.value, location)
+    return apiPostWechatNewPay(window.location.href, wupin.value, num.value, location, await getPasswordHsh(form.value.password))
   }
 
 const doWeChatPay = () => {
@@ -315,6 +316,8 @@ const open = () => {
   model.value = true
 }
 
+const title = ref("在线购买")
+
 const openWithNew = (wp: Wupin, n: number): boolean => {
   if (!wp || wp.id === 0) {
     return false
@@ -325,13 +328,15 @@ const openWithNew = (wp: Wupin, n: number): boolean => {
   wupin.value = wp
   num.value = n
   shoprecord.value = null
+  buyrecord.value = null
+  title.value = "在线购买"
 
   open()
   return true
 }
 
 const openWithShop = (record: ShopRecord): boolean => {
-  if (!record || !record.wupin || record.wupin.id === 0) {
+  if (!record || !record.wupin || record.wupinId === 0 || record.wupinId !== record.wupin.id) {
     return false
   } else if (record.num <= 0) {
     return false
@@ -340,8 +345,36 @@ const openWithShop = (record: ShopRecord): boolean => {
   wupin.value = record.wupin
   num.value = record.num
   shoprecord.value = record
+  buyrecord.value = null
+  title.value = "在线购买"
 
   open()
+  return true
+}
+
+const openWithRepay = (record: BuyRecord): boolean => {
+  if (!record || !record.wupin || record.wupin.id === 0 || record.nowwupin.id === 0 || record.wupinId !== record.nowwupin.id || record.wupinId !== record.nowwupin.id) {
+    return false
+  } else if (record.num <= 0) {
+    return false
+  }
+
+  wupin.value = record.wupin
+  num.value = record.num
+  shoprecord.value = null
+  buyrecord.value = record
+  title.value = "重新支付"
+
+  open()
+  form.value = {
+    password: "",
+    name: record.user.name,
+    phone: record.user.phone,
+    location: record.user.location,
+    wechat: record.user.wechat || "",
+    email: record.user.email || "",
+    remark: "",
+  }
   return true
 }
 
@@ -376,6 +409,7 @@ const close = () => {
 defineExpose({
   openWithShop,
   openWithNew,
+  openWithRepay,
   close,
 })
 
@@ -387,12 +421,12 @@ defineExpose({
       width="25%"
       destroy-on-close
       :before-close="onBeforeClose"
+      top="5vh"
   >
     <template #title>
       <div style="width: 100%; display: flex; justify-content: center">
         <el-text style="font-size: 1vw">
-          在线购买
-          {{ isLoading }} {{ model }}
+          {{ title }}
         </el-text>
       </div>
     </template>
@@ -439,6 +473,7 @@ defineExpose({
                   minlength="1"
                   show-word-limit
                   clearable
+                  
               />
             </el-form-item>
             <el-form-item>
@@ -475,7 +510,7 @@ defineExpose({
               <template #label>
                 <el-text>备注</el-text>
               </template>
-              <el-input v-model="form.remark"  minlength="0" maxlength="150" show-word-limit type="textarea" :rows="3"/>
+              <el-input v-model="form.remark" minlength="0" maxlength="150" show-word-limit type="textarea" :rows="3"/>
             </el-form-item>
             <el-form-item>
               <template #label>
@@ -499,7 +534,7 @@ defineExpose({
         </div>
         <div style="width: 15vw; margin-top: 5px; display: flex; justify-content: center">
           <el-button-group>
-            <el-button :disabled="isLoading" type="info">取消支付</el-button>
+            <el-button v-if="!allCheck || isLoading" type="info">取消支付</el-button>
             <el-button :disabled="!allCheck || isLoading" type="primary" @click="doAliPay">
               支付宝支付
             </el-button>
@@ -515,22 +550,6 @@ defineExpose({
           </div>
           <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
             <el-alert title="请输入密码！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-          <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-          <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-          <div v-if="!emailCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon>
-            </el-alert>
-          </div>
-          <div v-if="!checkLocation" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的收件地址！" :closable="false" type="warning" center show-icon>
             </el-alert>
           </div>
         </div>

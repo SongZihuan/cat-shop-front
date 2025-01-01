@@ -25,7 +25,7 @@ const changePage = (status: number | string) => {
         title: '支付提示',
         message: '有订单支付失败哦，请尝试重新支付！',
         type: 'warning',
-        duration: 0,
+        duration: 5000,
         position: 'top-left',
       })
     }
