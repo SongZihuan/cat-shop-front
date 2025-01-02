@@ -36,9 +36,7 @@
   }
   onChange()
 
-  const showAvatar = ref(false)
   const avatarUrl = ref('')
-
   const openAvatar = (avatar: string) => {
     if (avatar.length === 0) {
       avatar = configStore.config?.avatar
@@ -53,7 +51,6 @@
     }
 
     avatarUrl.value = avatar
-    showAvatar.value = true
   }
 
   const toInfo = (id: number) => {
@@ -89,7 +86,7 @@
             :disabled="!configStore.config?.avatar || configStore.config.avatar.length === 0"
             @click="openAvatar(row.avatar)"
           >
-            点击查看头像
+            查看头像
           </el-button>
         </template>
       </el-table-column>
@@ -137,18 +134,7 @@
     </div>
   </el-card>
   <div v-else></div>
-
-  <el-dialog v-model="showAvatar" style="height: 50vh; width: 20vw" destroy-on-close>
-    <div style="height: 35vh; width: 100%; display: flex; justify-content: center">
-      <img alt="wechat" style="height: 100%; width: 100%; object-fit: contain" :src="avatarUrl" />
-    </div>
-
-    <template #footer>
-      <div class="dialog-footer" style="height: 10vh">
-        <el-button type="success" @click="showAvatar = false"> 关闭 </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <Showimg v-model="avatarUrl"></Showimg>
 </template>
 
 <style scoped lang="scss"></style>

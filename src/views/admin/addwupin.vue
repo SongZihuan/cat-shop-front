@@ -200,16 +200,13 @@
     newPic.value = null
   }
 
-  const showPic = ref(false)
   const picUrl = ref('')
-
   const openPic = () => {
     if (!newPic.value) {
       return
     }
 
     picUrl.value = URL.createObjectURL((newPic.value as any).raw)
-    showPic.value = true
   }
 
   const showEdit = ref(false)
@@ -394,17 +391,7 @@
   </el-card>
   <div v-else></div>
 
-  <el-dialog v-model="showPic" style="height: 50vh; width: 20vw" destroy-on-close>
-    <div style="height: 35vh; width: 100%; display: flex; justify-content: center">
-      <img alt="wechat" style="height: 100%; width: 100%; object-fit: contain" :src="picUrl" />
-    </div>
-
-    <template #footer>
-      <div class="dialog-footer" style="height: 10vh">
-        <el-button type="success" @click="showPic = false"> 关闭 </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <Showimg v-model="picUrl"></Showimg>
 
   <el-dialog v-model="showEdit" width="40vw">
     <template #header>

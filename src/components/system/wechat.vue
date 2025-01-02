@@ -7,18 +7,41 @@
   const configStore = useConfigStore()
 
   const delayShow = ref(false)
-  const show = ref(false)
   const isAdmin = computed(() => route.meta?.admin === true || route.meta?.rootAdmin === true)
 
+  let closeId: NodeJS.Timeout | number = 0
   onMounted(() => {
     setTimeout(() => {
       delayShow.value = true
 
-      setTimeout(() => {
-        wechatStore.close()
-      }, 10000)
+      closeId === 0 &&
+        (closeId = setTimeout(() => {
+          wechatStore.close()
+        }, 10000))
     }, 2500)
   })
+
+  const picUrl = ref('')
+  const openPic = () => {
+    picUrl.value = configStore.config.wechat
+    closeId >= 0 && clearTimeout(closeId)
+    closeId = -1
+  }
+  watch(
+    () => picUrl.value,
+    () => {
+      if (picUrl.value === '' && closeId === -1) {
+        closeId = setTimeout(() => {
+          wechatStore.close()
+        }, 10000)
+      }
+    }
+  )
+
+  const onClose = () => {
+    closeId >= 0 && clearTimeout(closeId)
+    wechatStore.close()
+  }
 </script>
 
 <template>
@@ -30,12 +53,15 @@
             <el-text class="header_text"> 欢迎了解我！ </el-text>
           </div>
         </template>
-        <div class="wechat_img">
+        <div class="wechat_img" @click="openPic">
           <el-image :src="configStore.config.wechat" fit="contain"> </el-image>
         </div>
         <template #footer>
           <div style="display: flex; justify-content: center">
-            <el-button> 关闭 </el-button>
+            <el-button-group>
+              <el-button type="success" @click="openPic"> 查看 </el-button>
+              <el-button type="warning" @click="onClose"> 关闭 </el-button>
+            </el-button-group>
           </div>
         </template>
       </el-card>
@@ -43,17 +69,7 @@
   </div>
   <div v-else></div>
 
-  <el-dialog v-model="show" style="height: 75vh; width: 30vw">
-    <div style="height: 60vh; width: 100%; display: flex; justify-content: center">
-      <img alt="wechat" style="height: 100%; width: 100%; object-fit: contain" :src="configStore.config?.wechat" />
-    </div>
-
-    <template #footer>
-      <div class="dialog-footer" style="height: 10vh">
-        <el-button type="success" @click="show = false"> 关闭 </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <Showimg v-model="picUrl"></Showimg>
 </template>
 
 <style scoped lang="scss">
