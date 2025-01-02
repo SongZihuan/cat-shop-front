@@ -403,24 +403,6 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'config/httpserver/stop',
-        component: () => import('@/views/admin/stophttpserver.vue'),
-        meta: {
-          title: '服务prize',
-          admin: true,
-          subtitle: '关闭后端Http服务'
-        }
-      },
-      {
-        path: 'config/httpserver/restart',
-        component: () => import('@/views/admin/restarthttpserver.vue'),
-        meta: {
-          title: '服务prize',
-          admin: true,
-          subtitle: '重启后端Http服务'
-        }
-      },
-      {
         path: 'wupin',
         redirect: '/admin/wupin/list'
       },
@@ -514,19 +496,19 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'config/httpserver/stop',
-        component: () => import('@/views/admin/httpserver.vue'),
+        component: () => import('@/views/admin/stophttpserver.vue'),
         meta: {
-          title: '关闭后端Http服务',
-          rootAdmin: true,
+          title: '服务prize',
+          admin: true,
           subtitle: '关闭后端Http服务'
         }
       },
       {
         path: 'config/httpserver/restart',
-        component: () => import('@/views/admin/httpserver.vue'),
+        component: () => import('@/views/admin/restarthttpserver.vue'),
         meta: {
-          title: '重启后端Http服务',
-          rootAdmin: true,
+          title: '服务prize',
+          admin: true,
           subtitle: '重启后端Http服务'
         }
       }

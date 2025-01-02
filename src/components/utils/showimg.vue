@@ -21,7 +21,7 @@
     () => showPic.value,
     () => {
       if (!showPic.value) {
-        console.log("STOP")
+        console.log('STOP')
         emits('update:modelValue', '')
       }
     }
