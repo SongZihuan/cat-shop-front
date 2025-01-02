@@ -254,7 +254,7 @@
                   >
 
                   <el-sub-menu index="user/buy/wupin">
-                    <template #title> 商品 </template>
+                    <template #title> 用户商品详情 </template>
                     <el-menu-item index="user/buy/wupin/sale" :disabled="!user || !record" @click="onClickToNowRecord"
                       >用户订单商品售卖详情</el-menu-item
                     >
@@ -263,17 +263,17 @@
                     >
                   </el-sub-menu>
                 </el-sub-menu>
-              </el-sub-menu>
 
-              <el-sub-menu index="user/bag">
-                <template #title> 购物车 </template>
-                <el-menu-item index="user/bag/list" :disabled="!user" @click="onClick">用户购物车列表</el-menu-item>
-              </el-sub-menu>
+                <el-sub-menu index="user/bag">
+                  <template #title> 用户购物车 </template>
+                  <el-menu-item index="user/bag/list" :disabled="!user" @click="onClick">用户购物车列表</el-menu-item>
+                </el-sub-menu>
 
-              <el-sub-menu index="user/other">
-                <template #title> 其他操作 </template>
-                <el-menu-item index="user/other/add" @click="onClick">添加用户</el-menu-item>
-                <el-menu-item index="user/other/msg" @click="onClick">用户留言列表</el-menu-item>
+                <el-sub-menu index="user/other">
+                  <template #title> 其他操作 </template>
+                  <el-menu-item index="user/other/add" @click="onClick">添加用户</el-menu-item>
+                  <el-menu-item index="user/other/msg" @click="onClick">用户留言列表</el-menu-item>
+                </el-sub-menu>
               </el-sub-menu>
 
               <el-sub-menu index="class">
@@ -366,10 +366,9 @@
 
 <style lang="scss">
   .admin_root_main_base_card {
-    --card-height: calc(#{var(--custom-height)} - 10%);
-    --card-width: calc(#{var(--custom-body-width)} - 10%);
+    --card-height: calc(#{var(--custom-height)} * 0.9);
+    --card-width: calc(#{var(--custom-body-width)} * 0.9);
 
-    height: #{var(--card-height)};
     width: #{var(--card-width)};
 
     margin: 1%;

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import useUserStore, { isLogin, hasLoad, UserTypeList } from '@/store/user'
   import { Edit } from '@element-plus/icons-vue'
-  import { BuyRecord } from '#/center/buyrecord'
-  // import Buyrecord from "@/components/center/buyrecord.vue"
+  import { BuyRecord as BuyRecordData } from '#/center/buyrecord'
+  import Buyrecord from '@/components/center/buyrecord.vue'
   import { ElNotification, ElMessage, UploadFile } from 'element-plus'
   import { genFileId } from 'element-plus'
   import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
@@ -51,7 +51,7 @@
   const stop = ref(false)
   const loading = ref(false)
 
-  const buyRecord = ref([] as BuyRecord[])
+  const buyRecord = ref([] as BuyRecordData[])
   const updater = () => {
     if (stop.value || loading.value) {
       return
@@ -357,7 +357,7 @@
 
 <style scoped lang="scss">
   .base_card {
-    --base-card-height: #{var(--custom-height)};
+    --base-card-height: calc(#{var(--custom-height)} - 5px);
     --base-card-width: #{var(--custom-little-width)};
     height: #{var(--base-card-height)};
     max-height: #{var(--base-card-height)};

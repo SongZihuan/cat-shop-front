@@ -4,7 +4,7 @@
   const headerDiv = ref()
 
   // header 10vh + 3px
-  const bodyHeight = computed(() => `calc(100vh - ${headerDiv.value.height}px)`)
+  const bodyHeight = computed(() => `calc(100vh - ${headerDiv.value.height}px - 7px)`)
 </script>
 
 <template>
@@ -22,7 +22,7 @@
 
 <style lang="scss">
   #back_home {
-    --custom-height: max(calc(90vh - 3px), v-bind(bodyHeight));
+    --custom-height: max(calc(90vh - 10px), v-bind(bodyHeight));
     --custom-width: 98vw;
     --custom-menu-width: 13vw;
     --custom-body-width: calc(#{var(--custom-width)} - #{var(--custom-menu-width)});

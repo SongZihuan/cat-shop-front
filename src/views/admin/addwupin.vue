@@ -5,13 +5,8 @@
   import { AdminWupinBase, apiAdminPostAddWupin } from '#/admin/wupin'
   import { AdminClass, apiAdminGetClassLst } from '#/admin/class'
   import { Edit } from '@element-plus/icons-vue'
-  import '@wangeditor/editor/dist/css/style.css'
-  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-  import { IToolbarConfig } from '@wangeditor/editor'
-  import { IEditorConfig } from '@wangeditor/editor'
-  import { apiAdminPostUploadImageUrl, apiAdminPostUploadVideoUrl } from '#/admin/file'
-  import { getXtoken } from '@/store/user'
   import { UploadFile } from 'element-plus'
+  import Editor from '@/components/utils/editor.vue'
 
   const router = useRouter()
 
@@ -22,48 +17,6 @@
         msg: '页面错误'
       }
     })
-  }
-
-  const editorMode = ref('default')
-  const editorRef = shallowRef()
-  const toolbarConfig: Partial<IToolbarConfig> = {}
-  const editorConfig: Partial<IEditorConfig> = {
-    placeholder: '请输入介绍信息...',
-    MENU_CONF: {
-      uploadImage: {
-        server: apiAdminPostUploadImageUrl(),
-        fieldName: 'image',
-        maxFileSize: 2 * 1024 * 1024,
-        headers: {
-          'X-Token': getXtoken(),
-          Accept: 'application/json'
-        },
-        meta: {
-          type: 'admin-wupin'
-        }
-      },
-      uploadVideo: {
-        server: apiAdminPostUploadVideoUrl(),
-        fieldName: 'video',
-        maxFileSize: 10 * 1024 * 1024,
-        headers: {
-          'X-Token': getXtoken(),
-          Accept: 'application/json'
-        },
-        meta: {
-          type: 'admin-wupin'
-        }
-      }
-    },
-    scroll: true
-  }
-
-  onBeforeUnmount(() => {
-    editorRef.value && editorRef.value.destroy()
-  })
-
-  const handleEditCreated = (editor) => {
-    editorRef.value = editor // 记录 editor 实例，重要！
   }
 
   const classLst = ref([] as AdminClass[])
@@ -459,27 +412,9 @@
         <el-text style="font-size: 1vw; font-weight: bold; margin-bottom: 10px"> 商品介绍编辑器 </el-text>
       </div>
     </template>
-    <Clear>
-      <div id="dialogBox" style="width: 100%; height: 50vh; display: flex; justify-content: center">
-        <div id="editorBox">
-          <Toolbar
-            style="border-bottom: 1px solid #ccc"
-            :editor="editorRef"
-            :default-config="toolbarConfig"
-            :mode="editorMode"
-          />
-          <!-- eslint-disable vue/v-on-event-hyphenation -->
-          <Editor
-            v-model="form.info"
-            style="height: 80%; overflow-y: hidden"
-            :default-config="editorConfig"
-            :mode="editorMode"
-            @onCreated="handleEditCreated"
-          />
-          <!-- eslint-enable vue/v-on-event-hyphenation -->
-        </div>
-      </div>
-    </Clear>
+    <div id="dialogBox" style="width: 100%; height: 50vh; display: flex; justify-content: center">
+      <Editor v-model="form.info" placeholder="请输入介绍信息..." type="'admin-wupin'"></Editor>
+    </div>
     <template #footer>
       <div class="dialog-footer">
         <el-button type="success"> 确定 </el-button>

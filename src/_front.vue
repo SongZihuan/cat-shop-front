@@ -16,8 +16,8 @@
   // footer 7vh + 3px
   const bodyHeight = computed(() =>
     showFooter.value
-      ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)`
-      : `calc(100vh - ${headerDiv.value.height}px)`
+      ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px - 3px)`
+      : `calc(100vh - ${headerDiv.value.height}px - 3px)`
   )
 </script>
 
@@ -60,13 +60,14 @@
     display: flex;
     justify-content: center;
 
-    min-height: #{var(--custom-height)};
+    max-height: #{var(--custom-height)};
     height: #{var(--custom-height)};
   }
 
   .front_scroll {
     display: flex;
     justify-content: center;
+    height: 100%;
     width: 100%;
   }
 

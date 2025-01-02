@@ -20,6 +20,12 @@
     down: false
   } as NewClassData)
 
+  const notDownChange = () => {
+    if (form.value.down) {
+      form.value.show = false
+    }
+  }
+
   const checkShow = computed(() => {
     if (form.value.down) {
       return form.value.show === false
@@ -67,17 +73,17 @@
         </template>
         <el-input v-model="form.name" maxlength="10" minlength="1" show-word-limit clearable />
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-show="!form.down">
         <template #label>
           <el-text> 是否显示 </el-text>
         </template>
-        <el-checkbox v-model="form.show" label="" />
+        <el-checkbox v-model="form.show" label="" :disabled="form.down" />
       </el-form-item>
       <el-form-item>
         <template #label>
-          <el-text> 是否先保持下架 </el-text>
+          <el-text> 是否先下架 </el-text>
         </template>
-        <el-checkbox v-model="form.down" label="" @change="form.down ? (form.show = false) : 0" />
+        <el-checkbox v-model="form.down" label="" @change="notDownChange" />
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
@@ -87,7 +93,7 @@
       <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
-      <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
+      <div v-if="!checkShow" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="下架商品需要取消显示！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
     </div>
@@ -96,6 +102,12 @@
 </template>
 
 <style scoped lang="scss">
+  .base_card {
+    width: auto;
+    max-width: 98%;
+    min-width: 10vw;
+  }
+
   .tip_box {
     margin-top: 10px;
   }

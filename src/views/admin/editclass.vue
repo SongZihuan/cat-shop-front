@@ -54,6 +54,16 @@
     show: true,
     down: false
   } as AdminClassData)
+  const notDown = ref(true)
+
+  const notDownChange = () => {
+    if (notDown.value) {
+      form.value.down = false
+    } else {
+      form.value.down = true
+      form.value.show = false
+    }
+  }
 
   const checkShow = computed(() => {
     if (form.value.down) {
@@ -100,21 +110,21 @@
         </template>
         <el-input v-model="form.name" maxlength="10" minlength="1" show-word-limit clearable />
       </el-form-item>
-      <el-form-item>
+      <el-form-item v-show="!form.down">
         <template #label>
-          <el-text> 是否显示 </el-text>
+          <el-text> 是否公开显示 </el-text>
         </template>
-        <el-checkbox v-model="form.show" label="" />
+        <el-checkbox v-model="form.show" label="" :disabled="form.down" />
       </el-form-item>
       <el-form-item>
         <template #label>
-          <el-text> 是否下架 </el-text>
+          <el-text> 是否销售 </el-text>
         </template>
-        <el-checkbox v-model="form.down" label="" @change="form.down ? (form.show = false) : 0" />
+        <el-checkbox v-model="notDown" label="" @change="notDownChange" />
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
-      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 跟新 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 更新 </el-button>
     </div>
     <div style="width: 15vw; margin-top: 5px">
       <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
@@ -129,6 +139,12 @@
 </template>
 
 <style scoped lang="scss">
+  .base_card {
+    width: auto;
+    max-width: 98%;
+    min-width: 10vw;
+  }
+
   .tip_box {
     margin-top: 10px;
   }

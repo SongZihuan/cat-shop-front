@@ -6,6 +6,7 @@
   import { AdminWupin } from '#/admin/wupin'
   import { AdminBuyRecord, apiAdminGetBuyRecordInfo } from '#/admin/buyrecord'
   import pushTo from '@/views/admin/router_push'
+  import Showhtml from "@/components/utils/showhtml.vue";
   const router = useRouter()
   const route = useRoute()
 
@@ -403,8 +404,8 @@
       </div>
       <div class="right_box">
         <div style="padding-right: 5px">
-          <div id="info_box" class="info_box">
-            <div v-html="wupin.info"></div>
+          <div class="info_box">
+            <Showhtml :content="wupin.info"></Showhtml>
           </div>
         </div>
       </div>
@@ -591,11 +592,6 @@
 
   .wupin_buy_total_text {
     font-size: 0.6vw;
-  }
-
-  #info_box * {
-    all: initial;
-    width: 100%;
   }
 
   .footer_box {

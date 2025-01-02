@@ -100,14 +100,14 @@
 </script>
 
 <template>
-  <el-card v-if="user && isAdmin() && isDeleteUser(user)" class="base_class">
+  <el-card v-if="user && isAdmin() && isDeleteUser(user)" class="base_card admin_root_main_base_card">
     <el-result icon="error" title="用户已被删除" sub-title="用户已被删除，无法修改其信息。">
       <template #extra>
         <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
       </template>
     </el-result>
   </el-card>
-  <el-card v-else-if="user && isAdmin() && !hasPermission(user)" class="base_class">
+  <el-card v-else-if="user && isAdmin() && !hasPermission(user)" class="base_card admin_root_main_base_card">
     <el-result icon="error" title="权限不足" sub-title="您的权限不足以修改他的用户喜喜。">
       <template #extra>
         <el-button type="primary" @click="toBack">返回（{{ backSec > 5 ? 5 : backSec }}s）</el-button>
@@ -116,7 +116,7 @@
   </el-card>
   <el-card
     v-else-if="user && isAdmin()"
-    style="display: flex; max-width: 75%; justify-content: center; margin-top: 10px"
+    class="base_card admin_root_main_base_card"
   >
     <el-form :model="form" label-width="auto" style="width: 15vw">
       <el-form-item>
@@ -148,6 +148,12 @@
 </template>
 
 <style scoped lang="scss">
+  .base_card {
+    width: auto;
+    max-width: 98%;
+    min-width: 10vw;
+  }
+
   .tip_box {
     margin-top: 10px;
   }

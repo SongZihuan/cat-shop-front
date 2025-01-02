@@ -7,6 +7,7 @@
   import { apiGetBuyRecordInfo, BuyRecord } from '#/center/buyrecord'
   import { apiGetWupin } from '#/center/wupin'
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import Showhtml from "@/components/utils/showhtml.vue";
 
   const route = useRoute()
   const router = useRouter()
@@ -322,8 +323,8 @@
       <div class="right_box">
         <el-scrollbar>
           <div style="padding-right: 5px">
-            <div id="info_box" class="info_box">
-              <div v-html="wupin.info"></div>
+            <div class="info_box">
+              <Showhtml :content="wupin.info"></Showhtml>
             </div>
           </div>
         </el-scrollbar>
@@ -536,11 +537,6 @@
 
   .wupin_buy_total_text {
     font-size: 0.6vw;
-  }
-
-  #info_box * {
-    all: initial;
-    width: 100%;
   }
 
   .footer_box {

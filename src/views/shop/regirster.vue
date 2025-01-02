@@ -4,6 +4,7 @@
   import { redirect } from '@/router'
   import { ElMessage } from 'element-plus'
   import useConfigStore from '@/store/config'
+  import Showhtml from "@/components/utils/showhtml.vue";
 
   const userStore = useUserStore()
   const configStore = useConfigStore()
@@ -204,8 +205,8 @@
     </template>
 
     <el-scrollbar height="50vh">
-      <div id="info_box" class="info_box">
-        <div v-html="configStore.xieyi"></div>
+      <div class="info_box">
+        <Showhtml :content="configStore.xieyi"></Showhtml>
       </div>
     </el-scrollbar>
 
@@ -249,9 +250,5 @@
   }
   .xieyi_text:active {
     color: #2448aa;
-  }
-  #info_box * {
-    all: initial;
-    width: 100%;
   }
 </style>

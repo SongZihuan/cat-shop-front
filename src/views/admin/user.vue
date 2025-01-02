@@ -294,6 +294,7 @@
 <style scoped lang="scss">
   .base_card {
     width: auto;
+    max-width: 98%;
     min-width: 20vw;
   }
 

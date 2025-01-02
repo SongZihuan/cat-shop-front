@@ -94,7 +94,7 @@
 </script>
 
 <template>
-  <el-card v-if="isAdmin()" class="baseprice">
+  <el-card v-if="isAdmin()" class="base_card admin_root_main_base_card">
     <el-form :model="ub" label-width="auto" style="width: 15vw">
       <el-form-item>
         <template #label>
@@ -182,6 +182,12 @@
 </template>
 
 <style scoped lang="scss">
+  .base_card {
+    width: auto;
+    max-width: 98%;
+    min-width: 10vw;
+  }
+
   .tip_box {
     margin-top: 10px;
   }
