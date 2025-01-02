@@ -109,7 +109,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
     resolve: {
       alias: {
         '@': resolve(__dirname, 'src'),
-        '#': VITE_SIMULATION === "true" ? resolve(__dirname, 'src/api/simulation') : resolve(__dirname, 'src/api/real'),
+        '#': VITE_SIMULATION === 'true' ? resolve(__dirname, 'src/api/simulation') : resolve(__dirname, 'src/api/real')
       }
     },
     css: {
