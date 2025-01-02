@@ -404,7 +404,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'config/httpserver/stop',
-        component: () => import('@/views/admin/httpserver.vue'),
+        component: () => import('@/views/admin/stophttpserver.vue'),
         meta: {
           title: '服务prize',
           admin: true,
@@ -412,8 +412,8 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'config/httpserver/start',
-        component: () => import('@/views/admin/httpserver.vue'),
+        path: 'config/httpserver/restart',
+        component: () => import('@/views/admin/restarthttpserver.vue'),
         meta: {
           title: '服务prize',
           admin: true,

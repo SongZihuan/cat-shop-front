@@ -326,13 +326,13 @@
 
                 <el-sub-menu index="config/httpserver">
                   <template #title>
-                    <el-text>后端Http服务管理</el-text>
+                    <el-text>后端服务管理</el-text>
                   </template>
                   <el-menu-item index="config/httpserver/stop" :disabled="!isRootAdmin()" @click="onClick"
-                    >关闭</el-menu-item
+                    >关闭服务</el-menu-item
                   >
                   <el-menu-item index="config/httpserver/restart" :disabled="!isRootAdmin()" @click="onClick"
-                    >重启</el-menu-item
+                    >重启服务</el-menu-item
                   >
                 </el-sub-menu>
               </el-sub-menu>

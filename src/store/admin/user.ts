@@ -226,28 +226,15 @@ const useAdminUserStore = defineStore('useAdminUserStore', () => {
     })
   }
 
-  const restartServer = async (password: string, secret: string) => {
+  const restartServer = async (password: string, secret: string, waitsec: number) => {
     if (!isRootAdmin()) {
-      return
+      return Promise.reject()
     }
 
     const configStore = useConfigStore()
     const passwordHash = await sha256(`${configStore.config?.passwordfronthash}::${password}>>`)
 
-    return apiAdminRestartServer(passwordHash, secret).then((res) => {
-      if (!res.data.data.success) {
-        const waitsec = res.data.data.waitsec && res.data.data.waitsec >= 0 ? res.data.data.waitsec : 20
-
-        setTimeout(() => {
-          ElMessage({
-            message: '后端Http重启倒计时完毕，请确认服务是否正常。',
-            type: 'success'
-          })
-        }, waitsec * 1000)
-        return Promise.reject(`重启成功，预计重启时间${waitsec}秒。`)
-      }
-      return Promise.resolve()
-    })
+    return apiAdminRestartServer(passwordHash, secret, waitsec)
   }
 
   const stopServer = async (password: string, secret: string) => {

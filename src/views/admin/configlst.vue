@@ -10,6 +10,7 @@
   } from '#/admin/config'
   import { Edit } from '@element-plus/icons-vue'
   import { ElMessage, genFileId, UploadFile, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+  import Showimg from '@/components/utils/showimg.vue'
 
   const router = useRouter()
 
@@ -27,7 +28,13 @@
   const configinfo = ref({})
 
   const config = ref(null as AdminConfig | null)
-  const configKeys = computed(() => Object.keys(configtype.value))
+  const configKeys = computed(() =>
+    config.value
+      ? Object.keys(config.value).filter((key: string) => {
+          return key in configinfo.value && key in configtype.value && configtype.value[key] in configtypename.value
+        })
+      : []
+  )
 
   const onChange = () => {
     apiAdminGetConfig().then((res) => {
@@ -39,9 +46,7 @@
   }
   onChange()
 
-  const showPic = ref(false)
   const picUrl = ref('')
-
   const openPic = (url: string) => {
     if (url.length === 0) {
       ElMessage({
@@ -52,7 +57,6 @@
     }
 
     picUrl.value = url
-    showPic.value = true
   }
 
   const pictureLst = ref([])
@@ -128,6 +132,7 @@
           type: 'success',
           message: '修改成功'
         })
+        showUpdateText.value = false
         onChange()
       } else {
         ElMessage({
@@ -167,6 +172,7 @@
           type: 'success',
           message: '修改成功'
         })
+        showUpdateString.value = false
         onChange()
       } else {
         ElMessage({
@@ -201,25 +207,20 @@
 
 <template>
   <el-card v-if="config && isRootAdmin()" class="base_card admin_root_main_base_card">
-    <el-table :data="configKeys" style="width: 77vw" height="70vh">
+    <el-table :data="configKeys">
       <el-table-column label="配置项">
         <template #default="{ row }">
-          <el-text>
-            {{ row }}
-          </el-text>
+          <el-tooltip effect="dark" placement="bottom" :content="row">
+            <el-text>
+              {{ configinfo[row] }}
+            </el-text>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="配置项类型">
         <template #default="{ row }">
           <el-text>
             {{ configtypename[configtype[row]] || '未知' }}
-          </el-text>
-        </template>
-      </el-table-column>
-      <el-table-column label="配置项含义">
-        <template #default="{ row }">
-          <el-text>
-            {{ configinfo[row] || '未知' }}
           </el-text>
         </template>
       </el-table-column>
@@ -250,12 +251,12 @@
               :limit="1"
               :on-exceed="handleExceed"
               :show-file-list="false"
-              :0n-change="updatePicture(row)"
+              :on-change="updatePicture(row)"
             >
               <el-tooltip effect="dark" placement="bottom">
-                <el-button type="primary" plain>
+                <el-button type="success" plain>
                   <el-icon><Edit /></el-icon>
-                  上传商品图片
+                  更新配置
                 </el-button>
                 <template #content>
                   <el-text style="color: white"> 仅限jpg/png文件，不超过500KB </el-text>
@@ -264,15 +265,15 @@
             </el-upload>
           </div>
           <div v-else-if="configtype[row] === 'string|must' || configtype[row] === 'string'">
-            <el-button type="primary" plain @click="openUpdateString(row)">
+            <el-button type="success" plain @click="openUpdateString(row)">
               <el-icon><Edit /></el-icon>
-              更新文本
+              更新配置
             </el-button>
           </div>
           <div v-else>
-            <el-button type="primary" plain @click="openUpdateText(row)">
+            <el-button type="success" plain @click="openUpdateText(row)">
               <el-icon><Edit /></el-icon>
-              更新文本域
+              更新配置
             </el-button>
           </div>
         </template>
@@ -287,24 +288,14 @@
           >
             删除
           </el-button>
-          <el-text v-else> 不可删除 </el-text>
+          <el-text v-else> - </el-text>
         </template>
       </el-table-column>
     </el-table>
   </el-card>
   <div v-else></div>
 
-  <el-dialog v-model="showPic" style="height: 50vh; width: 20vw" destroy-on-close>
-    <div style="height: 35vh; width: 100%; display: flex; justify-content: center">
-      <img alt="wechat" style="height: 100%; width: 100%; object-fit: contain" :src="picUrl" />
-    </div>
-
-    <template #footer>
-      <div class="dialog-footer" style="height: 10vh">
-        <el-button type="success" @click="showPic = false"> 关闭 </el-button>
-      </div>
-    </template>
-  </el-dialog>
+  <Showimg v-model="picUrl"></Showimg>
 
   <el-dialog v-model="showUpdateText" width="800">
     <template #title>

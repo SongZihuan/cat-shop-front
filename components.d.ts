@@ -69,6 +69,7 @@ declare module '@vue/runtime-core' {
     Search: typeof import('./src/components/shop/search.vue')['default']
     Shoppingbag: typeof import('./src/components/center/shoppingbag.vue')['default']
     Showhtml: typeof import('./src/components/utils/showhtml.vue')['default']
+    Showimg: typeof import('./src/components/utils/showimg.vue')['default']
     Usertitleadmin: typeof import('./src/components/system/usertitleadmin.vue')['default']
     Usertitlecenter: typeof import('./src/components/system/usertitlecenter.vue')['default']
     VanList: typeof import('vant/es')['List']

@@ -5,7 +5,7 @@ export interface data {
   success: boolean
 }
 
-export const apiAdminRestartServer = (passwordHash: string, secret: string): Result<data> => {
+export const apiAdminRestartServer = (passwordHash: string, secret: string, waitsec: number): Result<data> => {
   return Promise.resolve({
     data: {
       code: 0,
