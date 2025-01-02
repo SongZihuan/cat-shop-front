@@ -90,7 +90,7 @@
     }
   }
 
-  watch(() => route.query?.userId, onChangeUser)
+  watch(() => route.query, onChangeUser)
   onChangeUser()
 
   const wupinId = ref(0)
@@ -114,7 +114,7 @@
     }
   }
 
-  watch(() => route.query?.wupinId, onChangeWupin)
+  watch(() => route.query, onChangeWupin)
   onChangeWupin()
 
   const classId = ref(Number(route.query?.classId).valueOf() || 0)
@@ -138,7 +138,7 @@
     }
   }
 
-  watch(() => route.query?.classId, onChangeClass)
+  watch(() => route.query, onChangeClass)
   onChangeClass()
 
   const recordId = ref(Number(route.query?.recordId).valueOf() || 0)
@@ -162,7 +162,7 @@
     }
   }
 
-  watch(() => route.query?.recordId, onChangeRecord)
+  watch(() => route.query, onChangeRecord)
   onChangeRecord()
 
   const defaultOpeneds = ref([

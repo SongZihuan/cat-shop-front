@@ -66,8 +66,8 @@
     }
   }
 
-  watch(() => route.query?.userId, onChangeUser)
-  watch(() => route.query?.recordId, onChangeUser)
+  watch(() => route.query, onChangeUser)
+  watch(() => route.query, onChangeUser)
   onChangeUser()
 
   const reload = () => {

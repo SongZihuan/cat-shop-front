@@ -113,7 +113,7 @@
     }
   }
 
-  watch(() => route.query?.userId, onChangeUser)
+  watch(() => route.query, onChangeUser)
   onChangeUser()
 
   const hasChange = computed(() => {

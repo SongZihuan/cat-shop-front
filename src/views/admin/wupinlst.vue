@@ -41,7 +41,7 @@
     })
   }
 
-  watch(() => route.query?.info, changePage)
+  watch(() => route.query, changePage)
   changePage()
 </script>
 

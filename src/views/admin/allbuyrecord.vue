@@ -41,7 +41,7 @@
     }
   }
 
-  watch(() => route.query?.recordId, onChangeRecord)
+  watch(() => route.query, onChangeRecord)
   onChangeRecord()
 
   const reload = () => {

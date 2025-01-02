@@ -54,7 +54,7 @@
     pushTo(router, route, '/admin/user/list')
   }
 
-  watch(() => route.query?.userId, onChangeUser)
+  watch(() => route.query, onChangeUser)
   onChangeUser()
 
   const onChange = () => {

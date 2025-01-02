@@ -35,7 +35,7 @@
   }
 
   infoController(route.query?.info)
-  watch(() => route.query?.info, infoController)
+  watch(() => route.query, infoController)
 
   const select = ref(0 as number)
   const search = ref(data.value.search || props.search || ('' as string))

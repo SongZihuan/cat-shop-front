@@ -37,7 +37,7 @@
     }
   }
 
-  watch(() => route.query?.wupinId, onChangeClass)
+  watch(() => route.query, onChangeClass)
   onChangeClass()
 
   const toEdit = () => {
