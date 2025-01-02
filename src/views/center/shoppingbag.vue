@@ -65,7 +65,7 @@
       <div class="box">
         <div class="scroll">
           <van-list v-model="loading" :finished="stop" finished-text="没有更多数据了" @load="updater">
-            <div v-for="(item, index) in shopRecord" :key="index">
+            <div v-for="(item, index) in shopRecord" :key="index" class="bag_box">
               <Shoppingbag ref="shopper" :record="item"></Shoppingbag>
             </div>
           </van-list>
@@ -101,5 +101,11 @@
   .title {
     font-size: 1.5rem;
     font-weight: bold;
+  }
+
+  .bag_box {
+    margin-left: 15px;
+    margin-right: 25px;
+    margin-bottom: 25px;
   }
 </style>
