@@ -24,11 +24,13 @@ module.exports = {
     'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
+    'eslint:recommended',
     'plugin:prettier/recommended'
   ],
+  plugins: ['prettier'],
   rules: {
     // typeScript (https://typescript-eslint.io/rules)
-    '@typescript-eslint/no-unused-vars': 'error', // 禁止定义未使用的变量
+    '@typescript-eslint/no-unused-vars': 'off', // 禁止定义未使用的变量
     '@typescript-eslint/no-inferrable-types': 'off', // 可以轻松推断的显式类型可能会增加不必要的冗长
     '@typescript-eslint/no-namespace': 'off', // 禁止使用自定义 TypeScript 模块和命名空间。
     '@typescript-eslint/no-explicit-any': 'off', // 禁止使用 any 类型
@@ -48,7 +50,8 @@ module.exports = {
     'vue/require-default-prop': 'off', // 此规则要求为每个 prop 为必填时，必须提供默认值
     'vue/multi-word-component-names': 'off',
     'no-undef': 'off',
-    'prettier/prettier': 'off',
+    'prettier/prettier': 'warn',
+    'no-unused-vars': 'off',
     // 禁用debugger
     'no-debugger': 'warn',
     // 禁止出现重复的 case 标签
@@ -62,7 +65,7 @@ module.exports = {
     // 禁止在 return、throw、continue 和 break 语句之后出现不可达代码
     'no-unreachable': 'warn',
     // 强制所有控制语句使用一致的括号风格
-    curly: 'warn',
+    'curly': 'warn',
     // 要求 switch 语句中有 default 分支
     'default-case': 'warn',
     // 强制尽可能地使用点号
@@ -102,7 +105,7 @@ module.exports = {
     // 强制使用骆驼拼写法命名约定
     // camelcase: 'warn',
     // 强制使用一致的缩进
-    indent: 'off',
+    'indent': 'off',
     // 强制在 JSX 属性中一致地使用双引号或单引号
     // 'jsx-quotes': 'warn',
     // 强制可嵌套的块的最大深度4
@@ -114,7 +117,7 @@ module.exports = {
     // 强制函数块最多允许的的语句数量20
     'max-statements': ['warn', 100],
     // 强制回调函数最大嵌套深度
-    'max-nested-callbacks': ['warn', 3],
+    'max-nested-callbacks': ['warn', 5],
     // 强制每一行中所允许的最大语句数量
     'max-statements-per-line': ['warn', { max: 1 }],
     // 要求方法链中每个调用都有一个换行符
@@ -126,7 +129,7 @@ module.exports = {
     // 禁止出现多行空行
     'no-multiple-empty-lines': 'warn',
     // 禁止出现;
-    semi: ['warn', 'never'],
+    'semi': ['warn', 'never'],
     // 强制在块之前使用一致的空格
     'space-before-blocks': 'warn',
     // 强制在 function的左括号之前使用一致的空格

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import useConfigStore from "@/store/config"
-  import Footer from "@/components/system/footer.vue"
-  import Wechat from "@/components/system/wechat.vue"
-  import Rightwin from "@/components/system/rightwin.vue"
-  import Header from "@/components/system/header.vue"
+  import useConfigStore from '@/store/config'
+  import Footer from '@/components/system/footer.vue'
+  import Wechat from '@/components/system/wechat.vue'
+  import Rightwin from '@/components/system/rightwin.vue'
+  import Header from '@/components/system/header.vue'
 
   const configStore = useConfigStore()
 
@@ -14,7 +14,11 @@
 
   // header 10vh + 3px
   // footer 7vh + 3px
-  const bodyHeight = computed(() => showFooter.value ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)` : `calc(100vh - ${headerDiv.value.height}px)`)
+  const bodyHeight = computed(() =>
+    showFooter.value
+      ? `calc(100vh - ${footerDiv.value.height}px - ${headerDiv.value.height}px)`
+      : `calc(100vh - ${headerDiv.value.height}px)`
+  )
 </script>
 
 <template>
@@ -38,13 +42,13 @@
 </template>
 
 <style lang="scss">
-#front_home {
-  --custom-height: v-bind(bodyHeight);
-  --custom-width: 85vw;
-  --custom-little-width: 60vw;
-  --custom-min-width: 35vw;
-  --custom-most-min-width: 20vw;
-}
+  #front_home {
+    --custom-height: v-bind(bodyHeight);
+    --custom-width: 85vw;
+    --custom-little-width: 60vw;
+    --custom-min-width: 35vw;
+    --custom-most-min-width: 20vw;
+  }
 </style>
 
 <style scoped lang="scss">

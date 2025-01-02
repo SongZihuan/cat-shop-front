@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import AdminWupinItem from "@/components/admin/adminwupinitem.vue"
-  import {AdminWupin} from "#/admin/wupin";
+  import AdminWupinItem from '@/components/admin/adminwupinitem.vue'
+  import { AdminWupin } from '#/admin/wupin'
 
   const props = defineProps({
-    "wp": {
+    wp: {
       type: Array<AdminWupin>,
-      required: true,
+      required: true
     }
   })
 
@@ -19,11 +19,9 @@
 </template>
 
 <style scoped lang="scss">
-
-.classLst {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: space-between;
-}
-
+  .classLst {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+  }
 </style>

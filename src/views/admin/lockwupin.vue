@@ -1,27 +1,27 @@
 <script setup lang="ts">
-  import {Location} from "@element-plus/icons-vue"
-  import {getFacePrice, getRealPrice, getTotalPrice} from "@/utils/price"
-  import {isAdmin} from "@/store/admin"
-  import {AdminWupin} from "#/admin/wupin"
-  import pushTo from "@/views/admin/router_push"
-  import {AdminBuyRecord, apiAdminGetBuyRecordInfo} from "#/admin/buyrecord";
-  import {apiAdminPostAddToShoppingBag} from "#/admin/shoppingbag";
-  import {ElMessage} from "element-plus";
+  import { Location } from '@element-plus/icons-vue'
+  import { getFacePrice, getRealPrice, getTotalPrice } from '@/utils/price'
+  import { isAdmin } from '@/store/admin'
+  import { AdminWupin } from '#/admin/wupin'
+  import pushTo from '@/views/admin/router_push'
+  import { AdminBuyRecord, apiAdminGetBuyRecordInfo } from '#/admin/buyrecord'
+  import { apiAdminPostAddToShoppingBag } from '#/admin/shoppingbag'
+  import { ElMessage } from 'element-plus'
 
   const router = useRouter()
   const route = useRoute()
 
   if (!isAdmin()) {
     router.push({
-      path: "/system/error",
+      path: '/system/error',
       query: {
-        msg: "页面错误"
+        msg: '页面错误'
       }
     })
   }
 
   const toBack = () => {
-    pushTo(router, route, "/admin/user/list")
+    pushTo(router, route, '/admin/user/list')
   }
 
   const recordId = ref(0)
@@ -38,10 +38,10 @@
     return getTotalPrice(wupin.value?.hotPrice, wupin.value?.realPrice, num.value)
   })
 
-  const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0) ? wupin.value.buytotal : 0)
-  const totalDaoHuo = computed(() => (wupin.value && wupin.value.buydaohuo >= 0) ? wupin.value.buydaohuo : 0)
+  const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0 ? wupin.value.buytotal : 0))
+  const totalDaoHuo = computed(() => (wupin.value && wupin.value.buydaohuo >= 0 ? wupin.value.buydaohuo : 0))
   const totalBuyGood = computed(() => {
-    const g = (wupin.value && wupin.value.buygood >= 0) ? wupin.value.buygood : 0
+    const g = wupin.value && wupin.value.buygood >= 0 ? wupin.value.buygood : 0
     if (g > totalDaoHuo.value) {
       return totalDaoHuo.value
     }
@@ -51,14 +51,13 @@
   const goodBuyPre = computed(() => (totalBuyGood.value / totalDaoHuo.value) * 100)
   const goodBuyMsg = computed(() => {
     if (goodBuyPre.value >= 85) {
-      return "好评如潮"
+      return '好评如潮'
     } else if (goodBuyPre.value >= 50) {
-      return "部分好评"
+      return '部分好评'
     } else if (goodBuyPre.value >= 30) {
-      return "好评甚少"
-    } else {
-      return "谨慎购买"
+      return '好评甚少'
     }
+    return '谨慎购买'
   })
 
   const onChangeWupin = () => {
@@ -66,13 +65,16 @@
     wupin.value = null
 
     if (recordId.value) {
-      apiAdminGetBuyRecordInfo(recordId.value).then((res) => {
-        record.value = res.data.data as AdminBuyRecord
-        wupin.value = record.value.wupin as AdminWupin
-        openTips()
-      }, () => {
-        toBack()
-      })
+      apiAdminGetBuyRecordInfo(recordId.value).then(
+        (res) => {
+          record.value = res.data.data as AdminBuyRecord
+          wupin.value = record.value.wupin as AdminWupin
+          openTips()
+        },
+        () => {
+          toBack()
+        }
+      )
     } else {
       toBack()
     }
@@ -82,9 +84,11 @@
   onChangeWupin()
 
   const onClassClick = () => {
-    wupin.value && wupin.value.classId > 1 && pushTo(router, route, "/admin/class/info", {
-      classId: wupin.value?.classOf.id
-    })
+    wupin.value &&
+      wupin.value.classId > 1 &&
+      pushTo(router, route, '/admin/class/info', {
+        classId: wupin.value?.classOf.id
+      })
   }
 
   const dialogVisible = ref(false)
@@ -93,9 +97,10 @@
   }
 
   const onBackToBuyRecord = () => {
-    record.value && pushTo(router, route, "/admin/user/buyrecord", {
-      recordId: record.value.id
-    })
+    record.value &&
+      pushTo(router, route, '/admin/user/buyrecord', {
+        recordId: record.value.id
+      })
   }
 
   const num = computed(() => {
@@ -103,74 +108,81 @@
   })
 
   const onClickBag = () => {
-    record.value && apiAdminPostAddToShoppingBag(record.value.userId, record.value.wupin.id, num.value).then((res) => {
-      if (res.data.data.success) {
-        if (num.value <= 0) {
-          record.value && ElMessage({
-            type: 'success',
-            message: `已经将 ${record.value.wupin.name} 从用户的购物车移出。`,
-          })
+    record.value &&
+      apiAdminPostAddToShoppingBag(record.value.userId, record.value.wupin.id, num.value).then((res) => {
+        if (res.data.data.success) {
+          if (num.value <= 0) {
+            record.value &&
+              ElMessage({
+                type: 'success',
+                message: `已经将 ${record.value.wupin.name} 从用户的购物车移出。`
+              })
+          } else {
+            record.value &&
+              ElMessage({
+                type: 'success',
+                message: `已经将 ${num.value}件 ${record.value.wupin.name} 添加到用户的购物车。`
+              })
+          }
+          onChangeWupin()
         } else {
-          record.value && ElMessage({
-            type: 'success',
-            message: `已经将 ${num.value}件 ${record.value.wupin.name} 添加到用户的购物车。`,
-          })
+          record.value &&
+            ElMessage({
+              type: 'error'
+            })
         }
-        onChangeWupin()
-      } else {
-        record.value && ElMessage({
-          type: 'error',
-        })
-      }
-    })
+      })
   }
-
 </script>
 
 <template>
   <el-card v-if="record && wupin && isAdmin()" class="base_card admin_root_main_base_card">
     <div style="display: inline-block; width: 15vw; height: 70vh; margin-right: 20px; margin-left: 20px">
       <div style="padding-right: 5px">
-        <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 100%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+        <el-image
+          :src="wupin.pic"
+          fit="contain"
+          style="height: auto; width: 100%"
+          :initial-index="0"
+          :preview-src-list="[wupin.pic]"
+        ></el-image>
         <div v-if="wupin.ren" class="wupin_info_box">
           <el-text class="wupin_info_text">
             <el-icon><Microphone /></el-icon>
-            客服专属称号
+            专属客服称呼
             {{ wupin.ren }}
           </el-text>
         </div>
         <div v-if="wupin.phone" class="wupin_info_box">
           <el-text class="wupin_info_text">
             <el-icon><Iphone /></el-icon>
-            客服专属电话
+            专属客服电话
             {{ wupin.phone }}
           </el-text>
         </div>
         <div v-if="wupin.email" class="wupin_info_box">
           <el-text class="wupin_info_text">
             <el-icon><Message /></el-icon>
-            客服专属邮箱
+            专属客服邮箱
             {{ wupin.email }}
           </el-text>
         </div>
         <div v-if="wupin.wechat" class="wupin_info_box">
           <el-text class="wupin_info_text">
             <el-icon><Service /></el-icon>
-            客服专属微信
+            专属客服微信
             {{ wupin.wechat }}
           </el-text>
         </div>
         <div v-if="wupin.wechat" class="wupin_info_box">
           <el-text class="wupin_info_text">
             <el-icon><Location /></el-icon>
-            客服专属地址
+            专属客服地址
             {{ wupin.location }}
           </el-text>
         </div>
 
-        <el-divider border-style="solid" content-position="left" style="margin-top: 50px;">
-          购物数据
-        </el-divider>
+        <el-divider border-style="solid" content-position="left" style="margin-top: 50px"> 购物数据 </el-divider>
 
         <div class="wupin_buy_total_box" style="margin-top: 0">
           <el-text class="wupin_buy_total_text">
@@ -192,16 +204,18 @@
           <el-text class="wupin_buy_total_text">
             <el-icon><Goblet /></el-icon>
             购买好评率：
-            <el-badge :value="goodBuyMsg">
-              {{ goodBuyPre.toFixed(2) }}%
-            </el-badge>
+            <el-badge :value="goodBuyMsg"> {{ goodBuyPre.toFixed(2) }}% </el-badge>
           </el-text>
         </div>
       </div>
     </div>
     <div style="display: inline-block; width: 50vw; height: 70vh; margin-right: 20px; margin-left: 20px">
       <div style="padding-right: 5px">
-        <el-badge  class="title" :value="(record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag)" style="margin-top: 10px">
+        <el-badge
+          class="title"
+          :value="record.down ? (record.wupin.tag ? `已下架 | ${record.wupin.tag}` : '已下架') : record.wupin.tag"
+          style="margin-top: 10px"
+        >
           <el-text class="wupin_name"> {{ wupin.name }} </el-text>
         </el-badge>
         <el-text v-if="wupin.classId > 1 && wupin.classOf" class="wupin_class_name">
@@ -251,9 +265,7 @@
             <el-text class="wupin_sb_price">
               <el-icon><Pouring /></el-icon>
               冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
-              <el-text v-if="realPrice > 0" class="wupin_sb_real_price">
-                原价：免费送
-              </el-text>
+              <el-text v-if="realPrice > 0" class="wupin_sb_real_price"> 原价：免费送 </el-text>
             </el-text>
           </div>
           <div v-else>
@@ -279,22 +291,18 @@
             </el-button>
           </div>
           <div class="btn_box" style="display: flex">
-            <el-tooltip
-                effect="dark"
-                content="只有用户能为自己购买"
-                placement="bottom"
-            >
+            <el-tooltip effect="dark" content="只有用户能为自己购买" placement="bottom">
               <el-button class="buy_item" size="large" disabled>
                 <el-icon style="margin-right: 3px"><Money /></el-icon>
                 立即购买
-                <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                <span v-if="num >= 1">
+                  （ 总价：{{ totalPrice > 0 ? '￥' + (totalPrice / 100).toFixed(2) : '免费' }} ）
+                </span>
               </el-button>
             </el-tooltip>
           </div>
           <div class="btn_box" style="display: flex" @click="onBackToBuyRecord">
-            <el-button type="primary" size="large" plain>
-              返回订单
-            </el-button>
+            <el-button type="primary" size="large" plain> 返回订单 </el-button>
           </div>
         </div>
         <div id="info_box" class="info_box">
@@ -304,17 +312,11 @@
     </div>
   </el-card>
   <div v-else></div>
-  <el-dialog
-      v-model="dialogVisible"
-      title="温馨提示"
-      width="500"
-  >
+  <el-dialog v-model="dialogVisible" title="温馨提示" width="500">
     <el-text>请注意，本页面为历史保存页面，旨在保存用户购买商品时，售卖页面的历史信息。</el-text>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">
-          确定
-        </el-button>
+        <el-button type="primary" @click="dialogVisible = false"> 确定 </el-button>
       </div>
     </template>
   </el-dialog>

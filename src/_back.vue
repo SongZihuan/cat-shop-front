@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Header from "@/components/system/header.vue"
+  import Header from '@/components/system/header.vue'
 
   const headerDiv = ref()
 
@@ -21,12 +21,12 @@
 </template>
 
 <style lang="scss">
-#back_home {
-  --custom-height: max(calc(90vh - 3px), v-bind(bodyHeight));
-  --custom-width: 98vw;
-  --custom-menu-width: 13vw;
-  --custom-body-width: calc(#{var(--custom-width)} - #{var(--custom-menu-width)});
-}
+  #back_home {
+    --custom-height: max(calc(90vh - 3px), v-bind(bodyHeight));
+    --custom-width: 98vw;
+    --custom-menu-width: 13vw;
+    --custom-body-width: calc(#{var(--custom-width)} - #{var(--custom-menu-width)});
+  }
 </style>
 
 <style scoped lang="scss">

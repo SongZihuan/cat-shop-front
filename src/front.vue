@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import BaseFront from "@/_front.vue"
+  import BaseFront from '@/_front.vue'
 </script>
 
 <template>

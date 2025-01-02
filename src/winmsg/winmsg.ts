@@ -1,4 +1,4 @@
 export interface EventMsg {
-    event: string,
-    data?: any,
+  event: string
+  data?: any
 }

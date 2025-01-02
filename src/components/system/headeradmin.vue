@@ -1,28 +1,27 @@
 <script setup lang="ts">
-import useConfigStore from "@/store/config"
-import UserTitleAdmin from "@/components/system/usertitleadmin.vue"
-import pushTo from "@/views/admin/router_push";
+  import useConfigStore from '@/store/config'
+  import UserTitleAdmin from '@/components/system/usertitleadmin.vue'
+  import pushTo from '@/views/admin/router_push'
 
-const router = useRouter()
-const route = useRoute()
+  const router = useRouter()
+  const route = useRoute()
 
-const title = computed(() => route.meta?.title ? route.meta.title : "")
-const configStore = useConfigStore()
+  const title = computed(() => (route.meta?.title ? route.meta.title : ''))
+  const configStore = useConfigStore()
 
-const toHome = () => {
-  router.push({
-    path: "/user/shop/home"
-  })
-}
+  const toHome = () => {
+    router.push({
+      path: '/user/shop/home'
+    })
+  }
 
-const toCenter = () => {
-  pushTo(router, route, "/admin/user/list")
-}
-
+  const toCenter = () => {
+    pushTo(router, route, '/admin/user/list')
+  }
 </script>
 
 <template>
-  <div class="header" >
+  <div class="header">
     <el-page-header icon="">
       <template #title>
         <div style="display: flex; justify-content: left">
@@ -33,9 +32,7 @@ const toCenter = () => {
             </span>
             <span @click="toCenter">
               <el-avatar class="avatar_logo" :src="configStore.config.logo" fit="fill"></el-avatar>
-              <el-text class="title">
-                管理后台
-              </el-text>
+              <el-text class="title"> 管理后台 </el-text>
             </span>
           </div>
         </div>
@@ -57,64 +54,64 @@ const toCenter = () => {
 </template>
 
 <style scoped lang="scss">
-.header {
-  height: 10vh;
-  max-height: 10vh;
-  min-height: 10vh;
+  .header {
+    height: 10vh;
+    max-height: 10vh;
+    min-height: 10vh;
 
-  background-color: royalblue;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
+    background-color: royalblue;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 
-#logo {
-  float: left;
-}
+  #logo {
+    float: left;
+  }
 
-.gokefu {
-  color: white;
-  cursor: pointer;
-}
+  .gokefu {
+    color: white;
+    cursor: pointer;
+  }
 
-.gokefu:hover {
- text-decoration: underline;
-}
+  .gokefu:hover {
+    text-decoration: underline;
+  }
 
-.gokefu:active {
-  color: cornflowerblue;
-  text-decoration: underline;
-}
+  .gokefu:active {
+    color: cornflowerblue;
+    text-decoration: underline;
+  }
 
-.avatar_logo {
-  height: 8vh;
-  width: 8vh;
-  margin-left: 5px;
-  margin-right: 5px;
-  vertical-align: middle;
-}
+  .avatar_logo {
+    height: 8vh;
+    width: 8vh;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
 
-.title {
-  font-size: 4vh;
-  color: white;
-  font-weight: bold;
-  vertical-align: middle;
-}
+  .title {
+    font-size: 4vh;
+    color: white;
+    font-weight: bold;
+    vertical-align: middle;
+  }
 
-.subtitle {
-  font-size: 2vh;
-  font-weight: normal;
-  margin-left: 5px;
-  vertical-align: middle;
-  color: gainsboro;
-}
+  .subtitle {
+    font-size: 2vh;
+    font-weight: normal;
+    margin-left: 5px;
+    vertical-align: middle;
+    color: gainsboro;
+  }
 
-.title_box {
-  padding-top: 1vh;
-}
+  .title_box {
+    padding-top: 1vh;
+  }
 
-.extrainfo{
-  font-size: 2vh;
-  margin-right: 10px;
-  vertical-align: middle;
-}
+  .extrainfo {
+    font-size: 2vh;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
 </style>

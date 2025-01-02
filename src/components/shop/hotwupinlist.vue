@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import WupinItem from "@/components/shop/wupinitem.vue"
-  import useHotWupinStore from "@/store/hotwupin"
+  import WupinItem from '@/components/shop/wupinitem.vue'
+  import useHotWupinStore from '@/store/hotwupin'
 
   const hotWupinStore = useHotWupinStore()
   hotWupinStore.getLst()
@@ -13,12 +13,10 @@
 </template>
 
 <style scoped lang="scss">
-
-.classLst {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: flex-start;
-  gap: 10px;
-}
-
+  .classLst {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: flex-start;
+    gap: 10px;
+  }
 </style>

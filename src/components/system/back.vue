@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import usePathStore from "@/store/path"
+  import usePathStore from '@/store/path'
 
   const pathStore = usePathStore()
   const router = useRouter()
@@ -21,36 +21,34 @@
 </template>
 
 <style scoped lang="scss">
+  .back {
+    position: fixed;
+    left: 0;
+    top: 20%;
+    transform: translateY(-50%);
+    background-color: coral;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+  }
 
-.back {
-  position: fixed;
-  left: 0;
-  top: 20%;
-  transform: translateY(-50%);
-  background-color: coral;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  cursor: pointer;
-}
+  .back_box {
+    padding: 5px;
+  }
 
-.back_box {
-  padding: 5px;
-}
+  .back_box_text {
+    font-size: 1.5vh;
+    color: white;
+    writing-mode: vertical-lr;
+  }
 
-.back_box_text {
-  font-size: 1.5vh;
-  color: white;
-  writing-mode: vertical-lr;
-}
+  .back:active {
+    background-color: rgb(67, 150, 202);
+    color: white;
+  }
 
-.back:active {
-  background-color: rgb(67, 150, 202);
-  color: white;
-}
-
-.back:focus {
-  background-color: rgb(67, 150, 202);
-  color: white;
-}
-
+  .back:focus {
+    background-color: rgb(67, 150, 202);
+    color: white;
+  }
 </style>

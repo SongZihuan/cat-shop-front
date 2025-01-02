@@ -10,5 +10,5 @@ module.exports = {
     jsxBracketSameLine: true, // jsx > 是否另取一行
     arrowParens: 'always', // 不需要写文件开头的 @prettier
     insertPragma: false, // 不需要自动在文件开头加入 @prettier
-    endOfLine: 'auto' // 换行符使用
+    endOfLine: 'lf' // 换行符使用
 }

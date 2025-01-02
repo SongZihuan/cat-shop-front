@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import useConfigStore from "@/store/config"
-import UserTitleCenter from "@/components/system/usertitlecenter.vue"
+  import useConfigStore from '@/store/config'
+  import UserTitleCenter from '@/components/system/usertitlecenter.vue'
 
-const router = useRouter()
-const route = useRoute()
+  const router = useRouter()
+  const route = useRoute()
 
-const title = computed(() => route.meta?.title ? route.meta.title : "")
-const configStore = useConfigStore()
+  const title = computed(() => (route.meta?.title ? route.meta.title : ''))
+  const configStore = useConfigStore()
 
-const goKefu = () => {
-  router.push({
-    path: "/system/kefu"
-  })
-}
+  const goKefu = () => {
+    router.push({
+      path: '/system/kefu'
+    })
+  }
 
-const toHome = () => {
-  router.push({
-    path: "/user/shop/home"
-  })
-}
-
+  const toHome = () => {
+    router.push({
+      path: '/user/shop/home'
+    })
+  }
 </script>
 
 <template>
@@ -48,9 +47,7 @@ const toHome = () => {
         <el-text v-else-if="title" class="subtitle">
           {{ title }}
         </el-text>
-        <el-text v-else class="subtitle">
-          欢迎您的到来
-        </el-text>
+        <el-text v-else class="subtitle"> 欢迎您的到来 </el-text>
       </template>
 
       <template #extra>
@@ -62,7 +59,7 @@ const toHome = () => {
 
           <el-text class="extrainfo gokefu" style="margin-right: 40px" @click="goKefu">
             <el-icon><Microphone /></el-icon>
-             {{ configStore.config?.hotline }}
+            {{ configStore.config?.hotline }}
           </el-text>
 
           <UserTitleCenter class="extrainfo"></UserTitleCenter>
@@ -73,63 +70,63 @@ const toHome = () => {
 </template>
 
 <style scoped lang="scss">
-.header {
-  height: 10vh;
-  max-height: 10vh;
-  min-height: 10vh;
+  .header {
+    height: 10vh;
+    max-height: 10vh;
+    min-height: 10vh;
 
-  background-color: aliceblue;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
+    background-color: aliceblue;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
 
-#logo {
-  float: left;
-}
+  #logo {
+    float: left;
+  }
 
-.gokefu {
-  color: black;
-  cursor: pointer;
-}
+  .gokefu {
+    color: black;
+    cursor: pointer;
+  }
 
-.gokefu:hover {
- text-decoration: underline;
-}
+  .gokefu:hover {
+    text-decoration: underline;
+  }
 
-.gokefu:active {
-  color: #2448aa;
-  text-decoration: underline;
-}
+  .gokefu:active {
+    color: #2448aa;
+    text-decoration: underline;
+  }
 
-.avatar_logo {
-  height: 8vh;
-  width: 8vh;
-  margin-left: 5px;
-  margin-right: 5px;
-  vertical-align: middle;
-}
+  .avatar_logo {
+    height: 8vh;
+    width: 8vh;
+    margin-left: 5px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
 
-.title {
-  font-size: 4vh;
-  color: black;
-  font-weight: bold;
-  vertical-align: middle;
-}
+  .title {
+    font-size: 4vh;
+    color: black;
+    font-weight: bold;
+    vertical-align: middle;
+  }
 
-.subtitle {
-  font-size: 2vh;
-  font-weight: normal;
-  margin-left: 5px;
-  vertical-align: middle;
-}
+  .subtitle {
+    font-size: 2vh;
+    font-weight: normal;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
 
-.title_box {
-  padding-top: 1vh;
-}
+  .title_box {
+    padding-top: 1vh;
+  }
 
-.extrainfo{
-  font-size: 2vh;
-  margin-right: 10px;
-  vertical-align: middle;
-}
+  .extrainfo {
+    font-size: 2vh;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
 </style>

@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "lint": "eslint --ext .ts,.vue --fix src",
     "dev": "node beforerun.mjs && vite",
-    "build": "node beforerun.mjs --mode production && vue-tsc && vite build --mode production",
+    "build": "node beforerun.mjs --mode production && npm run lint && vue-tsc && vite build --mode production",
     "preview": "node beforerun.mjs --mode production && vite preview --mode production"
   },
   "dependencies": {

@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import ClassItem from "@/components/shop/classitem.vue"
-  import {Class, apiGetClassLst} from "#/center/class";
+  import ClassItem from '@/components/shop/classitem.vue'
+  import { Class, apiGetClassLst } from '#/center/class'
 
   const props = defineProps({
-    "height": {
+    height: {
       type: Number || String,
       required: true
-    },
+    }
   })
 
   const classLst = ref([] as Class[])
@@ -18,7 +18,7 @@
   }
   getClass()
 
-  const maxWidth = ref("0")
+  const maxWidth = ref('0')
   const maxBtn = ref(0)
   const boxWidth = ref(0)
   const count = ref(0)
@@ -26,7 +26,7 @@
     const classChild = document.querySelectorAll('.components-shop-classitem-item')
     classChild.forEach((i: Element) => {
       const element: HTMLElement = i as unknown as HTMLElement
-      console.log("element.offsetWidth", element.offsetWidth)
+      console.log('element.offsetWidth', element.offsetWidth)
       if (element.offsetWidth + 20 > maxBtn.value) {
         maxBtn.value = element.offsetWidth + 20
       }
@@ -35,7 +35,7 @@
     if (classBox.value) {
       boxWidth.value = classBox.value.offsetWidth
       count.value = Math.floor(boxWidth.value / maxBtn.value)
-      maxWidth.value = (boxWidth.value / count.value) + "px"
+      maxWidth.value = boxWidth.value / count.value + 'px'
     }
   }
 
@@ -61,15 +61,15 @@
 </template>
 
 <style scoped lang="scss">
-.classLst {
-  display: flex;
-  flex-flow: wrap;
-  justify-content: flex-start;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 5px;
-}
+  .classLst {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: flex-start;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+  }
 
-.classItem {
-  width: calc(v-bind(maxWidth) - 5px);
-}
+  .classItem {
+    width: calc(v-bind(maxWidth) - 5px);
+  }
 </style>

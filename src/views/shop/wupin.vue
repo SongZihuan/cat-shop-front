@@ -1,201 +1,226 @@
 <script setup lang="ts">
-import {Wupin} from "@/store/hotwupin"
-import { ElNotification } from 'element-plus'
-import {Location} from "@element-plus/icons-vue"
-import {getFacePrice, getRealPrice, getTotalPrice} from "@/utils/price"
-import {apiPostAddToShoppingBag} from "#/center/shoppingbag"
-import {apiGetBuyRecordInfo, BuyRecord} from "#/center/buyrecord"
-import { ElMessage } from 'element-plus'
-import {apiGetWupin} from "#/center/wupin"
-const route = useRoute()
-const router = useRouter()
+  import { Wupin } from '@/store/hotwupin'
+  import { ElNotification } from 'element-plus'
+  import { Location } from '@element-plus/icons-vue'
+  import { getFacePrice, getRealPrice, getTotalPrice } from '@/utils/price'
+  import { apiPostAddToShoppingBag } from '#/center/shoppingbag'
+  import { apiGetBuyRecordInfo, BuyRecord } from '#/center/buyrecord'
+  import { apiGetWupin } from '#/center/wupin'
+  import { ElMessage, ElMessageBox } from 'element-plus'
 
-const nowrecordmode = "nowrecordmode"
-const recordmode = "recordmode"
-const wupinmode = "wupinmode"
-const nullmode = "nullmode"
+  const route = useRoute()
+  const router = useRouter()
 
-const mode = ref(nullmode)
+  const nowrecordmode = 'nowrecordmode'
+  const recordmode = 'recordmode'
+  const wupinmode = 'wupinmode'
+  const nullmode = 'nullmode'
 
-const nowRecordId = ref(route.query.nowRecordId as number | null | undefined)
-const recordId = ref(route.query.recordId as number | null | undefined)
-const wupinId = ref(route.query.wupinId as number | null | undefined)
+  const mode = ref(nullmode)
 
-const record = ref(null as BuyRecord | null)
-const wupin = ref(null as Wupin | null)
+  const nowRecordId = ref(computed(() => parseInt(route.query.nowRecordId as unknown as string) || (0 as number)))
+  const recordId = ref(computed(() => parseInt(route.query.recordId as unknown as string) || (0 as number)))
+  const wupinId = ref(computed(() => parseInt(route.query.wupinId as unknown as string) || (0 as number)))
 
-if (nowRecordId.value && nowRecordId.value >= 0) {
-  apiGetBuyRecordInfo(nowRecordId.value as number).then((res) => {
-    record.value = res.data.data as BuyRecord
-    wupin.value = record.value.nowwupin as Wupin
-    mode.value = nowrecordmode
-  }).catch(() => {
+  const record = ref(null as BuyRecord | null)
+  const wupin = ref(null as Wupin | null)
+  const hasClass = computed(
+    () =>
+      wupin.value &&
+      wupin.value.classId !== 1 &&
+      wupin.value.classId !== 0 &&
+      wupin.value.classOf &&
+      wupin.value.classOf.id !== wupin.value.classId
+  )
+
+  if (nowRecordId.value && nowRecordId.value >= 0) {
+    apiGetBuyRecordInfo(nowRecordId.value as number)
+      .then((res) => {
+        record.value = res.data.data as BuyRecord
+        wupin.value = record.value.nowwupin as Wupin
+        mode.value = nowrecordmode
+      })
+      .catch(() => {
+        router.push({
+          path: '/system/error',
+          query: {
+            msg: '商品不存在'
+          }
+        })
+      })
+  } else if (recordId.value && recordId.value >= 0) {
+    apiGetBuyRecordInfo(recordId.value as number)
+      .then((res) => {
+        record.value = res.data.data as BuyRecord
+        wupin.value = record.value.wupin as Wupin
+        mode.value = recordmode
+      })
+      .catch(() => {
+        router.push({
+          path: '/system/error',
+          query: {
+            msg: '商品不存在'
+          }
+        })
+      })
+  } else if (wupinId.value && wupinId.value >= 0) {
+    apiGetWupin(wupinId.value as number)
+      .then((res) => {
+        record.value = null
+        wupin.value = res.data.data as Wupin
+        mode.value = wupinmode
+      })
+      .catch(() => {
+        router.push({
+          path: '/system/error',
+          query: {
+            msg: '商品不存在'
+          }
+        })
+      })
+  } else {
     router.push({
-      path: "/system/error",
+      path: '/system/error',
       query: {
-        msg: "商品不存在",
+        msg: '商品不存在'
       }
     })
-  })
-} else if (recordId.value && recordId.value >= 0) {
-  apiGetBuyRecordInfo(recordId.value as number).then((res) => {
-    record.value = res.data.data as BuyRecord
-    wupin.value = record.value.wupin as Wupin
-    mode.value = recordmode
-  }).catch(() => {
-    router.push({
-      path: "/system/error",
-      query: {
-        msg: "商品不存在",
-      }
-    })
-  })
-} else if (wupinId.value && wupinId.value >= 0) {
-  apiGetWupin(wupinId.value as number).then((res) => {
-    record.value = null
-    wupin.value = res.data.data
-    mode.value = wupinmode
-  }).catch(() => {
-    router.push({
-      path: "/system/error",
-      query: {
-        msg: "商品不存在",
-      }
-    })
-  })
-} else {
-  router.push({
-    path: "/system/error",
-    query: {
-      msg: "商品不存在",
-    }
-  })
-}
-
-const num = ref(1)
-const realPrice = computed(() => {
-  return getRealPrice(wupin.value?.realPrice)
-})
-const facePrice = computed(() => {
-  return getFacePrice(wupin.value?.hotPrice, wupin.value?.realPrice)
-})
-const totalPrice = computed(() => {
-  return getTotalPrice(wupin.value?.hotPrice, wupin.value?.realPrice, num.value)
-})
-
-const totalDaoHuo = computed(() => (wupin.value && wupin.value.buydaohuo >= 0) ? wupin.value.buydaohuo : 0)
-const totalAllUserPrice = computed(() => (wupin.value && wupin.value.buyprice >= 0) ? wupin.value.buyprice : 0)
-const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0) ? wupin.value.buytotal : 0)
-const totalPingJia = computed(() => (wupin.value && wupin.value.buypingjia >= 0) ? wupin.value.buypingjia : 0)
-const totalBuyGood = computed(() => (wupin.value && wupin.value.buygood >= 0) ? wupin.value.buygood : 0)
-
-const daohuoPre = computed(() => (totalDaoHuo.value / totalBuy.value) * 100)
-const pingjiaPre = computed(() => (totalPingJia.value / totalDaoHuo.value) * 100)
-const goodBuyPre = computed(() => (totalBuyGood.value / totalPingJia.value) * 100)
-const goodBuyMsg = computed(() => {
-  if (goodBuyPre.value >= 85) {
-    return "好评如潮"
-  } else if (goodBuyPre.value >= 50) {
-    return "部分好评"
-  } else if (goodBuyPre.value >= 30) {
-    return "好评甚少"
   }
 
-  return "谨慎购买"
-})
+  const num = ref(1)
+  const realPrice = computed(() => {
+    return getRealPrice(wupin.value?.realPrice)
+  })
+  const facePrice = computed(() => {
+    return getFacePrice(wupin.value?.hotPrice, wupin.value?.realPrice)
+  })
+  const totalPrice = computed(() => {
+    return getTotalPrice(wupin.value?.hotPrice, wupin.value?.realPrice, num.value)
+  })
 
-const onClickBag = () => {
-  wupin.value && apiPostAddToShoppingBag(wupin.value.id, num.value).then((res) => {
-    if (res.data.data.success) {
-      wupin.value && ElNotification({
-        title: '已经加入购物车',
-        message: `尊敬的用户您好，我们已经将 ${num.value}件 ${wupin.value.name} 添加到您的购物车。请您进行接下来的操作。若现在购买，预测价格为￥${totalPrice.value}。`,
-        duration: 5000,
-        type: "success",
-        position: 'top-left',
+  const totalBuy = computed(() => (wupin.value && wupin.value.buytotal >= 0 ? wupin.value.buytotal : 0))
+  const totalPingJia = computed(() => (wupin.value && wupin.value.buypingjia >= 0 ? wupin.value.buypingjia : 0))
+  const totalBuyGood = computed(() => (wupin.value && wupin.value.buygood >= 0 ? wupin.value.buygood : 0))
+
+  const goodBuyPre = computed(() => (totalBuyGood.value / totalPingJia.value) * 100)
+  const goodBuyMsg = computed(() => {
+    if (goodBuyPre.value >= 85) {
+      return '好评如潮'
+    } else if (goodBuyPre.value >= 50) {
+      return '部分好评'
+    } else if (goodBuyPre.value >= 30) {
+      return '好评甚少'
+    }
+
+    return '谨慎购买'
+  })
+
+  const onClickBag = () => {
+    wupin.value &&
+      apiPostAddToShoppingBag(wupin.value.id, num.value).then((res) => {
+        if (res.data.data.success) {
+          wupin.value &&
+            ElNotification({
+              title: '已经加入购物车',
+              message: `尊敬的用户您好，我们已经将 ${num.value}件 ${wupin.value.name} 添加到您的购物车。请您进行接下来的操作。若现在购买，预测价格为￥${totalPrice.value}。`,
+              duration: 5000,
+              type: 'success',
+              position: 'top-left'
+            })
+        } else {
+          ElMessage({
+            type: 'error',
+            message: '加入购物车失败'
+          })
+        }
       })
-    } else {
+  }
+
+  const onGoRecord = () => {
+    if (mode.value === nowrecordmode) {
+      router.push({
+        path: '/user/center/buyrecord',
+        query: {
+          id: nowRecordId.value
+        }
+      })
+    } else if (mode.value === recordmode) {
+      router.push({
+        path: '/user/center/buyrecord',
+        query: {
+          id: recordId.value
+        }
+      })
+    }
+  }
+
+  const onSameClick = () => {
+    wupin.value &&
+      router.push({
+        path: '/user/shop/search',
+        query: {
+          select: wupin.value.classId || 0,
+          search: wupin.value.name || ''
+        }
+      })
+  }
+
+  const onClassClick = () => {
+    if (wupin.value && hasClass.value) {
+      ElMessageBox.alert(`该商品的类型为：${wupin.value.classOf.name}。`, '商品类型', {
+        confirmButtonText: '确认'
+      })
+    } else if (wupin.value) {
+      ElMessageBox.alert('该商品目前暂无类型分类', '商品类型', {
+        confirmButtonText: '确认'
+      })
+    }
+  }
+
+  const byn = ref(null as any)
+  const buy = () => {
+    if (!byn.value) {
       ElMessage({
-        type: 'error',
-        message: "加入购物车失败",
+        type: 'warning',
+        message: '系统出现了问题，请重试。'
+      })
+      return
+    }
+
+    if (num.value <= 0) {
+      return
+    }
+
+    if (!byn.value.openWithNew(wupin.value, num.value)) {
+      ElMessage({
+        type: 'warning',
+        message: '系统出现了问题，请重试。'
       })
     }
-  })
-}
-
-const onGoRecord = () => {
-  if (mode.value === nowrecordmode) {
-    router.push({
-      path: "/user/center/buyrecord",
-      query: {
-        id: nowRecordId.value,
-      }
-    })
-  } else if (mode.value === recordmode) {
-    router.push({
-      path: "/user/center/buyrecord",
-      query: {
-        id: recordId.value,
-      }
-    })
-  }
-}
-
-const onSameClick = () => {
-  wupin.value && router.push({
-    path: "/user/shop/search",
-    query: {
-      select: wupin.value.classId || 0,
-      search: wupin.value.name || "",
-    }
-  })
-}
-
-const byn = ref(null as any)
-const buy = () => {
-  if (!byn.value) {
-    ElMessage({
-      type: 'warning',
-      message: "系统出现了问题，请重试。"
-    })
-    return
   }
 
-  if (num.value <= 0) {
-    return
-  }
+  const headerCustomer = ref<HTMLElement>()
+  const headerHeight = ref('0')
+  const el_card_header_px = 37
 
-  if (!byn.value.openWithNew(wupin.value, num.value)) {
-    ElMessage({
-      type: 'warning',
-      message: "系统出现了问题，请重试。"
+  const updateHeaderHeight = new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      headerHeight.value = entry.contentRect.height + el_card_header_px + 'px'
     })
-  }
-}
-
-const headerCustomer = ref<HTMLElement>()
-const headerHeight = ref("0")
-const el_card_header_px = 37
-
-const updateHeaderHeight = new ResizeObserver((entries) => {
-  entries.forEach(entry => {
-    headerHeight.value = entry.contentRect.height + el_card_header_px + "px"
   })
-})
 
-const footerCustomer = ref<HTMLElement>()
-const footerHeight = ref("0")
-const el_card_footer_px = 37
+  const footerCustomer = ref<HTMLElement>()
+  const footerHeight = ref('0')
+  const el_card_footer_px = 37
 
-const updateFooterHeight = new ResizeObserver((entries) => {
-  entries.forEach(entry => {
-    footerHeight.value = entry.contentRect.height + el_card_footer_px + "px"
+  const updateFooterHeight = new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      footerHeight.value = entry.contentRect.height + el_card_footer_px + 'px'
+    })
   })
-})
 
-watch(headerCustomer, () => headerCustomer.value && updateHeaderHeight.observe(headerCustomer.value))
-watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(footerCustomer.value))
-
+  watch(headerCustomer, () => headerCustomer.value && updateHeaderHeight.observe(headerCustomer.value))
+  watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(footerCustomer.value))
 </script>
 
 <template>
@@ -210,24 +235,20 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
           </div>
           <div style="float: right">
             <div class="title_btn_box">
-              <div class="class_box">
-                <el-text v-if="wupin.classId !== 1 && wupin.classOf && wupin.classOf.id !== 1" class="class_text">
-                  商品分类：{{ wupin.classOf.name }}
-                </el-text>
-                <el-text v-else class="class_text">
-                  商品暂无分类
-                </el-text>
-              </div>
-              <div class="class_box class_box_click" @click="onSameClick">
-                <el-text class="class_text">
-                  搜同类
-                </el-text>
-              </div>
-              <div v-if="mode === nowrecordmode || mode === recordmode" class="class_box class_box_click" @click="onGoRecord">
-                <el-text class="class_text">
+              <el-button-group>
+                <el-button size="large" type="success" @click="onClassClick">
+                  {{ hasClass ? '商品分类：' + wupin.classOf.name : '商品暂无分类' }}
+                </el-button>
+                <el-button size="large" type="primary" @click="onSameClick"> 搜同类 </el-button>
+                <el-button
+                  v-if="mode === nowrecordmode || mode === recordmode"
+                  size="large"
+                  type="warning"
+                  @click="onGoRecord"
+                >
                   回到订单页面
-                </el-text>
-              </div>
+                </el-button>
+              </el-button-group>
             </div>
           </div>
         </div>
@@ -237,86 +258,54 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
       <div class="left_box">
         <el-scrollbar>
           <div style="padding-right: 5px">
-            <div class="img_box">
-              <el-image :src="wupin.pic" fit="contain" style="height: auto; width: 85%" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+            <div class="img_outside_box">
+              <div class="img_box">
+                <el-image :src="wupin.pic" fit="contain" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+              </div>
             </div>
             <div v-if="wupin.ren" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Microphone /></el-icon>
-                客服专属称号
+                商品客服称呼
                 {{ wupin.ren }}
               </el-text>
             </div>
             <div v-if="wupin.phone" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Iphone /></el-icon>
-                客服专属电话
+                商品客服电话
                 {{ wupin.phone }}
               </el-text>
             </div>
             <div v-if="wupin.email" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Message /></el-icon>
-                客服专属邮箱
+                商品客服邮箱
                 {{ wupin.email }}
               </el-text>
             </div>
             <div v-if="wupin.wechat" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Service /></el-icon>
-                客服专属微信
+                商品客服微信
                 {{ wupin.wechat }}
               </el-text>
             </div>
             <div v-if="wupin.wechat" class="wupin_info_box">
               <el-text class="wupin_info_text">
                 <el-icon><Location /></el-icon>
-                客服专属地址
+                商品客服地址
                 {{ wupin.location }}
               </el-text>
             </div>
 
-            <el-divider border-style="solid" content-position="left" style="margin-top: 50px;">
-              购物数据
-            </el-divider>
+            <el-divider border-style="solid" content-position="left" class="divider_height"> 购物数据 </el-divider>
 
             <div class="wupin_buy_total_box" style="margin-top: 0">
               <el-text class="wupin_buy_total_text">
                 <el-icon><UserFilled /></el-icon>
                 购买人数：
-                {{ totalBuy }}
-              </el-text>
-            </div>
-
-            <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text">
-                <el-icon><IceCream /></el-icon>
-                购买好评人数：
-                {{ totalBuyGood }}
-              </el-text>
-            </div>
-
-            <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text">
-                <el-icon><Money /></el-icon>
-                总消费金额：
-                ￥{{ (totalAllUserPrice / 100).toFixed(2) }}
-              </el-text>
-            </div>
-
-            <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text">
-                <el-icon><Goblet /></el-icon>
-                购买到货率：
-                {{ daohuoPre.toFixed(2) }}%
-              </el-text>
-            </div>
-
-            <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text">
-                <el-icon><Goblet /></el-icon>
-                购买评价率：
-                {{ pingjiaPre.toFixed(2) }}%
+                {{ totalBuy > 999 ? '999+' : totalBuy }}
               </el-text>
             </div>
 
@@ -324,9 +313,7 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
               <el-text class="wupin_buy_total_text">
                 <el-icon><Goblet /></el-icon>
                 购买好评率：
-                <el-badge :value="goodBuyMsg">
-                  {{ goodBuyPre.toFixed(2) }}%
-                </el-badge>
+                <el-badge :value="goodBuyMsg"> {{ goodBuyPre.toFixed(2) }}% </el-badge>
               </el-text>
             </div>
           </div>
@@ -419,7 +406,9 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
                 <el-button class="buy_item" type="success" size="large" @click="buy">
                   <el-icon style="margin-right: 3px"><Money /></el-icon>
                   立即购买
-                  <span v-if="num >= 1"> （ 总价：{{ totalPrice > 0 ? "￥" + (totalPrice / 100).toFixed(2) : "免费" }} ） </span>
+                  <span v-if="num >= 1">
+                    （ 总价：{{ totalPrice > 0 ? '￥' + (totalPrice / 100).toFixed(2) : '免费' }} ）
+                  </span>
                 </el-button>
               </el-button-group>
             </div>
@@ -433,172 +422,194 @@ watch(footerCustomer, () => footerCustomer.value && updateFooterHeight.observe(f
 </template>
 
 <style scoped lang="scss">
-.base_card {
-  --base-card-height: #{var(--custom-height)};
-  --base-card-width: #{var(--custom-little-width)};
-  height: #{var(--base-card-height)};
-  max-height: #{var(--base-card-height)};
-  width: #{var(--base-card-width)};
-}
+  .base_card {
+    --base-card-height: #{var(--custom-height)};
+    --base-card-width: #{var(--custom-little-width)};
+    height: #{var(--base-card-height)};
+    max-height: #{var(--base-card-height)};
+    width: #{var(--base-card-width)};
+  }
 
-.box {
-  display: flow-root;
-  --base-card-body-height: calc(#{var(--base-card-height)} - v-bind(headerHeight) - v-bind(footerHeight) - 40px);  // el_card对body内置的padding
-  height: calc(#{var(--base-card-body-height)} - 6px);
-  max-height: calc(#{var(--base-card-body-height)} - 6px);
-  margin-top: 3px;
-  margin-bottom: 3px;
-}
+  .box {
+    display: flow-root;
+    --base-card-body-height: calc(
+      #{var(--base-card-height)} - v-bind(headerHeight) - v-bind(footerHeight) - 40px
+    ); // el_card对body内置的padding
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-top: 3px;
+    margin-bottom: 3px;
+  }
 
-.left_box {
-  float: left;
-  width: calc(30% - 5px);
-  height: calc(#{var(--base-card-body-height)} - 6px);
-  max-height: calc(#{var(--base-card-body-height)} - 6px);
-  margin-right: 2.5px;
-}
+  .left_box {
+    float: left;
+    width: calc(25% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
 
-.right_box {
-  float: right;
-  width: calc(70% - 5px);
-  height: calc(#{var(--base-card-body-height)} - 6px);
-  max-height: calc(#{var(--base-card-body-height)} - 6px);
-  margin-right: 2.5px;
-}
+  .right_box {
+    float: right;
+    width: calc(75% - 5px);
+    height: calc(#{var(--base-card-body-height)} - 6px);
+    max-height: calc(#{var(--base-card-body-height)} - 6px);
+    margin-right: 2.5px;
+  }
 
-.class_btn {
-  margin-top: 10px;
-  margin-right: 10px;
-  font-size: 1.3rem;
-}
+  .wupin_name {
+    display: inline-block;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 5px;
+    vertical-align: bottom;
+  }
 
-.wupin_name {
-  display: inline-block;
-  font-size: 1.8vw;
-  font-weight: bold;
-  margin-right: 5px;
-  vertical-align: bottom;
-}
+  .wupin_tag {
+    margin-top: 10px;
+    margin-left: 5px;
+  }
 
-.wupin_tag {
-  margin-top: 10px;
-  margin-left: 5px;
-}
+  .wupin_hot_price {
+    color: red;
+    font-size: 1.5rem;
+  }
 
-.wupin_hot_price {
-  color: red;
-  font-size: 1.5rem;
-}
+  .wupin_hot_real_price {
+    margin-left: 5px;
+    color: black;
+    font-size: 1.3rem;
+  }
 
-.wupin_hot_real_price {
-  margin-left: 5px;
-  color: black;
-  font-size: 1.3rem;
-}
+  .wupin_hot_real_price_line-through {
+    text-decoration: line-through;
+  }
 
-.wupin_hot_real_price_line-through {
-  text-decoration: line-through;
-}
+  .wupin_sb_price {
+    color: blue;
+    font-size: 1.3rem;
+  }
 
-.wupin_sb_price {
-  color: blue;
-  font-size: 1.3rem;
-}
+  .wupin_sb_real_price {
+    margin-left: 5px;
+    color: black;
+    font-size: 1.3rem;
+  }
 
-.wupin_sb_real_price {
-  margin-left: 5px;
-  color: black;
-  font-size: 1.3rem;
-}
+  .wupin_sb_real_price_line_through {
+    text-decoration: line-through;
+  }
 
-.wupin_sb_real_price_line_through {
-  text-decoration: line-through;
-}
+  .wupin_real_price {
+    color: black;
+    font-size: 1.3rem;
+  }
 
-.wupin_real_price {
-  color: black;
-  font-size: 1.3rem;
-}
+  .wupin_else_real_price {
+    margin-left: 5px;
+    color: black;
+    font-size: 0.7vw;
+  }
 
-.wupin_else_real_price {
-  margin-left: 5px;
-  color: black;
-  font-size: 0.7vw;
-}
+  .wupin_else_real_price_line_through {
+    text-decoration: line-through;
+  }
 
-.wupin_else_real_price_line_through {
-  text-decoration: line-through;
-}
+  .buy_item {
+    margin-left: 3px;
+    margin-right: 3px;
+  }
 
-.buy_item {
-  margin-left: 3px;
-  margin-right: 3px;
-}
+  .info_box {
+    margin-top: 10px;
+  }
 
-.info_box {
-  margin-top: 10px;
-}
+  .wupin_info_text {
+    font-size: 0.6vw;
+  }
 
-.wupin_info_text {
-  font-size: 0.6vw;
-}
+  .wupin_info_box,
+  .wupin_buy_total_box {
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
 
-.wupin_info_box, .wupin_buy_total_box {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
+  .wupin_buy_total_text {
+    font-size: 0.6vw;
+  }
 
-.wupin_buy_total_text {
-  font-size: 0.6vw;
-}
+  #info_box * {
+    all: initial;
+    width: 100%;
+  }
 
-#info_box * {
-  all: initial;
-  width: 100%;
-}
+  .footer_box {
+    display: flow-root;
+  }
 
-.footer_box {
-  display: flow-root;
-}
+  .price_box {
+    float: left;
+  }
 
-.price_box{
-  float: left;
-}
+  .buy_box {
+    float: right;
+  }
 
-.buy_box {
-  float: right;
-}
+  .class_box {
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
 
-.class_box {
-  display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
+    border: 1px solid #333333;
+    padding: 5px;
+    border-radius: 10px;
 
-  border: 1px solid #333333;;
-  padding: 5px;
-  border-radius: 10px;
+    margin-right: 5px;
+    margin-left: 5px;
+  }
 
-  margin-right: 5px;
-  margin-left: 5px;
-}
+  .class_box_click {
+    cursor: pointer;
+    background-color: white;
+  }
 
-.class_box_click {
-  cursor: pointer;
-  background-color: white;
-}
+  .class_box_click:hover {
+    background-color: rgb(220, 220, 220);
+  }
 
-.class_box_click:hover {
-  background-color: rgb(220, 220, 220);
-}
+  .class_text {
+    font-size: 1.15rem;
+    vertical-align: middle;
+  }
 
-.class_text {
-  font-size: 1.15rem;
-  vertical-align: middle;
-}
+  .title_btn_box {
+    display: flex;
+    justify-content: left;
 
+    margin-right: 5px;
+    margin-left: 5px;
+  }
 
-.title_btn_box {
-  display: flex;
-  justify-content: left;
-}
+  .img_outside_box {
+    display: flex;
+    justify-content: left;
+
+    width: 100%;
+    height: auto;
+  }
+
+  .img_box {
+    height: auto;
+    width: 60%;
+  }
+
+  .img_box > .el-image {
+    height: auto;
+    width: 100%;
+  }
+
+  .divider_height {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
 </style>

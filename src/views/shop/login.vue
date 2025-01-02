@@ -1,111 +1,116 @@
 <script setup lang="ts">
-import useUserStore, {isLogin} from "@/store/user"
-import {isMobile} from "@/utils/str"
-import {redirect} from "@/router"
-import useConfigStore from "@/store/config"
-import { ElMessage } from "element-plus"
+  import useUserStore, { isLogin } from '@/store/user'
+  import { isMobile } from '@/utils/str'
+  import { redirect } from '@/router'
+  import useConfigStore from '@/store/config'
+  import { ElMessage } from 'element-plus'
 
-const configStore = useConfigStore()
-const userStore = useUserStore()
+  const configStore = useConfigStore()
+  const userStore = useUserStore()
 
-configStore.updateXieyi()
+  configStore.updateXieyi()
 
-const route = useRoute()
-const router = useRouter()
+  const route = useRoute()
+  const router = useRouter()
 
-const goRedirect = () => {
-  const redirectPath = route.query?.[redirect]
-  if (typeof redirectPath === "string" && redirectPath.length > 0) {
-    const p = decodeURIComponent(redirectPath)
-    if (p.startsWith("http")) {
-      window.open(p)
+  const goRedirect = () => {
+    const redirectPath = route.query?.[redirect]
+    if (typeof redirectPath === 'string' && redirectPath.length > 0) {
+      const p = decodeURIComponent(redirectPath)
+      if (p.startsWith('http')) {
+        window.open(p)
+      } else {
+        window.location.href = window.location.origin + p
+      }
     } else {
-      window.location.href = window.location.origin + p
+      router.push({
+        path: '/home'
+      })
     }
-  } else {
+  }
+
+  watch(
+    () => isLogin(),
+    (value) => {
+      if (value) {
+        goRedirect()
+      }
+    }
+  )
+
+  if (isLogin()) {
+    goRedirect()
+  }
+
+  const form = ref({
+    phone: '',
+    password: '',
+    code: ''
+  })
+
+  function getRandomInt(max: number) {
+    return Math.floor(Math.random() * max)
+  }
+
+  const a = ref(getRandomInt(10))
+  const b = ref(getRandomInt(10))
+
+  const resetCode = () => {
+    a.value = getRandomInt(10)
+    b.value = getRandomInt(10)
+    form.value.code = ''
+  }
+
+  const answer = computed(() => a.value + b.value)
+  const question = computed(() => `${a.value} + ${b.value}`)
+
+  const codeCheck = computed(() => Number(form.value.code).valueOf() === answer.value)
+  const phoneCheck = computed(() => isMobile(form.value.phone))
+  const passwordCheck = computed(() => form.value.password && form.value.password.length > 0) // 登录阶段不检查密码
+  const allCheck = computed(() => codeCheck.value && phoneCheck.value && passwordCheck.value && accept.value)
+
+  const toRegirst = () => {
     router.push({
-      "path": "/home",
+      path: '/user/shop/regirster',
+      query: route.query
     })
   }
-}
 
-watch(() => isLogin(), (value) => {
-  if (value) {
-    goRedirect()
-  }
-})
+  const login = () => {
+    if (!allCheck.value) {
+      return
+    }
 
-if (isLogin()) {
-  goRedirect()
-}
-
-const form = ref({
-  phone: "",
-  password: "",
-  code: "",
-})
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max)
-}
-
-const a = ref(getRandomInt(10))
-const b = ref(getRandomInt(10))
-
-const resetCode = () => {
-  a.value = getRandomInt(10)
-  b.value = getRandomInt(10)
-  form.value.code = ""
-}
-
-const answer = computed(() => a.value + b.value)
-const question = computed(() => `${a.value} + ${b.value}`)
-
-const codeCheck = computed(() => Number(form.value.code).valueOf() === answer.value)
-const phoneCheck = computed(() => isMobile(form.value.phone))
-const passwordCheck = computed(() => form.value.password && form.value.password.length > 0)// 登录阶段不检查密码
-const allCheck = computed(() => codeCheck.value && phoneCheck.value && passwordCheck.value && accept.value)
-
-const toRegirst = () => {
-  router.push({
-    path: "/user/shop/regirster",
-    query: route.query,
-  })
-}
-
-const login = () => {
-  if (!allCheck.value) {
-    return
+    userStore.login(form.value.phone, form.value.password).then(
+      () => {
+        goRedirect()
+      },
+      () => {
+        resetCode()
+        ElMessage({
+          type: 'error',
+          message: '登录失败，请检查手机号或者密码'
+        })
+      }
+    )
   }
 
-  userStore.login(form.value.phone, form.value.password).then(() => {
-    goRedirect()
-  }, () => {
-    resetCode()
-    ElMessage({
-      type: "error",
-      message: "登录失败，请检查手机号或者密码",
-    })
-  })
-}
+  const accept = ref(false)
+  const acceptModel = ref(false)
 
-const accept = ref(false)
-const acceptModel = ref(false)
+  const openXieyi = () => {
+    acceptModel.value = true
+  }
 
-const openXieyi = () => {
-  acceptModel.value = true
-}
+  const acceptXieyi = () => {
+    acceptModel.value = false
+    accept.value = true
+  }
 
-const acceptXieyi = () => {
-  acceptModel.value = false
-  accept.value = true
-}
-
-const notAcceptXieyi = () => {
-  acceptModel.value = false
-  accept.value = false
-}
-
+  const notAcceptXieyi = () => {
+    acceptModel.value = false
+    accept.value = false
+  }
 </script>
 
 <template>
@@ -117,13 +122,7 @@ const notAcceptXieyi = () => {
             <template #label>
               <el-text>手机号</el-text>
             </template>
-            <el-input
-                v-model="form.phone"
-                maxlength="20"
-                minlength="1"
-                show-word-limit
-                clearable
-            />
+            <el-input v-model="form.phone" maxlength="20" minlength="1" show-word-limit clearable />
           </el-form-item>
           <el-form-item>
             <template #label>
@@ -152,30 +151,22 @@ const notAcceptXieyi = () => {
         </div>
         <div style="display: flex; width: 15vw; justify-content: center; margin-top: 10px">
           <el-button-group>
-            <el-button type="primary" :disabled="!allCheck" @click="login">
-              登录
-            </el-button>
-            <el-button v-if="!allCheck" type="success" @click="toRegirst">
-              还没有账号？先去注册
-            </el-button>
+            <el-button type="primary" :disabled="!allCheck" @click="login"> 登录 </el-button>
+            <el-button v-if="!allCheck" type="success" @click="toRegirst"> 还没有账号？先去注册 </el-button>
           </el-button-group>
         </div>
         <div style="width: 15vw; margin-top: 5px">
           <div v-if="!codeCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon>
-            </el-alert>
+            <el-alert title="请输入正确的验证码！" :closable="false" type="warning" center show-icon> </el-alert>
           </div>
           <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon>
-            </el-alert>
+            <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon> </el-alert>
           </div>
           <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请输入密码！" :closable="false" type="warning" center show-icon>
-            </el-alert>
+            <el-alert title="请输入密码！" :closable="false" type="warning" center show-icon> </el-alert>
           </div>
           <div v-if="!accept" class="tip_box" style="display: flex; justify-content: center">
-            <el-alert title="请同意用户协议！" :closable="false" type="warning" center show-icon>
-            </el-alert>
+            <el-alert title="请同意用户协议！" :closable="false" type="warning" center show-icon> </el-alert>
           </div>
         </div>
       </div>
@@ -183,10 +174,7 @@ const notAcceptXieyi = () => {
   </el-card>
   <div v-else></div>
 
-  <el-dialog
-      v-model="acceptModel"
-      style="width: 50vw; height: 70vh"
-  >
+  <el-dialog v-model="acceptModel" style="width: 50vw; height: 70vh">
     <template #title>
       <div style="display: flex; justify-content: center; height: 10vh">
         <el-text style="font-size: 0.8vw; font-weight: bold"> 用户协议 </el-text>
@@ -202,12 +190,8 @@ const notAcceptXieyi = () => {
     <template #footer>
       <div style="display: flex; justify-content: right">
         <el-button-group>
-          <el-button type="info" size="large" @click="notAcceptXieyi">
-            不同意
-          </el-button>
-          <el-button type="success" size="large" @click="acceptXieyi">
-            同意
-          </el-button>
+          <el-button type="info" size="large" @click="notAcceptXieyi"> 不同意 </el-button>
+          <el-button type="success" size="large" @click="acceptXieyi"> 同意 </el-button>
         </el-button-group>
       </div>
     </template>
@@ -215,38 +199,38 @@ const notAcceptXieyi = () => {
 </template>
 
 <style scoped lang="scss">
-.base_card {
-  --base-card-height: #{var(--custom-height)};
-  --base-card-width: #{var(--custom-little-width)};
-  --base-card-min-width: #{var(--custom-min-width)};
-  max-height: #{var(--base-card-height)};
-  max-width: #{var(--base-card-width)};
-}
+  .base_card {
+    --base-card-height: #{var(--custom-height)};
+    --base-card-width: #{var(--custom-little-width)};
+    --base-card-min-width: #{var(--custom-min-width)};
+    max-height: #{var(--base-card-height)};
+    max-width: #{var(--base-card-width)};
+  }
 
-.box {
-  display: flex;
-  justify-content: center;
-}
+  .box {
+    display: flex;
+    justify-content: center;
+  }
 
-.tip_box {
-  margin-top: 10px;
-}
+  .tip_box {
+    margin-top: 10px;
+  }
 
-.xieyi_checkbox {
-  vertical-align: middle;
-}
-.xieyi_text{
-  vertical-align: middle;
-  cursor: pointer;
-}
-.xieyi_text:hover{
-  text-decoration: underline;
-}
-.xieyi_text:active{
-  color: #2448aa;
-}
-#info_box * {
-  all: initial;
-  width: 100%;
-}
+  .xieyi_checkbox {
+    vertical-align: middle;
+  }
+  .xieyi_text {
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .xieyi_text:hover {
+    text-decoration: underline;
+  }
+  .xieyi_text:active {
+    color: #2448aa;
+  }
+  #info_box * {
+    all: initial;
+    width: 100%;
+  }
 </style>

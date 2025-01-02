@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import "normalize.css"
+  import 'normalize.css'
 </script>
 
 <template>
@@ -8,5 +8,4 @@ import "normalize.css"
   </div>
 </template>
 
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>
