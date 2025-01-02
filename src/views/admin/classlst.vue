@@ -8,7 +8,7 @@
     apiAdminPostChangeClassName,
     apiAdminPostChangeClassShow
   } from '#/admin/class'
-  import pushTo from "@/views/admin/router_push";
+  import pushTo from '@/views/admin/router_push'
 
   const route = useRoute()
   const router = useRouter()

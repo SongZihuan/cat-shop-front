@@ -2,7 +2,7 @@
   import { isAdmin, isRootAdmin } from '@/store/admin'
   import { apiAdminGetXieyi } from '#/admin/xieyi'
   import pushTo from '@/views/admin/router_push'
-  import Showhtml from "@/components/utils/showhtml.vue";
+  import Showhtml from '@/components/utils/showhtml.vue'
 
   const router = useRouter()
   const route = useRoute()

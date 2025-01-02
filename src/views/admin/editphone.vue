@@ -115,10 +115,7 @@
       </template>
     </el-result>
   </el-card>
-  <el-card
-    v-else-if="user && isAdmin()"
-    class="base_card admin_root_main_base_card"
-  >
+  <el-card v-else-if="user && isAdmin()" class="base_card admin_root_main_base_card">
     <el-form-item>
       <template #label>
         <el-text>新手机号</el-text>

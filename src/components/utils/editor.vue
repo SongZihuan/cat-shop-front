@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import 'normalize.css'
-  import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+  import { Editor as WangEditor, Toolbar as WangToolbar } from '@wangeditor/editor-for-vue'
   import { IToolbarConfig } from '@wangeditor/editor'
   import { IEditorConfig } from '@wangeditor/editor'
   import '@wangeditor/editor/dist/css/style.css'
@@ -19,7 +19,7 @@
     },
     type: {
       type: String,
-      required: true,
+      required: true
     }
   })
 
@@ -85,14 +85,14 @@
 
 <template>
   <div id="editorBox">
-    <Toolbar
+    <WangToolbar
       style="border-bottom: 1px solid #ccc"
       :editor="editorRef"
       :default-config="toolbarConfig"
       :mode="editorMode"
     />
     <!-- eslint-disable vue/v-on-event-hyphenation -->
-    <Editor
+    <WangEditor
       v-model="content"
       style="height: 80%; overflow-y: hidden"
       :default-config="editorConfig"

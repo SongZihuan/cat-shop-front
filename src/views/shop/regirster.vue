@@ -4,7 +4,7 @@
   import { redirect } from '@/router'
   import { ElMessage } from 'element-plus'
   import useConfigStore from '@/store/config'
-  import Showhtml from "@/components/utils/showhtml.vue";
+  import Showhtml from '@/components/utils/showhtml.vue'
 
   const userStore = useUserStore()
   const configStore = useConfigStore()

@@ -21,7 +21,6 @@ declare module '@vue/runtime-core' {
     Buyrecord: typeof import('./src/components/center/buyrecord.vue')['default']
     Classitem: typeof import('./src/components/shop/classitem.vue')['default']
     Classlist: typeof import('./src/components/shop/classlist.vue')['default']
-    Clear: typeof import('./src/components/system/clear.vue')['default']
     Editor: typeof import('./src/components/utils/editor.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']

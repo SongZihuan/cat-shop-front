@@ -7,7 +7,7 @@
   import { apiGetBuyRecordInfo, BuyRecord } from '#/center/buyrecord'
   import { apiGetWupin } from '#/center/wupin'
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import Showhtml from "@/components/utils/showhtml.vue";
+  import Showhtml from '@/components/utils/showhtml.vue'
 
   const route = useRoute()
   const router = useRouter()
