@@ -96,8 +96,8 @@
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
       <el-button-group>
-        <el-button :disabled="!allCheck" @click="restart"> 重启后端 </el-button>
-        <el-button :disabled="!allCheck" @click="stop"> 关闭后端 </el-button>
+        <el-button size="large" type="warning" :disabled="!allCheck" @click="restart"> 重启后端 </el-button>
+        <el-button size="large" type="danger" :disabled="!allCheck" @click="stop"> 关闭后端 </el-button>
       </el-button-group>
     </div>
     <div style="width: 15vw; margin-top: 5px">

@@ -156,7 +156,7 @@
       <div style="margin-left: 10px; height: 20vh">
         <div style="display: flow-root">
           <div class="price_box" style="float: left">
-            <div v-if="record.down">
+            <div v-if="record.down" class="info_box">
               <el-text class="wupin_down_price">
                 商品已下架
                 <br />
@@ -172,7 +172,7 @@
                 </el-text>
               </el-text>
             </div>
-            <div v-if="facePrice == 0">
+            <div v-else-if="facePrice == 0" class="info_box">
               <el-text class="wupin_hot_price">
                 现在：免费抢购
                 <br />
@@ -181,7 +181,7 @@
                 </el-text>
               </el-text>
             </div>
-            <div v-else-if="facePrice < realPrice">
+            <div v-else-if="facePrice < realPrice" class="info_box">
               <el-text class="wupin_hot_price">
                 促销：￥{{ (facePrice / 100).toFixed(2) }} / 件
                 <br />
@@ -192,11 +192,9 @@
                 <el-text v-if="realPrice > 0" class="wupin_hot_real_price">
                   惊喜：{{ ((facePrice / realPrice) * 10).toFixed(1) }} 折扣
                 </el-text>
-                <br />
-                <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
               </el-text>
             </div>
-            <div v-else-if="facePrice > realPrice">
+            <div v-else-if="facePrice > realPrice" class="info_box">
               <!--              不应该出现此情况-->
               <el-text class="wupin_sb_price">
                 冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
@@ -204,16 +202,12 @@
                 <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                   原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                 </el-text>
-                <br />
-                <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
               </el-text>
             </div>
-            <div v-else-if="facePrice == realPrice">
+            <div v-else-if="facePrice == realPrice" class="info_box">
               <el-text class="wupin_real_price"> 售价：￥{{ (facePrice / 100).toFixed(2) }} / 件 </el-text>
-              <br />
-              <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
             </div>
-            <div v-else-if="realPrice == 0">
+            <div v-else-if="realPrice == 0" class="info_box">
               <!--              不应该出现此情况-->
               <el-text class="wupin_sb_price">
                 冤种价：￥{{ (facePrice / 100).toFixed(2) }} / 件
@@ -221,11 +215,9 @@
                 <el-text v-if="realPrice > 0" class="wupin_sb_real_price wupin_sb_real_price_line_through">
                   原价：免费送
                 </el-text>
-                <br />
-                <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
               </el-text>
             </div>
-            <div v-else>
+            <div v-else class="info_box">
               <!--              不应该出现此情况-->
               <el-text class="wupin_real_price">
                 售价：￥{{ (facePrice / 100).toFixed(2) }} / 件
@@ -233,9 +225,10 @@
                 <el-text v-if="realPrice > 0" class="wupin_else_real_price wupin_else_real_price_line_through">
                   原价：￥{{ (realPrice / 100).toFixed(2) }} / 件
                 </el-text>
-                <br />
-                <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
               </el-text>
+            </div>
+            <div v-if="record.time" class="info_box">
+              <el-text class="record_info"> 放入购物车时间：{{ formatDate(record.time) }} </el-text>
             </div>
           </div>
         </div>
@@ -293,7 +286,6 @@
     font-weight: bold;
     margin-right: 5px;
     vertical-align: bottom;
-    cursor: pointer;
   }
 
   .wupin_name_click {
@@ -431,5 +423,9 @@
   .right_box {
     display: flex;
     justify-content: left;
+  }
+
+  .info_box {
+    margin-bottom: 5px;
   }
 </style>

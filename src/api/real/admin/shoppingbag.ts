@@ -57,7 +57,7 @@ export function apiAdminGetUserShoppingRecord(
         classId: 2,
         classOf: {
           id: 2,
-          name: '商品分类',
+          name: '商品分类2222',
           show: true,
           down: false
         },

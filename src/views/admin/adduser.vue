@@ -1,8 +1,14 @@
 <script setup lang="ts">
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import useAdminUserStore, { RootAdminUserStatus } from '@/store/admin/user'
-  import { isAdmin } from '@/store/admin'
-  import { isMobile } from '@/utils/str'
+  import useAdminUserStore, {
+    AdminUserStatus,
+    AdminUserType,
+    RootAdminUserStatus,
+    RootAdminUserType,
+    RootAdminUserTypeWithoutRoot
+  } from '@/store/admin/user'
+  import { isAdmin, isRootAdmin } from '@/store/admin'
+  import { isEmail, isMobile } from '@/utils/str'
   import { NewUserData } from '#/admin/user'
 
   const router = useRouter()
@@ -20,22 +26,38 @@
 
   const ub = ref({
     name: '',
-    phone: '',
-    password: '',
+    wechat: '',
+    email: '',
     location: '',
     status: 1,
     type: 1,
-    wechat: '',
-    email: ''
+    phone: '',
+    password: ''
   } as NewUserData)
 
-  const userStatusLst = ref(RootAdminUserStatus)
+  const userStatusLst = ref(AdminUserStatus) // 创建新用户status不能是delete
+  const userTypeLst = ref(isRootAdmin() ? RootAdminUserTypeWithoutRoot : AdminUserType)
 
-  const checkName = computed(() => ub.value.name && ub.value.name.length > 0 && ub.value.name.length <= 10)
+  const checkName = computed(() => !ub.value.name || ub.value.name.length <= 10)
+  const checkStatus = computed(() => !Object.keys(userStatusLst).some((v) => Number(v).valueOf() === ub.value.status))
+  const checkType = computed(() => !Object.keys(userTypeLst).some((v) => Number(v).valueOf() === ub.value.type))
   const phoneCheck = computed(() => isMobile(ub.value.phone))
   const passwordCheck = computed(() => ub.value.password.length >= 8)
-  const checkStatus = computed(() => !Object.keys(userStatusLst).some((v) => Number(v).valueOf() === ub.value.status))
-  const allCheck = computed(() => checkStatus.value && checkName.value && phoneCheck.value && passwordCheck.value)
+  const checkEmail = computed(() => {
+    if (!ub.value.email) {
+      return true
+    }
+    return isEmail(ub.value.email)
+  })
+  const allCheck = computed(
+    () =>
+      checkType.value &&
+      checkEmail.value &&
+      checkStatus.value &&
+      checkName.value &&
+      phoneCheck.value &&
+      passwordCheck.value
+  )
 
   const update = () => {
     ElMessageBox.confirm('是否确定添加新用户', '提示', {
@@ -94,6 +116,18 @@
       </el-form-item>
       <el-form-item>
         <template #label>
+          <el-text>微信</el-text>
+        </template>
+        <el-input v-model="ub.wechat" maxlength="30" show-word-limit clearable />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>邮箱</el-text>
+        </template>
+        <el-input v-model="ub.email" maxlength="30" show-word-limit clearable />
+      </el-form-item>
+      <el-form-item>
+        <template #label>
           <el-text>地址</el-text>
         </template>
         <el-input v-model="ub.location" minlength="0" maxlength="150" show-word-limit />
@@ -102,23 +136,42 @@
         <template #label>
           <el-text>状态</el-text>
         </template>
-        <el-select v-model="ub.status" placeholder="状态" size="large">
+        <el-select
+          v-model="ub.status"
+          placeholder="状态"
+          size="large"
+          :disabled="Object.keys(userStatusLst).length <= 1"
+        >
           <el-option v-for="(item, i) in userStatusLst" :key="i" :label="item" :value="Number(i).valueOf()" />
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <template #label>
+          <el-text>类型</el-text>
+        </template>
+        <el-select v-model="ub.type" placeholder="类型" size="large" :disabled="Object.keys(userTypeLst).length <= 1">
+          <el-option v-for="(item, i) in userTypeLst" :key="i" :label="item" :value="Number(i).valueOf()" />
         </el-select>
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
-      <el-button :disabled="!allCheck" @click="update"> 更新 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 添加 </el-button>
     </div>
     <div style="width: 15vw; margin-top: 5px">
       <div v-if="!checkStatus" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="请输入正确的状态！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
+      <div v-if="!checkType" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的类型！" :closable="false" type="warning" center show-icon> </el-alert>
+      </div>
       <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-        <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon> </el-alert>
+        <el-alert title="名字不能多于10位！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
       <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="请输入正确的手机号！" :closable="false" type="warning" center show-icon> </el-alert>
+      </div>
+      <div v-if="!checkEmail" class="tip_box" style="display: flex; justify-content: center">
+        <el-alert title="请输入正确的邮箱！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
       <div v-if="!passwordCheck" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="密码必须长度大于8！" :closable="false" type="warning" center show-icon> </el-alert>

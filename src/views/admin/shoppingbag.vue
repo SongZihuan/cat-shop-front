@@ -4,6 +4,7 @@
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
   import { AdminShopRecord, apiAdminGetUserShoppingRecord } from '#/admin/shoppingbag'
   import pushTo from '@/views/admin/router_push'
+  import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
 
   const router = useRouter()
   const route = useRoute()
@@ -68,47 +69,57 @@
 <template>
   <el-card v-if="user && isAdmin()" class="base_card admin_root_main_base_card">
     <div v-if="shoppingbagLst && shoppingbagLst.length > 0">
-      <div>
-        <div style="display: flex; justify-content: center; margin-bottom: 10px; margin-top: 10px">
-          <el-pagination
-            v-model:current-page="page"
-            class="pager"
-            background
-            layout="prev, pager, next"
-            :page-size="pagesize"
-            :total="maxcount || 0"
-            @change="onChange"
-          />
-        </div>
-        <div style="width: 55vw; display: flex; justify-content: center">
-          <div style="width: 100%">
-            <div v-for="(item, index) in shoppingbagLst" :key="index" style="margin-left: 30px; margin-right: 30px">
-              <AdminShoppingbag ref="shopper" :record="item" @reload="onChange"></AdminShoppingbag>
+      <div style="display: flex; justify-content: center">
+        <div style="width: 100%">
+          <div class="pager">
+            <el-pagination
+              v-model:current-page="page"
+              class="pager"
+              background
+              layout="prev, pager, next"
+              :page-size="pagesize"
+              :total="maxcount || 0"
+              @change="onChange"
+            />
+          </div>
+          <div style="width: 100%; display: flex; justify-content: center">
+            <div style="width: 100%">
+              <div v-for="(item, index) in shoppingbagLst" :key="index" class="record_box">
+                <AdminShoppingbag :record="item" @reload="onChange"></AdminShoppingbag>
+              </div>
             </div>
           </div>
-        </div>
-        <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
-          <el-pagination
-            v-model:current-page="page"
-            class="pager"
-            background
-            layout="prev, pager, next"
-            :page-size="pagesize"
-            :total="maxcount || 0"
-            @change="onChange"
-          />
+          <div style="display: flex; justify-content: center; margin-top: 10px; margin-bottom: 10px">
+            <el-pagination
+              v-model:current-page="page"
+              class="pager"
+              background
+              layout="prev, pager, next"
+              :page-size="pagesize"
+              :total="maxcount || 0"
+              @change="onChange"
+            />
+          </div>
         </div>
       </div>
     </div>
     <div v-else>
-      <el-result icon="info" title="您的购物车还没有任何记录呢" sub-title="欢迎到别处去看看吧">
-        <template #extra>
-          <el-button type="primary">到我的中心</el-button>
-        </template>
-      </el-result>
+      <el-result icon="info" title="用户的购物车还没有任何记录呢" sub-title="欢迎到别处去看看吧"></el-result>
     </div>
   </el-card>
   <div v-else></div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+  .pager {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
+  .record_box {
+    margin-bottom: 15px;
+    width: 100%;
+  }
+</style>

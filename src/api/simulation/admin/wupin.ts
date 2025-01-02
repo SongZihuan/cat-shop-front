@@ -53,7 +53,7 @@ export const apiAdminGetWupin = (id: number): Result<AdminWupin> => {
     classId: 2,
     classOf: {
       id: 2,
-      name: '商品分类',
+      name: '商品分类2222',
       show: true,
       down: false
     },
@@ -136,7 +136,7 @@ export function apiAdminGetWupinLst(page: number, pagesize: number): Result<Admi
       classId: 2,
       classOf: {
         id: 2,
-        name: '商品分类',
+        name: '商品分类2222',
         show: true,
         down: false
       },

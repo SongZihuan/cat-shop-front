@@ -372,7 +372,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           classId: 2,
           classOf: {
             id: 1,
-            name: '商品分类',
+            name: '商品分类2222',
             show: true,
             down: false
           },
@@ -400,7 +400,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           classId: 2,
           classOf: {
             id: 1,
-            name: '商品分类',
+            name: '商品分类2222',
             show: true,
             down: false
           },

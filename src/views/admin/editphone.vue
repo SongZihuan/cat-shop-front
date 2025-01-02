@@ -126,7 +126,7 @@
       <el-input v-model="form.newPhone" maxlength="20" minlength="1" show-word-limit clearable />
     </el-form-item>
     <div style="display: flex; width: 15vw; justify-content: center">
-      <el-button :disabled="!allCheck" @click="update"> 更新 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 更新 </el-button>
     </div>
     <div style="width: 15vw; margin-top: 5px">
       <div v-if="!phoneCheck" class="tip_box" style="display: flex; justify-content: center">

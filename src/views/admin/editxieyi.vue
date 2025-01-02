@@ -113,7 +113,7 @@
         </div>
       </Clear>
       <div style="width: 100%; display: flex; justify-content: center">
-        <el-button type="success" size="large" @click="updateXieYi"> 提交 </el-button>
+        <el-button size="large" type="success" @click="updateXieYi"> 更新 </el-button>
       </div>
     </div>
   </el-card>

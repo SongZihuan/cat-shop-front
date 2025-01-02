@@ -6,7 +6,8 @@
     AdminUserType,
     RootAdminUserStatus,
     RootAdminUserType,
-    AdminUserStatus
+    AdminUserStatus,
+    RootAdminUserTypeWithoutRoot
   } from '@/store/admin/user'
   import pushTo from '@/views/admin/router_push'
   import { hasPermission, isAdmin, isDeleteUser, isRootAdmin } from '@/store/admin'
@@ -28,8 +29,8 @@
 
   const userId = ref(Number(route.query?.userId).valueOf() || 0)
   const user = ref(null as AdminUser | null)
-  const userStatusLst = ref(isRootAdmin() ? RootAdminUserStatus : (AdminUserStatus as { [key: number]: string }))
-  const userTypeLst = ref(isRootAdmin() ? RootAdminUserType : (AdminUserType as { [key: number]: string }))
+  const userStatusLst = ref(isRootAdmin() ? RootAdminUserStatus : AdminUserStatus)
+  const userTypeLst = ref(isRootAdmin() ? RootAdminUserTypeWithoutRoot : AdminUserType)
 
   const ub = ref({
     name: '',
@@ -128,11 +129,11 @@
 
   const deleteCheck = computed(() => !(user.value && user.value.status === 3 && ub.value.status !== 3))
   const rootAdminCheck = computed(() => !(user.value && user.value.type === 3 && ub.value.status !== 1))
-  const checkName = computed(() => ub.value.name && ub.value.name.length > 0 && ub.value.name.length <= 10)
+  const checkName = computed(() => !ub.value.name || ub.value.name.length <= 10)
   const checkStatus = computed(() => !Object.keys(userStatusLst).some((v) => Number(v).valueOf() === ub.value.status))
+  const checkType = computed(() => !Object.keys(userTypeLst).some((v) => Number(v).valueOf() === ub.value.type))
   const checkRootType = computed(() => (userIsRoot.value ? ub.value.type === 3 : true))
   const checkRootStatus = computed(() => (userIsRoot.value ? ub.value.status === 1 : true))
-  const checkType = computed(() => !Object.keys(userTypeLst).some((v) => Number(v).valueOf() === ub.value.type))
   const checkEmail = computed(() => {
     if (!ub.value.email) {
       return true
@@ -263,7 +264,7 @@
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
-      <el-button :disabled="!allCheck" @click="update"> 更新 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 更新 </el-button>
     </div>
     <div style="width: 15vw; margin-top: 5px">
       <div v-if="!checkStatus" class="tip_box" style="display: flex; justify-content: center">
@@ -273,7 +274,7 @@
         <el-alert title="请输入正确的类型！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
       <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
-        <el-alert title="名字需要在1-10位！" :closable="false" type="warning" center show-icon> </el-alert>
+        <el-alert title="名字不能多于位！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
       <div v-if="!hasChange" class="tip_box" style="display: flex; justify-content: center">
         <el-alert title="请编辑信息！" :closable="false" type="warning" center show-icon> </el-alert>

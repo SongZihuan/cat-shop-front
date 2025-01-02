@@ -81,7 +81,7 @@
 
 <template>
   <el-card v-if="dataInfo && isAdmin()" class="base_card admin_root_main_base_card">
-    <div class="box">
+    <div>
       <el-tabs v-model="activeModel" @tab-change="changePage(activeModel)">
         <el-tab-pane
           v-for="(status, index) in BuyRecordStatus"
@@ -91,10 +91,9 @@
           :name="index"
         >
           <div v-if="(dataInfo[index]?.maxcount || 0) > 0">
-            <div style="display: flex; justify-content: center">
+            <div class="pager">
               <el-pagination
                 v-model:current-page="currentPage[index]"
-                class="pager"
                 background
                 layout="prev, pager, next"
                 :page-size="dataInfo[index]?.pgesize || 20"
@@ -104,19 +103,14 @@
             </div>
             <div style="width: 100%; display: flex; justify-content: center">
               <div style="width: 100%">
-                <div
-                  v-for="(record, idx) in dataInfo[index]?.data || {}"
-                  :key="idx"
-                  style="margin-top: 10px; width: 100%"
-                >
+                <div v-for="(record, idx) in dataInfo[index]?.data || {}" :key="idx" class="record_box">
                   <AdminBuyRecord :record="record" :safe="false" :xiangqing="true"> </AdminBuyRecord>
                 </div>
               </div>
             </div>
-            <div style="display: flex; justify-content: center">
+            <div class="pager">
               <el-pagination
                 v-model:current-page="currentPage[index]"
-                class="pager"
                 background
                 layout="prev, pager, next"
                 :page-size="dataInfo[index]?.pgesize || 20"
@@ -126,11 +120,7 @@
             </div>
           </div>
           <div v-else>
-            <el-result icon="success" title="在此处您没有任何销售记录" sub-title="欢迎到别处去看看吧">
-              <template #extra>
-                <el-button type="primary">到我的中心</el-button>
-              </template>
-            </el-result>
+            <el-result icon="success" title="用户在此处没有任何销售记录" sub-title="欢迎到别处去看看吧"></el-result>
           </div>
         </el-tab-pane>
       </el-tabs>
@@ -139,13 +129,9 @@
 </template>
 
 <style scoped lang="scss">
-  .box {
-    display: flow-root;
-    margin-top: 3px;
-    margin-bottom: 3px;
-  }
-
   .pager {
+    display: flex;
+    justify-content: center;
     margin-bottom: 5px;
     margin-top: 5px;
   }
@@ -153,5 +139,10 @@
   .title {
     font-size: 1.5rem;
     font-weight: bold;
+  }
+
+  .record_box {
+    margin-bottom: 15px;
+    width: 100%;
   }
 </style>

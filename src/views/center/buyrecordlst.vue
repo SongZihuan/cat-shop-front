@@ -86,11 +86,7 @@
             </div>
             <div style="width: 100%; display: flex; justify-content: center">
               <div style="width: 100%">
-                <div
-                  v-for="(record, idx) in dataInfo[index]?.data || {}"
-                  :key="idx"
-                  style="margin-top: 10px; width: 100%"
-                >
+                <div v-for="(record, idx) in dataInfo[index]?.data || {}" :key="idx" class="record_box">
                   <BuyRecord :record="record" :safe="false" :xiangqing="true"> </BuyRecord>
                 </div>
               </div>
@@ -146,5 +142,10 @@
   .title {
     font-size: 1.5rem;
     font-weight: bold;
+  }
+
+  .record_box {
+    margin-bottom: 15px;
+    width: 100%;
   }
 </style>

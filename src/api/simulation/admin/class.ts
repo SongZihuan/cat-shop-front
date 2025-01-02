@@ -36,7 +36,7 @@ export function apiAdminGetClass(classId: number): Result<AdminClass> {
       code: 0,
       data: {
         id: classId,
-        name: '商品分类' + classId,
+        name: '商品分类2222' + classId,
         show: classId % 2 == 0,
         down: false
       }
@@ -68,7 +68,7 @@ export function apiAdminGetClassLst(page: number, pagesize: number): Result<Admi
 
     classLst.value.push({
       id: page * pagesize + i + 1,
-      name: '商品分类' + (page * pagesize + i + 1),
+      name: '商品分类2222' + (page * pagesize + i + 1),
       show: Boolean(i % 2 == 0).valueOf(),
       down: false
     })

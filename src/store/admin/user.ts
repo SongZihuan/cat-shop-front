@@ -15,7 +15,17 @@ import { apiAdminRestartServer, apiAdminStopServer } from '#/admin/httpserver'
 import { ElMessage } from 'element-plus'
 
 export const AdminUserType = {
-  1: '新用户'
+  1: '普通用户'
+}
+
+export const RootAdminUserTypeWithoutRoot = {
+  ...AdminUserType,
+  2: '管理员'
+}
+
+export const RootAdminUserType = {
+  ...RootAdminUserTypeWithoutRoot,
+  3: '根管理员'
 }
 
 export const AdminUserStatus = {
@@ -23,15 +33,8 @@ export const AdminUserStatus = {
   2: '冻结'
 }
 
-export const RootAdminUserType = {
-  1: '新用户',
-  2: '管理员',
-  3: '根管理员'
-}
-
 export const RootAdminUserStatus = {
-  1: '正常',
-  2: '冻结',
+  ...AdminUserStatus,
   3: '删除'
 }
 

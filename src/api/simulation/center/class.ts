@@ -27,7 +27,7 @@ export function apiGetClass(id: number): Result<GetClassData> {
       data: {
         class: {
           id: id,
-          name: '商品分类' + id
+          name: '商品分类2222' + id
         } as Class,
         hasfound: id % 2 != 0
       }
@@ -67,7 +67,7 @@ export function apiGetClassLst(offset: number = 0, limit: number = 50): Result<C
   for (let i = 0; i < limit; i++) {
     classLst.value.push({
       id: offset + i + 1,
-      name: '商品分类' + (offset + i + 1)
+      name: '商品分类2222' + (offset + i + 1)
     })
   }
 
@@ -112,7 +112,7 @@ export function apiGetClassLstByPage(page: number, pagesize: number): Result<Cla
 
     classLst.value.push({
       id: page * pagesize + i + 1,
-      name: '商品分类' + (page * pagesize + i + 1)
+      name: '商品分类2222' + (page * pagesize + i + 1)
     })
   }
 

@@ -50,9 +50,10 @@
 
   const onClassClick = () => {
     record.value &&
-      record.value.userId > 1 &&
+      record.value.classId !== 1 &&
+      record.value.classId !== 0 &&
       pushTo(router, route, '/admin/class/info', {
-        classId: record.value.wupin.classId
+        classId: record.value.classId
       })
   }
 
@@ -640,14 +641,6 @@
       })
   }
 
-  const wupinNameClass = computed(() => {
-    if (record.value.down) {
-      return ['wupin_name']
-    }
-
-    return ['wupin_name', 'wupin_name_click']
-  })
-
   const maxWidth = ref('0')
   const maxText = ref(0)
   const boxWidth = ref(0)
@@ -685,7 +678,7 @@
       <div style="display: flow-root">
         <div style="float: left">
           <div class="wupin_name_box">
-            <el-text :class="wupinNameClass" @click="onGoWupin()"> {{ record.wupin.name }} </el-text>
+            <el-text class="wupin_name" @click="onGoWupin()"> {{ record.wupin.name }} </el-text>
           </div>
           <div class="buyer_name_box">
             <el-text class="buyer_name" @click="onUserClick">
@@ -731,7 +724,8 @@
               </el-button>
             </el-tooltip>
             <el-button
-              v-if="safe && record.wupin && record.wupin.classOf"
+              v-if="safe"
+              :disabled="record.classId === 1 || record.classId === 0"
               type="success"
               size="large"
               class="class_btn"
@@ -799,7 +793,7 @@
           </el-text>
           <el-text v-else class="info_text components-admin-buyrecord-info-box"> 商品销售情况：正常销售中 </el-text>
         </div>
-        <div v-if="record.wupin.tag">
+        <div v-if="record.wupin.tag" class="info_box">
           <el-text class="info_text components-admin-buyrecord-info-box"> 商品标签：{{ record.wupin.tag }} </el-text>
         </div>
         <div class="info_box">
@@ -1525,17 +1519,14 @@
     font-weight: bold;
     margin-right: 5px;
     vertical-align: bottom;
-  }
-
-  .wupin_name_click {
     cursor: pointer;
   }
 
-  .wupin_name_click:hover {
+  .wupin_name:hover {
     text-decoration: underline;
   }
 
-  .wupin_name_click:active {
+  .wupin_name:active {
     color: blue;
   }
 

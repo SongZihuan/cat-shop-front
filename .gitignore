@@ -25,5 +25,6 @@ dist-production
 *.njsproj
 *.sln
 *.sw?
+*.bak
 
 tsconfig.json

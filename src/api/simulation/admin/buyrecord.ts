@@ -372,7 +372,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           classId: 2,
           classOf: {
             id: 2,
-            name: '商品分类'
+            name: '商品分类2222'
           },
           tag: '火爆',
           hotPrice: 9999,
@@ -399,7 +399,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           classId: 2,
           classOf: {
             id: 2,
-            name: '商品分类'
+            name: '商品分类2222'
           },
           tag: '火爆',
           hotPrice: 9999,
