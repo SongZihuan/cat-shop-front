@@ -37,7 +37,7 @@
     }
   }
 
-  watch(() => route.query, onChangeClass)
+  onBeforeRouteUpdate(onChangeClass)
   onChangeClass()
 
   const toEdit = () => {

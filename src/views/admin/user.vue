@@ -45,7 +45,7 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
+  onBeforeRouteUpdate(onChangeUser)
   onChangeUser()
 
   if (userId.value) {

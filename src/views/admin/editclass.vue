@@ -46,7 +46,7 @@
     }
   }
 
-  watch(() => route.query, onChangeClass)
+  onBeforeRouteUpdate(onChangeClass)
   onChangeClass()
 
   const form = ref({

@@ -67,7 +67,7 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
+  onBeforeRouteUpdate(onChangeUser)
   onChangeUser()
 
   const passwordCheck = computed(() => form.value.newPassword.length >= 8)

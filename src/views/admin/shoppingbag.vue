@@ -54,7 +54,7 @@
     pushTo(router, route, '/admin/user/list')
   }
 
-  watch(() => route.query, onChangeUser)
+  onBeforeRouteUpdate(onChangeUser)
   onChangeUser()
 
   const onChange = () => {

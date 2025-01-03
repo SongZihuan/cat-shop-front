@@ -90,9 +90,6 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
-  onChangeUser()
-
   const wupinId = ref(0)
   const wupin = ref(null as AdminWupin | null)
 
@@ -113,9 +110,6 @@
       wupin.value = null
     }
   }
-
-  watch(() => route.query, onChangeWupin)
-  onChangeWupin()
 
   const classId = ref(Number(route.query?.classId).valueOf() || 0)
   const classObj = ref(null as AdminClass | null)
@@ -138,9 +132,6 @@
     }
   }
 
-  watch(() => route.query, onChangeClass)
-  onChangeClass()
-
   const recordId = ref(Number(route.query?.recordId).valueOf() || 0)
   const record = ref(null as AdminBuyRecordData | null)
 
@@ -162,7 +153,15 @@
     }
   }
 
-  watch(() => route.query, onChangeRecord)
+  onBeforeRouteUpdate(() => {
+    onChangeUser()
+    onChangeClass()
+    onChangeWupin()
+    onChangeRecord()
+  })
+  onChangeUser()
+  onChangeClass()
+  onChangeWupin()
   onChangeRecord()
 
   const defaultOpeneds = ref([

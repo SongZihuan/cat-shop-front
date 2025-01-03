@@ -35,7 +35,7 @@
   }
 
   infoController(route.query?.info)
-  watch(() => route.query, infoController)
+  onBeforeRouteUpdate(infoController)
 
   const select = ref(0 as number)
   const search = ref(data.value.search || props.search || ('' as string))

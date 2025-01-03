@@ -113,7 +113,7 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
+  onBeforeRouteUpdate(onChangeUser)
   onChangeUser()
 
   const hasChange = computed(() => {

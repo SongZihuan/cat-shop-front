@@ -30,7 +30,7 @@
     })
   }
 
-  watch(() => route.query, changePage)
+  onBeforeRouteUpdate(changePage)
   changePage()
 </script>
 

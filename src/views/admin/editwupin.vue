@@ -78,7 +78,7 @@
     }
   }
 
-  watch(() => route.query, onChangeWupin)
+  onBeforeRouteUpdate(onChangeWupin)
   onChangeWupin()
 
   const classLst = ref([] as AdminClass[])

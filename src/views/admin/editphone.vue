@@ -68,7 +68,7 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
+  onBeforeRouteUpdate(onChangeUser)
   onChangeUser()
 
   const hasChange = computed(() => form.value.newPhone !== user.value?.phone)
