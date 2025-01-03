@@ -243,7 +243,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
           title: '用户购物记录',
-          admin: true
+          admin: true,
+          recordisall: false,
         }
       },
       {
@@ -251,7 +252,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecord.vue'),
         meta: {
           title: '用户订单详情',
-          admin: true
+          admin: true,
+          recordisall: false,
         }
       },
       {
@@ -262,8 +264,10 @@ const routes: RouteRecordRaw[] = [
         path: 'user/buy/wupin/sale',
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
-          title: '查看商品售卖详情',
-          admin: true
+          title: '商品售卖详情',
+          admin: true,
+          wupinmode: "sale",
+          wupinfrom: "user",
         }
       },
       {
@@ -271,7 +275,9 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '用户订单档案商品详情',
-          admin: true
+          admin: true,
+          wupinmode: "lock",
+          wupinfrom: "user",
         }
       },
       {
@@ -343,66 +349,6 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'buyrecord',
-        redirect: '/admin/buyrecord/list'
-      },
-      {
-        path: 'buyrecord/list',
-        component: () => import('@/views/admin/buyrecordlst.vue'),
-        meta: {
-          title: '购买记录列表',
-          admin: true
-        }
-      },
-      {
-        path: 'buyrecord/info',
-        component: () => import('@/views/admin/buyrecord.vue'),
-        meta: {
-          title: '购买记录详情',
-          admin: true
-        }
-      },
-      {
-        path: 'xieyi',
-        redirect: '/admin/xieyi/show'
-      },
-      {
-        path: 'xieyi/show',
-        component: () => import('@/views/admin/xieyi.vue'),
-        meta: {
-          title: '用户协议',
-          admin: true
-        }
-      },
-      {
-        path: 'xieyi/edit',
-        component: () => import('@/views/admin/editxieyi.vue'),
-        meta: {
-          title: '用户协议修改',
-          admin: true
-        }
-      },
-      {
-        path: 'config',
-        redirect: '/admin/config/'
-      },
-      {
-        path: 'config/list',
-        component: () => import('@/views/admin/configlst.vue'),
-        meta: {
-          title: '配置注册表',
-          admin: true
-        }
-      },
-      {
-        path: 'config/httpserver',
-        component: () => import('@/views/admin/configlst.vue'),
-        meta: {
-          title: '服务prize',
-          admin: true
-        }
-      },
-      {
         path: 'wupin',
         redirect: '/admin/wupin/list'
       },
@@ -419,7 +365,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '商品详情',
-          admin: true
+          admin: true,
+          wupinfrom: "wupin",
         }
       },
       {
@@ -439,23 +386,45 @@ const routes: RouteRecordRaw[] = [
         }
       },
       {
-        path: 'buyrecord',
-        redirect: '/admin/buyrecord/list'
+        path: 'buy',
+        redirect: '/admin/buy/list'
       },
       {
-        path: 'buyrecord/list',
-        component: () => import('@/views/admin/allbuyrecordlst.vue'),
+        path: 'buy/list',
+        component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
-          title: '购物记录',
-          admin: true
+          title: '总订单列表',
+          admin: true,
+          recordisall: true,
         }
       },
       {
-        path: 'buyrecord/info',
-        component: () => import('@/views/admin/allbuyrecord.vue'),
+        path: 'buy/info',
+        component: () => import('@/views/admin/buyrecord.vue'),
         meta: {
-          title: '购物记录',
-          admin: true
+          title: '订单详情',
+          admin: true,
+          recordisall: true,
+        }
+      },
+      {
+        path: 'buy/wupin/sale',
+        component: () => import('@/views/admin/wupin.vue'),
+        meta: {
+          title: '商品售卖详情',
+          admin: true,
+          wupinmode: "sale",
+          wupinfrom: "record",
+        }
+      },
+      {
+        path: 'buy/wupin/lock',
+        component: () => import('@/views/admin/wupin.vue'),
+        meta: {
+          title: '用户订单档案商品详情',
+          admin: true,
+          wupinmode: "lock",
+          wupinfrom: "record",
         }
       },
       {
@@ -500,7 +469,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '服务prize',
           admin: true,
-          subtitle: '关闭后端Http服务'
         }
       },
       {
@@ -509,7 +477,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '服务prize',
           admin: true,
-          subtitle: '重启后端Http服务'
         }
       }
     ]

@@ -1,6 +1,6 @@
 import { LocationQueryRaw, RouteLocationNormalizedLoaded, Router } from 'vue-router'
 
-const baseDeleteQuery = ['oldRecordId', 'nowRecordId']
+const baseDeleteOldQuery: string[] = []
 
 const pushTo = (
   router: Router,
@@ -8,6 +8,7 @@ const pushTo = (
   path: string,
   newQuery: LocationQueryRaw = {},
   deleteNewQueryArray: string[] = [],
+  deleteOldQueryArray: string[] = [],
   deleteQueryArray: string[] = []
 ) => {
   if (!path) {
@@ -18,9 +19,14 @@ const pushTo = (
     ...route.query
   }
 
-  baseDeleteQuery.forEach((item) => {
+  baseDeleteOldQuery.forEach((item) => {
     oldQuery?.[item] && delete oldQuery[item]
   })
+
+  deleteOldQueryArray &&
+    deleteOldQueryArray.forEach((item) => {
+      oldQuery?.[item] && delete oldQuery[item]
+    })
 
   deleteNewQueryArray &&
     deleteNewQueryArray.forEach((item) => {

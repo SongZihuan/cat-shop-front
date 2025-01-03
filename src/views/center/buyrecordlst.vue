@@ -1,10 +1,9 @@
 <script setup lang="ts">
   import { ElNotification } from 'element-plus'
-  import { ElMessage } from 'element-plus'
-
   import BuyRecord from '@/components/center/buyrecord.vue'
   import { apiGetUserBuyRecordByPage } from '#/center/buyrecord'
   import { BuyRecordStatus } from '#/center/buyrecord'
+
   const activeModel = ref('1')
   const dataInfo = ref({} as any)
   const currentPage = ref<{ [key: string]: number }>({})
@@ -30,12 +29,6 @@
             position: 'top-left'
           })
         }
-      })
-      .catch(() => {
-        ElMessage({
-          type: 'error',
-          message: '获取数据失败'
-        })
       })
   }
 

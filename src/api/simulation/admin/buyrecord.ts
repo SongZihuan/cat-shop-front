@@ -162,7 +162,7 @@ export function apiAdminGetBuyRecordByPage(
         down: false
       },
       user: {
-        name: '用户121',
+        name: '用户-222',
         phone: '17322061610',
         location: '广东广州',
         wechat: '1234',
@@ -301,7 +301,7 @@ export function apiAdminGetUserBuyRecordByPage(
         down: false
       },
       user: {
-        name: '用户',
+        name: '用户-111',
         phone: '17322061610',
         location: '广东广州',
         wechat: '1234',
@@ -428,7 +428,7 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           remark: '1234,'
         } as LocationForUser,
         shop: {
-          name: '用户',
+          name: '用户2222',
           phone: '17322061610',
           location: '广东广州',
           wechat: '1234',

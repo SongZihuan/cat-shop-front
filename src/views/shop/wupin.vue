@@ -41,14 +41,6 @@
         wupin.value = record.value.nowwupin as Wupin
         mode.value = nowrecordmode
       })
-      .catch(() => {
-        router.push({
-          path: '/system/error',
-          query: {
-            msg: '商品不存在'
-          }
-        })
-      })
   } else if (recordId.value && recordId.value >= 0) {
     apiGetBuyRecordInfo(recordId.value as number)
       .then((res) => {
@@ -56,28 +48,12 @@
         wupin.value = record.value.wupin as Wupin
         mode.value = recordmode
       })
-      .catch(() => {
-        router.push({
-          path: '/system/error',
-          query: {
-            msg: '商品不存在'
-          }
-        })
-      })
   } else if (wupinId.value && wupinId.value >= 0) {
     apiGetWupin(wupinId.value as number)
       .then((res) => {
         record.value = null
         wupin.value = res.data.data as Wupin
         mode.value = wupinmode
-      })
-      .catch(() => {
-        router.push({
-          path: '/system/error',
-          query: {
-            msg: '商品不存在'
-          }
-        })
       })
   } else {
     router.push({

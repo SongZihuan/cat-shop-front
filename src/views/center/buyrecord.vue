@@ -3,7 +3,6 @@
   import BuyRecord from '@/components/center/buyrecord.vue'
 
   const route = useRoute()
-  const router = useRouter()
   const recordId = ref(Number(route.query?.id).valueOf() || 0)
 
   const record = ref(null as BuyRecordData | null)
@@ -12,14 +11,6 @@
     apiGetBuyRecordInfo(recordId.value as number)
       .then((res) => {
         record.value = res.data.data as BuyRecordData
-      })
-      .catch(() => {
-        router.push({
-          path: '/system/error',
-          query: {
-            msg: '获取数据失败'
-          }
-        })
       })
   }
   reload()

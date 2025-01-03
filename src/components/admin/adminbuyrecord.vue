@@ -37,13 +37,14 @@
       default: false
     },
     xiangqing: {
-      type: Boolean,
-      default: false
-    }
+      type: String,
+      default: '',
+    },
   })
 
   const emits = defineEmits(['reload'])
 
+  const isall = computed(() => !!route.meta.recordisall)
   const record = computed(() => props.record)
   const safe = computed(() => props.safe)
   const xiangqing = computed(() => props.xiangqing)
@@ -65,16 +66,20 @@
       })
   }
 
-  const onGoWupin = () => {
-    pushTo(router, route, '/admin/user/buy/wupin/sale', {
-      nowRecordId: record.value.id
-    })
+  const onGoSaleWupin = () => {
+    if (isall.value) {
+      record.value && pushTo(router, route, '/admin/buy/wupin/sale')
+    } else {
+      record.value && pushTo(router, route, '/admin/user/buy/wupin/sale')
+    }
   }
 
   const onGoLockWupin = () => {
-    pushTo(router, route, '/admin/user/buy/wupin/lock', {
-      oldRecordId: record.value.id
-    })
+    if (isall.value) {
+      record.value && pushTo(router, route, '/admin/buy/wupin/lock')
+    } else {
+      record.value && pushTo(router, route, '/admin/user/buy/wupin/lock')
+    }
   }
 
   const startRepay = () => {
@@ -558,9 +563,15 @@
   }
 
   const onXiangQing = () => {
-    pushTo(router, route, '/admin/user/buy/info', {
-      recordId: record.value.id
-    })
+    if (xiangqing.value && isall.value){
+      pushTo(router, route, "/admin/buy/info", {
+        recordId: record.value.id
+      })
+    } else if (xiangqing.value && !isall.value){
+      pushTo(router, route, "/admin/user/buy/info", {
+        recordId: record.value.id,
+      })
+    }
   }
 
   const changeUserModel = ref(false)
@@ -678,7 +689,7 @@
       <div style="display: flow-root">
         <div style="float: left">
           <div class="wupin_name_box">
-            <el-text class="wupin_name" @click="onGoWupin()"> {{ record.wupin.name }} </el-text>
+            <el-text class="wupin_name" @click="onGoSaleWupin()"> {{ record.wupin.name }} </el-text>
           </div>
           <div class="buyer_name_box">
             <el-text class="buyer_name" @click="onUserClick">
@@ -699,7 +710,7 @@
               type="success"
               size="large"
               class="class_btn"
-              @click="onGoWupin"
+              @click="onGoSaleWupin"
             >
               查看商品售卖页
             </el-button>

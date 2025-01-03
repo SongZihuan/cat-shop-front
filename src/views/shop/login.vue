@@ -88,10 +88,6 @@
       },
       () => {
         resetCode()
-        ElMessage({
-          type: 'error',
-          message: '登录失败，请检查手机号或者密码'
-        })
       }
     )
   }

@@ -7,6 +7,7 @@
   import { AdminBuyRecord, apiAdminGetBuyRecordInfo } from '#/admin/buyrecord'
   import pushTo from '@/views/admin/router_push'
   import Showhtml from '@/components/utils/showhtml.vue'
+  import useAdminUserStore, {AdminUser} from "@/store/admin/user";
   const router = useRouter()
   const route = useRoute()
 
@@ -19,23 +20,37 @@
     })
   }
 
-  const nowrecordmode = 'nowrecordmode'
-  const oldrecordmode = 'oldrecordmode'
-  const wupinmode = 'wupinmode'
-  const nullmode = 'nullmode'
+  const modesale = 'sale'
+  const modelock = 'lock'
+  const modeinfo = 'info'
 
-  const mode = ref(nullmode)
+  const wupinfromuser = "user"
+  const wupinfromwupin = "wupin"
+  const wupinfromrecord = "record"
 
-  const nowRecordId = ref(computed(() => parseInt(route.query.nowRecordId as unknown as string) || (0 as number)))
-  const oldRecordId = ref(computed(() => parseInt(route.query.oldRecordId as unknown as string) || (0 as number)))
-  const wupinId = ref(computed(() => parseInt(route.query.wupinId as unknown as string) || (0 as number)))
-  const userId = ref(computed(() => parseInt(route.query.userId as unknown as string) || (0 as number)))
+  const mode = computed(() => route.meta.wupinmode || modeinfo)
+  const wupinfrom = computed(() => route.meta.wupinfrom || wupinfromwupin)
+  const hasUser = computed(() => wupinfrom.value === wupinfromuser)
+
+  const recordId = ref(computed(() => Number(route.query.recordId).valueOf() || 0 as number))
+  const wupinId = ref(computed(() => Number(route.query.wupinId).valueOf() || 0 as number))
+  const userId = ref(computed(() => Number(route.query.userId).valueOf() || 0 as number))
   const record = ref(null as AdminBuyRecord | null)
   const wupin = ref(null as AdminWupin | null)
+  const user = ref(null as AdminUser | null)
+
+  const userAdminStore = useAdminUserStore()
 
   const getData = () => {
-    if (nowRecordId.value && nowRecordId.value >= 0) {
-      if (!userId.value) {
+    if (wupinfrom.value === wupinfromuser && (!userId.value || !user.value || user.value.id !== userId.value)) {
+      router.push({
+        path: '/system/error',
+        query: {
+          msg: '页面错误'
+        }
+      })
+    } else if ((wupinfrom.value === wupinfromuser || wupinfrom.value === wupinfromrecord) && (mode.value === modesale || mode.value === modelock)) {
+      if (!recordId.value) {
         router.push({
           path: '/system/error',
           query: {
@@ -44,58 +59,47 @@
         })
       }
 
-      apiAdminGetBuyRecordInfo(nowRecordId.value as number, userId.value)
+      apiAdminGetBuyRecordInfo(recordId.value as number, userId.value)
         .then((res) => {
           record.value = res.data.data as AdminBuyRecord
-          wupin.value = record.value.nowwupin as AdminWupin
-          mode.value = nowrecordmode
+
+          if (mode.value == modesale) {
+            wupin.value = record.value.nowwupin as AdminWupin
+          } else if (mode.value == modelock) {
+            wupin.value = record.value.nowwupin as AdminWupin
+          } else {
+            router.push({
+              path: '/system/error',
+              query: {
+                msg: '页面错误'
+              }
+            })
+            return
+          }
+
+          if (wupinfrom.value === wupinfromuser && record.value.userId !== userId.value) {
+            router.push({
+              path: '/system/error',
+              query: {
+                msg: '页面错误'
+              }
+            })
+          }
         })
-        .catch(() => {
-          router.push({
-            path: '/system/error',
-            query: {
-              msg: '订单不存在'
-            }
-          })
-        })
-    } else if (oldRecordId.value && oldRecordId.value >= 0) {
-      if (!userId.value) {
+    } else if (mode.value === modeinfo && wupinfrom.value === wupinfromwupin) {
+      if (!wupinId.value) {
         router.push({
           path: '/system/error',
           query: {
-            msg: '订单不存在'
+            msg: '商品不存在'
           }
         })
       }
 
-      apiAdminGetBuyRecordInfo(oldRecordId.value as number, userId.value)
-        .then((res) => {
-          record.value = res.data.data as AdminBuyRecord
-          wupin.value = record.value.wupin as AdminWupin
-          mode.value = oldrecordmode
-        })
-        .catch(() => {
-          router.push({
-            path: '/system/error',
-            query: {
-              msg: '订单不存在'
-            }
-          })
-        })
-    } else if (wupinId.value && wupinId.value >= 0) {
       apiGetWupin(wupinId.value as number)
         .then((res) => {
           record.value = null
           wupin.value = res.data.data as AdminWupin
-          mode.value = wupinmode
-        })
-        .catch(() => {
-          router.push({
-            path: '/system/error',
-            query: {
-              msg: '商品不存在'
-            }
-          })
         })
     } else {
       router.push({
@@ -137,14 +141,12 @@
   })
 
   const onGoRecord = () => {
-    if (mode.value === nowrecordmode && nowRecordId.value) {
-      pushTo(router, route, '/admin/user/buy/info', {
-        recordId: nowRecordId.value
-      })
-    } else if (mode.value === oldrecordmode && oldRecordId.value) {
-      pushTo(router, route, '/admin/user/buy/info', {
-        recordId: oldRecordId.value
-      })
+    if (record.value && wupinfrom.value === wupinfromuser) {
+      pushTo(router, route, '/admin/user/buy/info')
+    } else if (record.value && wupinfrom.value === wupinfromrecord) {
+      pushTo(router, route, '/admin/buy/info')
+    } else if (record.value && wupinfrom.value === wupinfromwupin) {
+      pushTo(router, route, '/admin/wupin/info')
     }
   }
 
@@ -158,18 +160,48 @@
       })
   }
 
-  const onChangeRouteQuery = () => {
-    wupin.value = null
-    record.value = null
-    mode.value = nullmode
-
-    if (wupinId.value || oldRecordId.value || nowRecordId.value) {
-      getData()
+  const toBack = () => {
+    if (wupinfrom.value === wupinfromuser) {
+      pushTo(router, route, '/admin/user/buy/list')
+    } else if (wupinfrom.value === wupinfromrecord) {
+      pushTo(router, route, '/admin/buy/list')
+    } else if (wupinfrom.value === wupinfromwupin) {
+      pushTo(router, route, '/admin/wupin/list')
+    } else {
+      router.push({
+        path: "/system/error",
+        query: {
+          msh: "页面错误",
+        }
+      })
     }
   }
 
-  watch(() => route.query, onChangeRouteQuery)
-  onChangeRouteQuery()
+  const onChangeUser = () => {
+    user.value = null
+    wupin.value = null
+    record.value = null
+
+    if (wupinId.value || recordId.value) {
+      if (wupinfrom.value === wupinfromuser && userId.value) {
+        userAdminStore.getUser(userId.value).then((res) => {
+          user.value = res as AdminUser
+          getData()
+        }, () => {
+          user.value = null
+          toBack()
+        })
+      } else {
+        user.value = null
+        getData()
+      }
+    } else {
+      toBack()
+    }
+  }
+
+  onBeforeRouteUpdate(onChangeUser)
+  onChangeUser()
 
   const headerCustomer = ref<HTMLElement>()
   const headerHeight = ref('0')
@@ -201,14 +233,14 @@
       <div ref="headerCustomer">
         <div style="display: flow-root">
           <div style="float: left">
-            <el-text class="wupin_name"> {{ wupin.name }} {{ mode === oldrecordmode ? '（存档）' : '' }}</el-text>
+            <el-text class="wupin_name"> {{ wupin.name }} {{ mode === modelock ? '（存档）' : '' }}</el-text>
           </div>
           <div style="float: right">
             <div class="title_btn_box">
               <el-button-group>
                 <el-button type="warning" size="large" @click="onGoUserBuyPage"> 前往用户购买页面 </el-button>
                 <el-button
-                  v-if="mode === nowrecordmode || mode === oldrecordmode"
+                  v-if="mode === modesale || mode === modelock"
                   type="primary"
                   size="large"
                   @click="onGoRecord"

@@ -168,13 +168,14 @@
   const defaultOpeneds = ref([
     'user',
     'user/buy',
-    'user/nuy/wupin',
+    'user/buy/wupin',
     'user/edit',
     'user/bag',
     'user/other',
     'class',
     'wupin',
-    'buyrecord',
+    'buy',
+    'buy/wupin',
     'xieyi',
     'bconfig',
     'config',
@@ -184,20 +185,6 @@
 
   const onClick = (event: MenuItemRegistered) => {
     pushTo(router, route, basePath + (event.index || 'user/list'))
-  }
-
-  const onClickToOldRecord = (event: MenuItemRegistered) => {
-    record.value &&
-      pushTo(router, route, basePath + (event.index || 'user/list'), {
-        oldRecordId: record.value.id
-      })
-  }
-
-  const onClickToNowRecord = (event: MenuItemRegistered) => {
-    record.value &&
-      pushTo(router, route, basePath + (event.index || 'user/list'), {
-        nowRecordId: record.value.id
-      })
   }
 
   const userNaame = computed(() => userStore?.user?.name || '未知用户')
@@ -254,11 +241,11 @@
                   >
 
                   <el-sub-menu index="user/buy/wupin">
-                    <template #title> 用户商品详情 </template>
-                    <el-menu-item index="user/buy/wupin/sale" :disabled="!user || !record" @click="onClickToNowRecord"
+                    <template #title> 用户订单商品详情 </template>
+                    <el-menu-item index="user/buy/wupin/sale" :disabled="!user || !record" @click="onClick"
                       >用户订单商品售卖详情</el-menu-item
                     >
-                    <el-menu-item index="user/buy/wupin/lock" :disabled="!user || !record" @click="onClickToOldRecord"
+                    <el-menu-item index="user/buy/wupin/lock" :disabled="!user || !record" @click="onClick"
                       >用户订单商品详情存档</el-menu-item
                     >
                   </el-sub-menu>
@@ -296,12 +283,22 @@
                 <el-menu-item index="wupin/add" @click="onClick">添加商品</el-menu-item>
               </el-sub-menu>
 
-              <el-sub-menu index="buyrecord">
+              <el-sub-menu index="buy">
                 <template #title>
                   <el-text>订单管理</el-text>
                 </template>
-                <el-menu-item index="buyrecord/list" @click="onClick">购物记录</el-menu-item>
-                <el-menu-item index="buyrecord/info" :disabled="!record" @click="onClick">订单详情</el-menu-item>
+                <el-menu-item index="buy/list" @click="onClick">订单列表</el-menu-item>
+                <el-menu-item index="buy/info" :disabled="!record" @click="onClick">订单详情</el-menu-item>
+
+                <el-sub-menu index="buy/wupin">
+                  <template #title> 订单商品详情 </template>
+                  <el-menu-item index="buy/wupin/sale" :disabled="!record" @click="onClick"
+                  >订单商品售卖详情</el-menu-item
+                  >
+                  <el-menu-item index="buy/wupin/lock" :disabled="!record" @click="onClick"
+                  >订单商品详情存档</el-menu-item
+                  >
+                </el-sub-menu>
               </el-sub-menu>
 
               <el-sub-menu index="xieyi">

@@ -17,45 +17,47 @@
     })
   }
 
-  const toBack = () => {
-    pushTo(router, route, '/admin/user/list')
-  }
-
   const userAdminStore = useAdminUserStore()
 
+  const isall = computed(() => !!route.meta.recordisall)
   const userId = ref(Number(route.query?.userId).valueOf() || 0)
   const user = ref(null as AdminUser | null)
-
   const recordId = ref(Number(route.query?.recordId).valueOf() || 0)
   const record = ref(null as AdminBuyRecordData | null)
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
-    user.value = null
-
-    if (userId.value) {
-      userAdminStore.getUser(userId.value).then(
-        (res) => {
-          user.value = res as AdminUser
-          onChangeRecord()
-        },
-        () => {
-          toBack()
-        }
-      )
+  const toBack = () => {
+    if (isall.value) {
+      pushTo(router, route, '/admin/buy/list')
     } else {
-      toBack()
+      pushTo(router, route, '/admin/user/list')
     }
   }
 
   const onChangeRecord = () => {
     recordId.value = Number(route.query?.recordId).valueOf() || 0
+    userId.value = Number(route.query?.userId).valueOf() || 0
     record.value = null
 
-    if (recordId.value) {
-      apiAdminGetBuyRecordInfo(recordId.value as number, userId.value || 0).then(
+    if (!isall.value && (!userId.value || !user.value || user.value.id !== userId.value)) {
+      router.push({
+        path: '/system/error',
+        query: {
+          msg: '页面错误'
+        }
+      })
+    } else if (recordId.value) {
+      apiAdminGetBuyRecordInfo(recordId.value as number, (user.value && user.value.id) || 0).then(
         (res) => {
           record.value = res.data.data as AdminBuyRecordData
+
+          if (!isall.value && userId.value && record.value && userId.value !== record.value.userId) {
+            router.push({
+              path: '/system/error',
+              query: {
+                msg: '页面错误'
+              }
+            })
+          }
         },
         () => {
           toBack()
@@ -66,30 +68,40 @@
     }
   }
 
-  watch(() => route.query, onChangeUser)
+  const onChangeUser = () => {
+    userId.value = Number(route.query?.userId).valueOf() || 0
+    user.value = null
+
+    if (isall.value) {
+      user.value = null
+      onChangeRecord()
+    } else if (userId.value) {
+      userAdminStore.getUser(userId.value).then((res) => {
+        user.value = res as AdminUser
+        onChangeRecord()
+      }, () => {
+        user.value = null
+        toBack()
+      })
+    } else {
+      toBack()
+    }
+  }
+
   watch(() => route.query, onChangeUser)
   onChangeUser()
 
   const reload = () => {
     recordId.value &&
-      user.value &&
       apiAdminGetBuyRecordInfo(recordId.value as number, userId.value as number)
         .then((res) => {
           record.value = res.data.data as AdminBuyRecordData
-        })
-        .catch(() => {
-          router.push({
-            path: '/system/error',
-            query: {
-              msg: '获取数据失败'
-            }
-          })
         })
   }
 </script>
 
 <template>
-  <div v-if="record && record.wupin && isAdmin()" class="base_card admin_root_main_base_card">
+  <div v-if="(isall || user) && record && record.wupin && isAdmin()" class="base_card admin_root_main_base_card">
     <AdminBuyRecord
       :zhifutishi="true"
       :record="record as AdminBuyRecordData"
