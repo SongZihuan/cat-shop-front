@@ -8,10 +8,9 @@
   const record = ref(null as BuyRecordData | null)
 
   const reload = () => {
-    apiGetBuyRecordInfo(recordId.value as number)
-      .then((res) => {
-        record.value = res.data.data as BuyRecordData
-      })
+    apiGetBuyRecordInfo(recordId.value as number).then((res) => {
+      record.value = res.data.data as BuyRecordData
+    })
   }
   reload()
 </script>

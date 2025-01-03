@@ -293,10 +293,10 @@
                 <el-sub-menu index="buy/wupin">
                   <template #title> 订单商品详情 </template>
                   <el-menu-item index="buy/wupin/sale" :disabled="!record" @click="onClick"
-                  >订单商品售卖详情</el-menu-item
+                    >订单商品售卖详情</el-menu-item
                   >
                   <el-menu-item index="buy/wupin/lock" :disabled="!record" @click="onClick"
-                  >订单商品详情存档</el-menu-item
+                    >订单商品详情存档</el-menu-item
                   >
                 </el-sub-menu>
               </el-sub-menu>

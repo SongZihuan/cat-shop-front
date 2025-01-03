@@ -35,26 +35,23 @@
   )
 
   if (nowRecordId.value && nowRecordId.value >= 0) {
-    apiGetBuyRecordInfo(nowRecordId.value as number)
-      .then((res) => {
-        record.value = res.data.data as BuyRecord
-        wupin.value = record.value.nowwupin as Wupin
-        mode.value = nowrecordmode
-      })
+    apiGetBuyRecordInfo(nowRecordId.value as number).then((res) => {
+      record.value = res.data.data as BuyRecord
+      wupin.value = record.value.nowwupin as Wupin
+      mode.value = nowrecordmode
+    })
   } else if (recordId.value && recordId.value >= 0) {
-    apiGetBuyRecordInfo(recordId.value as number)
-      .then((res) => {
-        record.value = res.data.data as BuyRecord
-        wupin.value = record.value.wupin as Wupin
-        mode.value = recordmode
-      })
+    apiGetBuyRecordInfo(recordId.value as number).then((res) => {
+      record.value = res.data.data as BuyRecord
+      wupin.value = record.value.wupin as Wupin
+      mode.value = recordmode
+    })
   } else if (wupinId.value && wupinId.value >= 0) {
-    apiGetWupin(wupinId.value as number)
-      .then((res) => {
-        record.value = null
-        wupin.value = res.data.data as Wupin
-        mode.value = wupinmode
-      })
+    apiGetWupin(wupinId.value as number).then((res) => {
+      record.value = null
+      wupin.value = res.data.data as Wupin
+      mode.value = wupinmode
+    })
   } else {
     router.push({
       path: '/system/error',

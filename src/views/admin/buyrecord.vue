@@ -76,13 +76,16 @@
       user.value = null
       onChangeRecord()
     } else if (userId.value) {
-      userAdminStore.getUser(userId.value).then((res) => {
-        user.value = res as AdminUser
-        onChangeRecord()
-      }, () => {
-        user.value = null
-        toBack()
-      })
+      userAdminStore.getUser(userId.value).then(
+        (res) => {
+          user.value = res as AdminUser
+          onChangeRecord()
+        },
+        () => {
+          user.value = null
+          toBack()
+        }
+      )
     } else {
       toBack()
     }
@@ -93,10 +96,9 @@
 
   const reload = () => {
     recordId.value &&
-      apiAdminGetBuyRecordInfo(recordId.value as number, userId.value as number)
-        .then((res) => {
-          record.value = res.data.data as AdminBuyRecordData
-        })
+      apiAdminGetBuyRecordInfo(recordId.value as number, userId.value as number).then((res) => {
+        record.value = res.data.data as AdminBuyRecordData
+      })
   }
 </script>
 

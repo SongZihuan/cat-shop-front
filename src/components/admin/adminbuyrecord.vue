@@ -37,9 +37,9 @@
       default: false
     },
     xiangqing: {
-      type: String,
-      default: '',
-    },
+      type: Boolean,
+      default: false
+    }
   })
 
   const emits = defineEmits(['reload'])
@@ -563,13 +563,13 @@
   }
 
   const onXiangQing = () => {
-    if (xiangqing.value && isall.value){
-      pushTo(router, route, "/admin/buy/info", {
+    if (xiangqing.value && isall.value) {
+      pushTo(router, route, '/admin/buy/info', {
         recordId: record.value.id
       })
-    } else if (xiangqing.value && !isall.value){
-      pushTo(router, route, "/admin/user/buy/info", {
-        recordId: record.value.id,
+    } else if (xiangqing.value && !isall.value) {
+      pushTo(router, route, '/admin/user/buy/info', {
+        recordId: record.value.id
       })
     }
   }

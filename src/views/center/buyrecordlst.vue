@@ -10,26 +10,25 @@
 
   const changePage = (status: number | string) => {
     const page = currentPage.value[status] || 1
-    apiGetUserBuyRecordByPage(page, 20, Number(status).valueOf())
-      .then((res) => {
-        dataInfo.value[status] = {
-          data: res.data.data.list,
-          pagesizze: 20,
-          total: res.data.data.total,
-          maxcount: res.data.data.maxcount,
-          pagesize: 20
-        }
+    apiGetUserBuyRecordByPage(page, 20, Number(status).valueOf()).then((res) => {
+      dataInfo.value[status] = {
+        data: res.data.data.list,
+        pagesizze: 20,
+        total: res.data.data.total,
+        maxcount: res.data.data.maxcount,
+        pagesize: 20
+      }
 
-        if (status === '2' && res.data.data.total > 0) {
-          ElNotification({
-            title: '支付提示',
-            message: '有订单支付失败哦，请尝试重新支付！',
-            type: 'warning',
-            duration: 5000,
-            position: 'top-left'
-          })
-        }
-      })
+      if (status === '2' && res.data.data.total > 0) {
+        ElNotification({
+          title: '支付提示',
+          message: '有订单支付失败哦，请尝试重新支付！',
+          type: 'warning',
+          duration: 5000,
+          position: 'top-left'
+        })
+      }
+    })
   }
 
   changePage(activeModel.value)

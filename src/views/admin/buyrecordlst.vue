@@ -2,7 +2,7 @@
   import { BuyRecordStatus } from '#/center/buyrecord'
   import { isAdmin } from '@/store/admin'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
-  import {apiAdminGetBuyRecordByPage, apiAdminGetUserBuyRecordByPage} from '#/admin/buyrecord'
+  import { apiAdminGetBuyRecordByPage, apiAdminGetUserBuyRecordByPage } from '#/admin/buyrecord'
   import pushTo from '@/views/admin/router_push'
   import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
 
@@ -36,16 +36,15 @@
   const changePage = (status: number | string) => {
     if (isall.value) {
       const page = currentPage.value[status] || 1
-      apiAdminGetBuyRecordByPage(page, 20, Number(status).valueOf())
-          .then((res) => {
-            dataInfo.value[status] = {
-              data: res.data.data.list,
-              pagesizze: 20,
-              total: res.data.data.total,
-              maxcount: res.data.data.maxcount,
-              pagesize: 20
-            }
-          })
+      apiAdminGetBuyRecordByPage(page, 20, Number(status).valueOf()).then((res) => {
+        dataInfo.value[status] = {
+          data: res.data.data.list,
+          pagesizze: 20,
+          total: res.data.data.total,
+          maxcount: res.data.data.maxcount,
+          pagesize: 20
+        }
+      })
     } else {
       if (!user.value) {
         router.push({
@@ -58,15 +57,14 @@
       }
 
       const page = currentPage.value[status] || 1
-      apiAdminGetUserBuyRecordByPage(userId.value, page, 20, Number(status).valueOf())
-          .then((res) => {
-            dataInfo.value[status] = {
-              data: res.data.data.list,
-              total: res.data.data.total,
-              maxcount: res.data.data.maxcount,
-              pagesize: 20
-            }
-          })
+      apiAdminGetUserBuyRecordByPage(userId.value, page, 20, Number(status).valueOf()).then((res) => {
+        dataInfo.value[status] = {
+          data: res.data.data.list,
+          total: res.data.data.total,
+          maxcount: res.data.data.maxcount,
+          pagesize: 20
+        }
+      })
     }
   }
 
@@ -78,13 +76,16 @@
       user.value = null
       changePage(activeModel.value)
     } else if (userId.value) {
-      userAdminStore.getUser(userId.value).then((res) => {
-        user.value = res as AdminUser
-        changePage(activeModel.value)
-      }, () => {
-        user.value = null
-        toBackUser()
-      })
+      userAdminStore.getUser(userId.value).then(
+        (res) => {
+          user.value = res as AdminUser
+          changePage(activeModel.value)
+        },
+        () => {
+          user.value = null
+          toBackUser()
+        }
+      )
     } else {
       toBackUser()
     }

@@ -244,7 +244,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '用户购物记录',
           admin: true,
-          recordisall: false,
+          recordisall: false
         }
       },
       {
@@ -253,7 +253,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '用户订单详情',
           admin: true,
-          recordisall: false,
+          recordisall: false
         }
       },
       {
@@ -266,8 +266,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '商品售卖详情',
           admin: true,
-          wupinmode: "sale",
-          wupinfrom: "user",
+          wupinmode: 'sale',
+          wupinfrom: 'user'
         }
       },
       {
@@ -276,8 +276,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '用户订单档案商品详情',
           admin: true,
-          wupinmode: "lock",
-          wupinfrom: "user",
+          wupinmode: 'lock',
+          wupinfrom: 'user'
         }
       },
       {
@@ -366,7 +366,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '商品详情',
           admin: true,
-          wupinfrom: "wupin",
+          wupinfrom: 'wupin'
         }
       },
       {
@@ -395,7 +395,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '总订单列表',
           admin: true,
-          recordisall: true,
+          recordisall: true
         }
       },
       {
@@ -404,7 +404,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '订单详情',
           admin: true,
-          recordisall: true,
+          recordisall: true
         }
       },
       {
@@ -413,8 +413,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '商品售卖详情',
           admin: true,
-          wupinmode: "sale",
-          wupinfrom: "record",
+          wupinmode: 'sale',
+          wupinfrom: 'record'
         }
       },
       {
@@ -423,8 +423,8 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '用户订单档案商品详情',
           admin: true,
-          wupinmode: "lock",
-          wupinfrom: "record",
+          wupinmode: 'lock',
+          wupinfrom: 'record'
         }
       },
       {
@@ -468,7 +468,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/stophttpserver.vue'),
         meta: {
           title: '服务prize',
-          admin: true,
+          admin: true
         }
       },
       {
@@ -476,7 +476,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/restarthttpserver.vue'),
         meta: {
           title: '服务prize',
-          admin: true,
+          admin: true
         }
       }
     ]
