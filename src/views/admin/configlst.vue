@@ -11,8 +11,10 @@
   import { Edit } from '@element-plus/icons-vue'
   import { ElMessage, genFileId, UploadFile, UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
   import Showimg from '@/components/utils/showimg.vue'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
+  const route = useRoute()
 
   if (!isRootAdmin()) {
     router.push({
@@ -36,15 +38,17 @@
       : []
   )
 
-  const onChange = () => {
+  const onChange = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     apiAdminGetConfig().then((res) => {
       config.value = apiAdminConfigAsDefault(res.data.data.config)
       configinfo.value = res.data.data.info
       configtype.value = res.data.data.type
       configtypename.value = res.data.data.typename
     })
+    next()
   }
-  onChange()
+  onBeforeRouteUpdate(onChange)
+  onChange(route, route, ()=>{})
 
   const picUrl = ref('')
   const openPic = (url: string) => {
@@ -93,7 +97,7 @@
           type: 'success',
           message: '图片上传成功'
         })
-        onChange()
+        onChange(route, route, ()=>{})
       } else {
         ElMessage({
           type: 'success',
@@ -133,7 +137,7 @@
           message: '修改成功'
         })
         showUpdateText.value = false
-        onChange()
+        onChange(route, route, ()=>{})
       } else {
         ElMessage({
           type: 'error',
@@ -173,7 +177,7 @@
           message: '修改成功'
         })
         showUpdateString.value = false
-        onChange()
+        onChange(route, route, ()=>{})
       } else {
         ElMessage({
           type: 'error',
@@ -194,7 +198,7 @@
           type: 'success',
           message: '删除成功'
         })
-        onChange()
+        onChange(route, route, ()=>{})
       } else {
         ElMessage({
           type: 'error',

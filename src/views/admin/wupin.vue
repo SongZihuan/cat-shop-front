@@ -8,6 +8,7 @@
   import pushTo from '@/views/admin/router_push'
   import Showhtml from '@/components/utils/showhtml.vue'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
+  import {RouteLocationNormalized} from "vue-router";
   const router = useRouter()
   const route = useRoute()
 
@@ -30,18 +31,21 @@
 
   const mode = computed(() => route.meta.wupinmode || modeinfo)
   const wupinfrom = computed(() => route.meta.wupinfrom || wupinfromwupin)
-  const hasUser = computed(() => wupinfrom.value === wupinfromuser)
 
-  const recordId = ref(computed(() => Number(route.query.recordId).valueOf() || (0 as number)))
-  const wupinId = ref(computed(() => Number(route.query.wupinId).valueOf() || (0 as number)))
-  const userId = ref(computed(() => Number(route.query.userId).valueOf() || (0 as number)))
+  const recordId = ref(Number(route.query?.recordId).valueOf() || 0)
+  const wupinId = ref(Number(route.query?.wupinId).valueOf() || 0)
+  const userId = ref(Number(route.query?.userId).valueOf() || 0)
+
   const record = ref(null as AdminBuyRecord | null)
   const wupin = ref(null as AdminWupin | null)
   const user = ref(null as AdminUser | null)
 
   const userAdminStore = useAdminUserStore()
 
-  const getData = () => {
+  const getData = (to:RouteLocationNormalized) => {
+    recordId.value = Number(to.query?.recordId).valueOf() || 0
+    wupinId.value = Number(to.query?.wupinId).valueOf() || 0
+
     if (wupinfrom.value === wupinfromuser && (!userId.value || !user.value || user.value.id !== userId.value)) {
       router.push({
         path: '/system/error',
@@ -178,7 +182,9 @@
     }
   }
 
-  const onChangeUser = () => {
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    userId.value = Number(to.query?.userId).valueOf() || 0
+
     user.value = null
     wupin.value = null
     record.value = null
@@ -188,7 +194,7 @@
         userAdminStore.getUser(userId.value).then(
           (res) => {
             user.value = res as AdminUser
-            getData()
+            getData(to)
           },
           () => {
             user.value = null
@@ -197,15 +203,16 @@
         )
       } else {
         user.value = null
-        getData()
+        getData(to)
       }
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
+  onChangeUser(route, route, ()=>{})
 
   const headerCustomer = ref<HTMLElement>()
   const headerHeight = ref('0')
@@ -259,191 +266,195 @@
     </template>
     <div class="box">
       <div class="left_box">
-        <div style="padding-right: 5px">
-          <div class="img_outside_box">
-            <div class="img_box">
-              <el-image :src="wupin.pic" fit="contain" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+        <el-scrollbar>
+          <div style="padding-right: 5px">
+            <div class="img_outside_box">
+              <div class="img_box">
+                <el-image :src="wupin.pic" fit="contain" :initial-index="0" :preview-src-list="[wupin.pic]"></el-image>
+              </div>
+            </div>
+            <div v-if="wupin.ren" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Microphone /></el-icon>
+                商品客服称呼
+                {{ wupin.ren }}
+              </el-text>
+            </div>
+            <div v-if="wupin.phone" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Iphone /></el-icon>
+                商品客服电话
+                {{ wupin.phone }}
+              </el-text>
+            </div>
+            <div v-if="wupin.email" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Message /></el-icon>
+                商品客服邮箱
+                {{ wupin.email }}
+              </el-text>
+            </div>
+            <div v-if="wupin.wechat" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Service /></el-icon>
+                商品客服微信
+                {{ wupin.wechat }}
+              </el-text>
+            </div>
+            <div v-if="wupin.wechat" class="wupin_info_box">
+              <el-text class="wupin_info_text">
+                <el-icon><Location /></el-icon>
+                商品客服地址
+                {{ wupin.location }}
+              </el-text>
+            </div>
+
+            <el-divider border-style="solid" content-position="left" class="divider_height"> 商品数据 </el-divider>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text"> 是否热销：{{ wupin.hot ? '热销' : '非热销' }} </el-text>
+            </div>
+
+            <div v-if="wupin.tag" class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text"> 标签：{{ wupin.tag }} </el-text>
+            </div>
+
+            <div v-if="wupin.tag" class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text"> 商品是否在售：{{ wupin.down ? '已下架' : '在售' }} </el-text>
+            </div>
+
+            <el-divider border-style="solid" content-position="left" class="divider_height"> 商品分类数据 </el-divider>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                商品分类：{{
+                  wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
+                      ? wupin.classOf.name
+                      : '暂无分类'
+                }}
+              </el-text>
+            </div>
+
+            <div
+                v-if="
+              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
+            "
+                class="wupin_buy_total_box"
+            >
+              <el-text class="wupin_buy_total_text">
+                商品分类是否展示：{{ wupin.classOf.show ? '展示' : '隐藏' }}
+              </el-text>
+            </div>
+
+            <div
+                v-if="
+              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
+            "
+                class="wupin_buy_total_box"
+            >
+              <el-text class="wupin_buy_total_text">
+                商品分了是否下架：{{ wupin.classOf.down ? '下架' : '销售中' }}
+              </el-text>
+            </div>
+
+            <el-divider border-style="solid" content-position="left" class="divider_height"> 售价数据 </el-divider>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text">
+                热销价格： {{ wupin.hotPrice && wupin.hotPrice >= 0 ? '￥' + (wupin.hotPrice / 100).toFixed(2) : '暂无' }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text">
+                实际价格： {{ wupin.realPrice >= 0 ? '￥' + (wupin.realPrice / 100).toFixed(2) : '￥0.00' }}
+              </el-text>
+            </div>
+
+            <div
+                v-if="wupin.hotPrice && wupin.hotPrice > wupin.realPrice"
+                class="wupin_buy_total_box"
+                style="margin-top: 0"
+            >
+              <el-text class="wupin_buy_total_text"> 热销价格异常：热销价格比实际价格昂贵。 </el-text>
+            </div>
+
+            <div v-if="wupin.realPrice <= 0" class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text"> 实际价格异常：实际价格为免费。 </el-text>
+            </div>
+
+            <el-divider border-style="solid" content-position="left" class="divider_height"> 购物数据 </el-divider>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text">
+                购买人数：
+                {{ totalBuy }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text">
+                到货人数：
+                {{ totalDaoHuo }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box" style="margin-top: 0">
+              <el-text class="wupin_buy_total_text">
+                评价人数：
+                {{ totalDaoHuo }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                好评人数：
+                {{ totalBuyGood }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                购买总件数：
+                {{ totalJian }}
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text"> 总消费金额： ￥{{ (totalAllUserPrice / 100).toFixed(2) }} </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                购买到货率：
+                {{ daohuoPre.toFixed(2) }}%
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                购买评价率：
+                {{ pingjiaPre.toFixed(2) }}%
+              </el-text>
+            </div>
+
+            <div class="wupin_buy_total_box">
+              <el-text class="wupin_buy_total_text">
+                购买好评率：
+                <el-badge :value="goodBuyMsg"> {{ goodBuyPre.toFixed(2) }}% </el-badge>
+              </el-text>
             </div>
           </div>
-          <div v-if="wupin.ren" class="wupin_info_box">
-            <el-text class="wupin_info_text">
-              <el-icon><Microphone /></el-icon>
-              商品客服称呼
-              {{ wupin.ren }}
-            </el-text>
-          </div>
-          <div v-if="wupin.phone" class="wupin_info_box">
-            <el-text class="wupin_info_text">
-              <el-icon><Iphone /></el-icon>
-              商品客服电话
-              {{ wupin.phone }}
-            </el-text>
-          </div>
-          <div v-if="wupin.email" class="wupin_info_box">
-            <el-text class="wupin_info_text">
-              <el-icon><Message /></el-icon>
-              商品客服邮箱
-              {{ wupin.email }}
-            </el-text>
-          </div>
-          <div v-if="wupin.wechat" class="wupin_info_box">
-            <el-text class="wupin_info_text">
-              <el-icon><Service /></el-icon>
-              商品客服微信
-              {{ wupin.wechat }}
-            </el-text>
-          </div>
-          <div v-if="wupin.wechat" class="wupin_info_box">
-            <el-text class="wupin_info_text">
-              <el-icon><Location /></el-icon>
-              商品客服地址
-              {{ wupin.location }}
-            </el-text>
-          </div>
-
-          <el-divider border-style="solid" content-position="left" class="divider_height"> 商品数据 </el-divider>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text"> 是否热销：{{ wupin.hot ? '热销' : '非热销' }} </el-text>
-          </div>
-
-          <div v-if="wupin.tag" class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text"> 标签：{{ wupin.tag }} </el-text>
-          </div>
-
-          <div v-if="wupin.tag" class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text"> 商品是否在售：{{ wupin.down ? '已下架' : '在售' }} </el-text>
-          </div>
-
-          <el-divider border-style="solid" content-position="left" class="divider_height"> 商品分类数据 </el-divider>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              商品分类：{{
-                wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-                  ? wupin.classOf.name
-                  : '暂无分类'
-              }}
-            </el-text>
-          </div>
-
-          <div
-            v-if="
-              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-            "
-            class="wupin_buy_total_box"
-          >
-            <el-text class="wupin_buy_total_text">
-              商品分类是否展示：{{ wupin.classOf.show ? '展示' : '隐藏' }}
-            </el-text>
-          </div>
-
-          <div
-            v-if="
-              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-            "
-            class="wupin_buy_total_box"
-          >
-            <el-text class="wupin_buy_total_text">
-              商品分了是否下架：{{ wupin.classOf.down ? '下架' : '销售中' }}
-            </el-text>
-          </div>
-
-          <el-divider border-style="solid" content-position="left" class="divider_height"> 售价数据 </el-divider>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text">
-              热销价格： {{ wupin.hotPrice && wupin.hotPrice >= 0 ? '￥' + (wupin.hotPrice / 100).toFixed(2) : '暂无' }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text">
-              实际价格： {{ wupin.realPrice >= 0 ? '￥' + (wupin.realPrice / 100).toFixed(2) : '￥0.00' }}
-            </el-text>
-          </div>
-
-          <div
-            v-if="wupin.hotPrice && wupin.hotPrice > wupin.realPrice"
-            class="wupin_buy_total_box"
-            style="margin-top: 0"
-          >
-            <el-text class="wupin_buy_total_text"> 热销价格异常：热销价格比实际价格昂贵。 </el-text>
-          </div>
-
-          <div v-if="wupin.realPrice <= 0" class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text"> 实际价格异常：实际价格为免费。 </el-text>
-          </div>
-
-          <el-divider border-style="solid" content-position="left" class="divider_height"> 购物数据 </el-divider>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text">
-              购买人数：
-              {{ totalBuy }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text">
-              到货人数：
-              {{ totalDaoHuo }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box" style="margin-top: 0">
-            <el-text class="wupin_buy_total_text">
-              评价人数：
-              {{ totalDaoHuo }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              好评人数：
-              {{ totalBuyGood }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              购买总件数：
-              {{ totalJian }}
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text"> 总消费金额： ￥{{ (totalAllUserPrice / 100).toFixed(2) }} </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              购买到货率：
-              {{ daohuoPre.toFixed(2) }}%
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              购买评价率：
-              {{ pingjiaPre.toFixed(2) }}%
-            </el-text>
-          </div>
-
-          <div class="wupin_buy_total_box">
-            <el-text class="wupin_buy_total_text">
-              购买好评率：
-              <el-badge :value="goodBuyMsg"> {{ goodBuyPre.toFixed(2) }}% </el-badge>
-            </el-text>
-          </div>
-        </div>
+        </el-scrollbar>
       </div>
       <div class="right_box">
-        <div style="padding-right: 5px">
-          <div class="info_box">
-            <Showhtml :content="wupin.info"></Showhtml>
+        <el-scrollbar>
+          <div style="padding-right: 5px">
+            <div class="info_box">
+              <Showhtml :content="wupin.info"></Showhtml>
+            </div>
           </div>
-        </div>
+        </el-scrollbar>
       </div>
     </div>
     <template #footer>

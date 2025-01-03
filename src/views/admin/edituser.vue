@@ -12,6 +12,7 @@
   import pushTo from '@/views/admin/router_push'
   import { hasPermission, isAdmin, isDeleteUser, isRootAdmin } from '@/store/admin'
   import { isEmail } from '@/utils/str'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -63,8 +64,8 @@
 
   const userIsRoot = ref(false)
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
     if (userId.value) {
@@ -111,10 +112,11 @@
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
+  onChangeUser(route, route, ()=>{})
 
   const hasChange = computed(() => {
     return (
@@ -171,7 +173,7 @@
             type: 'success',
             message: '更新成功'
           })
-          onChangeUser()
+          onChangeUser(route, route, ()=>{})
         },
         () => {
           ElMessage({

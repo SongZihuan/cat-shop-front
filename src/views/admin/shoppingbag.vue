@@ -5,6 +5,7 @@
   import { AdminShopRecord, apiAdminGetUserShoppingRecord } from '#/admin/shoppingbag'
   import pushTo from '@/views/admin/router_push'
   import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -24,22 +25,41 @@
   const user = ref(null as AdminUser | null)
 
   const maxcount = ref(0)
-  const page = ref(Number(route.query?.page).valueOf() || 1)
-  const pagesize = ref(20)
-  if (page.value < 1) {
-    page.value = 1
+  const querypage = ref(Number(route.query?.page).valueOf() || 1)
+  if (querypage.value < 1) {
+    querypage.value = 1
   }
+  const page = ref(querypage.value)
+  const pagesize = ref(20)
   const shoppingbagLst = ref([] as AdminShopRecord[])
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
+  const getData = () => {
+    user.value &&
+    apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {
+      maxcount.value = res.data.data.maxcount
+      shoppingbagLst.value = res.data.data.list
+    })
+  }
+
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    let nowQueryPage = Number(to.query?.page).valueOf() || 1
+    if (nowQueryPage < 1) {
+      nowQueryPage = 1
+    }
+
+    if (nowQueryPage !== querypage.value) {
+      querypage.value = nowQueryPage
+      page.value = nowQueryPage
+    }
+
+    userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
     if (userId.value) {
       userAdminStore.getUser(userId.value).then(
         (res) => {
           user.value = res as AdminUser
-          onChange()
+          getData()
         },
         () => {
           toBack()
@@ -48,6 +68,7 @@
     } else {
       toBack()
     }
+    next()
   }
 
   const toBack = () => {
@@ -55,15 +76,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
-
-  const onChange = () => {
-    user.value &&
-      apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {
-        maxcount.value = res.data.data.maxcount
-        shoppingbagLst.value = res.data.data.list
-      })
-  }
+  onChangeUser(route, route, ()=>{})
 </script>
 
 <template>

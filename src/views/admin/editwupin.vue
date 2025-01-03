@@ -8,6 +8,7 @@
   import { Edit } from '@element-plus/icons-vue'
   import Editor from '@/components/utils/editor.vue'
   import { UploadFile } from 'element-plus'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -29,8 +30,8 @@
   const wupin = ref(null as AdminWupin | null)
   const defaultClass = ref({} as AdminClass)
 
-  const onChangeWupin = () => {
-    wupinId.value = Number(route.query?.wupinId).valueOf() || 0
+  const onChangeWupin = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    wupinId.value = Number(to.query?.wupinId).valueOf() || 0
     wupin.value = null
 
     if (wupinId.value) {
@@ -76,10 +77,11 @@
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeWupin)
-  onChangeWupin()
+  onChangeWupin(route, route, ()=>{})
 
   const classLst = ref([] as AdminClass[])
   const classLstPage = ref(1)

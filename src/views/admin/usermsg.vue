@@ -1,9 +1,10 @@
 <script setup lang="ts">
   import { isAdmin } from '@/store/admin'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
-  import { AdminMsg as AdminMsgType, apiAdminGetUserMsg } from '#/admin/msg'
+  import {AdminMsg as AdminMsgType, apiAdminGetMsg, apiAdminGetUserMsg} from '#/admin/msg'
   import AdminMsg from '@/components/admin/adminmsg.vue'
   import pushTo from '@/views/admin/router_push'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -26,23 +27,59 @@
   const userId = ref(Number(route.query?.userId).valueOf() || 0)
   const user = ref(null as AdminUser | null)
 
+  const isall = computed(() => !!route.meta.msgisall)
+
   const maxcount = ref(0)
-  const page = ref(Number(route.query?.page).valueOf() || 1)
-  const pagesize = ref(20)
-  if (page.value < 1) {
-    page.value = 1
+  const querypage = ref(Number(route.query?.page).valueOf() || 1)
+  if (querypage.value < 1) {
+    querypage.value = 1
   }
+  const page = ref(querypage.value)
+  const pagesize = ref(20)
   const msgLst = ref([] as AdminMsgType[])
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
+  const getData = () => {
+    if (!isall.value && (!userId.value || !user.value || user.value.id !== userId.value)) {
+      router.push({
+        path: '/system/error',
+        query: {
+          msg: '页面错误'
+        }
+      })
+    } else if (isall.value) {
+      apiAdminGetMsg(page.value, pagesize.value).then((res) => {
+        maxcount.value = res.data.data.maxcount
+        msgLst.value = res.data.data.list
+      })
+    } else {
+      apiAdminGetUserMsg(userId.value, page.value, pagesize.value).then((res) => {
+        maxcount.value = res.data.data.maxcount
+        msgLst.value = res.data.data.list
+      })
+    }
+  }
+
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    let nowQueryPage = Number(to.query?.page).valueOf() || 1
+    if (nowQueryPage < 1) {
+      nowQueryPage = 1
+    }
+
+    if (nowQueryPage !== querypage.value) {
+      querypage.value = nowQueryPage
+      page.value = nowQueryPage
+    }
+
+    userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
-    if (userId.value) {
+    if (isall.value) {
+      getData()
+    } else if (userId.value) {
       userAdminStore.getUser(userId.value).then(
         (res) => {
           user.value = res as AdminUser
-          onChange()
+          getData()
         },
         () => {
           toBack()
@@ -54,19 +91,11 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
-
-  const onChange = () => {
-    user.value &&
-      apiAdminGetUserMsg(userId.value, page.value, pagesize.value).then((res) => {
-        maxcount.value = res.data.data.maxcount
-        msgLst.value = res.data.data.list
-      })
-  }
+  onChangeUser(route, route, ()=>{})
 </script>
 
 <template>
-  <div v-if="user && isAdmin()" class="base_card admin_root_main_base_card">
+  <div v-if="(isall || user) && isAdmin()" class="base_card admin_root_main_base_card">
     <div v-if="msgLst && msgLst.length > 0" class="msg_box">
       <div class="inner_box">
         <div class="page_box">

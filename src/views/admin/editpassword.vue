@@ -3,6 +3,7 @@
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
   import { hasPermission, isAdmin, isDeleteUser } from '@/store/admin'
   import pushTo from '@/views/admin/router_push'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -46,8 +47,8 @@
     newPasswordDouble: ''
   } as { newPassword: string; newPasswordDouble: string })
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
     if (userId.value) {
@@ -65,10 +66,11 @@
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
+  onChangeUser(route, route, ()=>{})
 
   const passwordCheck = computed(() => form.value.newPassword.length >= 8)
   const doublePasswordCheck = computed(() => form.value.newPassword === form.value.newPasswordDouble)
@@ -86,7 +88,7 @@
             type: 'success',
             message: '更新成功'
           })
-          onChangeUser()
+          onChangeUser(route, route, ()=>{})
         },
         () => {
           ElMessage({

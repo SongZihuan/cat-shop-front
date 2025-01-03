@@ -3,8 +3,10 @@
   import { apiAdminGetXieyi, apiAdminPostUpdateXieyi } from '#/admin/xieyi'
   import Editor from '@/components/utils/editor.vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
+  const route = useRoute()
 
   if (!isAdmin()) {
     router.push({
@@ -17,12 +19,14 @@
 
   const xieyi = ref('')
 
-  const getXieyi = () => {
+  const getXieyi = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     apiAdminGetXieyi().then((res) => {
       xieyi.value = res.data.data.xieyi
     })
+    next()
   }
-  getXieyi()
+  onBeforeRouteUpdate(getXieyi)
+  getXieyi(route, route, ()=>{})
 
   const updateXieYi = () => {
     ElMessageBox.confirm('是否确定更新协议', '提示', {

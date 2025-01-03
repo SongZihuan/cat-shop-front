@@ -9,6 +9,8 @@
   import { MenuItemRegistered } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
   import useUserStore, { UserTypeList } from '@/store/user'
+  import {onBeforeRouteUpdate} from "vue-router";
+  import onAfterRouteQueryUpdate from "@/views/admin/router_watch";
 
   const router = useRouter()
   const route = useRoute()
@@ -63,6 +65,7 @@
     user.value = null
     userPermissions.value = false
 
+    console.log("userId.value", userId.value, route.query)
     if (userId.value) {
       userAdminStore.getUser(userId.value).then(
         (res) => {
@@ -83,7 +86,7 @@
           user.value = null
           userPermissions.value = false
         }
-      )
+      ).finally(() => { console.log("user.value", user.value) })
     } else {
       user.value = null
       userPermissions.value = false
@@ -101,6 +104,7 @@
       apiAdminGetWupin(wupinId.value).then(
         (res) => {
           wupin.value = res.data.data as AdminWupin
+          console.log("get", wupin.value)
         },
         () => {
           wupin.value = null
@@ -153,7 +157,7 @@
     }
   }
 
-  onBeforeRouteUpdate(() => {
+  watch(() => route.query, () => {
     onChangeUser()
     onChangeClass()
     onChangeWupin()

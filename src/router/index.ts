@@ -230,8 +230,9 @@ const routes: RouteRecordRaw[] = [
         path: 'user/msg',
         component: () => import('@/views/admin/usermsg.vue'),
         meta: {
-          title: '查看樱花留言',
-          admin: true
+          title: '查看用户留言',
+          admin: true,
+          msgisall: false
         }
       },
       {
@@ -306,10 +307,11 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'user/other/msg',
-        component: () => import('@/views/admin/msg.vue'),
+        component: () => import('@/views/admin/usermsg.vue'),
         meta: {
           title: '全部用户留言',
-          admin: true
+          admin: true,
+          msgisall: true
         }
       },
       {

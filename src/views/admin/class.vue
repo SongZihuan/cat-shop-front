@@ -8,6 +8,7 @@
     apiAdminPostChangeClassShow
   } from '#/admin/class'
   import { ElMessage, ElMessageBox } from 'element-plus'
+  import {RouteLocationNormalized} from "vue-router";
 
   const route = useRoute()
   const router = useRouter()
@@ -19,8 +20,8 @@
   const classId = ref(Number(route.query?.classId).valueOf() || 0)
   const classObj = ref(null as AdminClass | null)
 
-  const onChangeClass = () => {
-    classId.value = Number(route.query?.classId).valueOf() || 0
+  const onChangeClass = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    classId.value = Number(to.query?.classId).valueOf() || 0
     classObj.value = null
 
     if (classId.value && classId.value > 1) {
@@ -35,10 +36,11 @@
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeClass)
-  onChangeClass()
+  onChangeClass(route, route, ()=>{})
 
   const toEdit = () => {
     classObj.value && pushTo(router, route, '/admin/class/edit')

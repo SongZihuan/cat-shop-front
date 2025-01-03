@@ -9,6 +9,7 @@
     apiAdminPostChangeClassShow
   } from '#/admin/class'
   import pushTo from '@/views/admin/router_push'
+  import {RouteLocationNormalized} from "vue-router";
 
   const route = useRoute()
   const router = useRouter()
@@ -23,21 +24,34 @@
   }
 
   const maxcount = ref(0)
-  const page = ref(Number(route.query?.page).valueOf() || 1)
-  const pagesize = ref(20)
-  if (page.value < 1) {
-    page.value = 1
+  const querypage = ref(Number(route.query?.page).valueOf() || 1)
+  if (querypage.value < 1) {
+    querypage.value = 1
   }
+  const page = ref(querypage.value)
+  const pagesize = ref(20)
 
   const classLst = ref([] as AdminClass[])
 
-  const onChange = () => {
+  const onChange = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    let nowQueryPage = Number(to.query?.page).valueOf() || 1
+    if (nowQueryPage < 1) {
+      nowQueryPage = 1
+    }
+
+    if (nowQueryPage !== querypage.value) {
+      querypage.value = nowQueryPage
+      page.value = nowQueryPage
+    }
+
     apiAdminGetClassLst(page.value, pagesize.value).then((res) => {
       maxcount.value = res.data.data.maxcount
       classLst.value = res.data.data.list
     })
+    next()
   }
-  onChange()
+  onBeforeRouteUpdate(onChange)
+  onChange(route, route, ()=>{})
 
   const toInfo = (id: number) => {
     pushTo(router, route, '/admin/class/info', {

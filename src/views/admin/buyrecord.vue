@@ -4,6 +4,7 @@
   import { isAdmin } from '@/store/admin'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
   import pushTo from '@/views/admin/router_push'
+  import {RouteLocationNormalized} from "vue-router";
 
   const router = useRouter()
   const route = useRoute()
@@ -33,10 +34,8 @@
     }
   }
 
-  const onChangeRecord = () => {
-    recordId.value = Number(route.query?.recordId).valueOf() || 0
-    userId.value = Number(route.query?.userId).valueOf() || 0
-    record.value = null
+  const onChangeRecord = (to:RouteLocationNormalized) => {
+    recordId.value = Number(to.query?.recordId).valueOf() || 0
 
     if (!isall.value && (!userId.value || !user.value || user.value.id !== userId.value)) {
       router.push({
@@ -68,18 +67,19 @@
     }
   }
 
-  const onChangeUser = () => {
-    userId.value = Number(route.query?.userId).valueOf() || 0
+  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+    userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
+    record.value = null
 
     if (isall.value) {
       user.value = null
-      onChangeRecord()
+      onChangeRecord(to)
     } else if (userId.value) {
       userAdminStore.getUser(userId.value).then(
         (res) => {
           user.value = res as AdminUser
-          onChangeRecord()
+          onChangeRecord(to)
         },
         () => {
           user.value = null
@@ -89,10 +89,11 @@
     } else {
       toBack()
     }
+    next()
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser()
+  onChangeUser(route, route, ()=>{})
 
   const reload = () => {
     recordId.value &&
