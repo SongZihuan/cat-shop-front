@@ -50,14 +50,13 @@ export function apiGetSelfInfo(): Result<UserWithoutPre> {
     data: {
       code: 0,
       data: {
-        name: '',
+        name: '小桓',
         wechat: 'xxx',
         email: 'hhh',
         type: 3,
         avatar: '',
         phone: '17322061610',
         location: '广东广州',
-        xtoken: '123456',
         totalPrice: 100000,
         totalBuy: 30,
         totalGood: 20,

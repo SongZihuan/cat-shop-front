@@ -57,7 +57,7 @@ export function apiAdminGetUserShoppingRecord(
         classId: 2,
         classOf: {
           id: 2,
-          name: '商品分类2222',
+          name: '商品分类222',
           show: true,
           down: false
         },
@@ -72,11 +72,11 @@ export function apiAdminGetUserShoppingRecord(
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        buyprice: 999,
+        buyprice: 90000,
         buypingjia: 20,
-        buyjian: 10,
+        buyjian: 15,
         hot: false,
-        down: false
+        down: true
       },
       down: false
     })

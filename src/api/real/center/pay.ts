@@ -17,20 +17,10 @@ export const shoprecordId = buyRecordId
 export const redirect = 'redirect'
 export const paytype = 'paytype'
 
-export interface AliRepayData {
-  url: string
-}
-
-export interface WechatRepayData {
-  url: string
-}
-
-export interface AliPayData {
-  url: string
-}
-
-export interface WechatPayData {
-  url: string
+export interface PayData {
+  url?: string
+  recordId?: number
+  success: boolean
 }
 
 export interface LocationForUser {
@@ -46,14 +36,19 @@ export const apiPostAliNewPay = (
   redirectTo: string,
   wupin: Wupin,
   num: number,
-  location: LocationForUser
-): Result<AliPayData> => {
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
         url:
-          window.location.origin +
+          window.location.protocol +
+          '//127.0.0.1:' +
+          window.location.port +
           testPayPath +
           `?${type}=` +
           encodeURIComponent(alipay) +
@@ -73,14 +68,20 @@ export const apiPostWechatNewPay = (
   redirectTo: string,
   wupin: Wupin,
   num: number,
-  location: LocationForUser
-): Result<WechatPayData> => {
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
+        // 测试不同源
         url:
-          window.location.origin +
+          window.location.protocol +
+          '//127.0.0.1:' +
+          window.location.port +
           testPayPath +
           `?${type}=` +
           encodeURIComponent(wechat) +
@@ -97,14 +98,16 @@ export const apiPostWechatNewPay = (
 }
 
 export const apiPostAliNewPayWithShop = (
-  redirectTo: string,
   shoprecord: ShopRecord,
-  location: LocationForUser
-): Result<AliPayData> => {
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
         url:
           window.location.origin +
           testPayPath +
@@ -112,8 +115,6 @@ export const apiPostAliNewPayWithShop = (
           encodeURIComponent(alipay) +
           `&${shoprecordId}=` +
           encodeURIComponent(shoprecord.id) +
-          `&${redirect}=` +
-          encodeURIComponent(redirectTo) +
           `&${paytype}=` +
           encodeURIComponent(shoppingbagpay)
       }
@@ -123,14 +124,16 @@ export const apiPostAliNewPayWithShop = (
 }
 
 export const apiPostWechatNewPayWithShop = (
-  redirectTo: string,
   shoprecord: ShopRecord,
-  location: LocationForUser
-): Result<WechatPayData> => {
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
         url:
           window.location.origin +
           testPayPath +
@@ -138,8 +141,6 @@ export const apiPostWechatNewPayWithShop = (
           encodeURIComponent(wechat) +
           `&${shoprecordId}=` +
           encodeURIComponent(shoprecord.id) +
-          `&${redirect}=` +
-          encodeURIComponent(redirectTo) +
           `&${paytype}=` +
           encodeURIComponent(shoppingbagpay)
       }
@@ -148,11 +149,18 @@ export const apiPostWechatNewPayWithShop = (
   })
 }
 
-export const apiPostAliRepay = (id: number, redirectTo: string): Result<AliRepayData> => {
+export const apiPostAliRepay = (
+  id: number,
+  redirectTo: string,
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
         url:
           window.location.origin +
           testPayPath +
@@ -170,11 +178,18 @@ export const apiPostAliRepay = (id: number, redirectTo: string): Result<AliRepay
   })
 }
 
-export const apiPostWechatRepay = (id: number, redirectTo: string): Result<WechatRepayData> => {
+export const apiPostWechatRepay = (
+  id: number,
+  redirectTo: string,
+  location: LocationForUser,
+  password: string
+): Result<PayData> => {
   return Promise.resolve({
     data: {
       code: 0,
       data: {
+        success: true,
+        recordId: 2,
         url:
           window.location.origin +
           testPayPath +

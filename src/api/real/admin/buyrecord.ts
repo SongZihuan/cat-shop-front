@@ -162,7 +162,7 @@ export function apiAdminGetBuyRecordByPage(
         down: false
       },
       user: {
-        name: '用户',
+        name: '用户-222',
         phone: '17322061610',
         location: '广东广州',
         wechat: '1234',
@@ -266,10 +266,10 @@ export function apiAdminGetUserBuyRecordByPage(
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        buyprice: 999,
-        buypingjia: 20,
+        buyprice: 1000,
+        buypingjia: 10,
         buyjian: 10,
-        hot: false,
+        hot: i % 2 == 0,
         down: false
       },
       nowwupin: {
@@ -294,14 +294,14 @@ export function apiAdminGetUserBuyRecordByPage(
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        buyprice: 999,
-        buypingjia: 20,
+        buyprice: 1000,
+        buypingjia: 10,
         buyjian: 10,
-        hot: false,
+        hot: i % 2 == 0,
         down: false
       },
       user: {
-        name: '用户',
+        name: '用户-111',
         phone: '17322061610',
         location: '广东广州',
         wechat: '1234',
@@ -367,56 +367,54 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
         isgood: true,
         wupin: {
           id: 1,
-          name: `商品1`,
+          name: '商品',
           pic: wupinPic,
           classId: 2,
           classOf: {
-            id: 1,
-            name: '商品分类2222',
-            show: true,
-            down: false
+            id: 2,
+            name: '商品分类2222'
           },
           tag: '火爆',
           hotPrice: 9999,
           realPrice: 19999,
           info: 'hhhhhh',
-          ren: '小超市',
+          ren: '宋子桓',
           phone: '17322061610',
+          wechat: 'abcd',
           email: 'songzihuan@song-zh.com',
           location: '广东广州',
           buytotal: 100,
           buydaohuo: 95,
           buygood: 90,
-          buyprice: 999,
-          buypingjia: 20,
+          buyprice: 1000,
+          buypingjia: 10,
           buyjian: 10,
           hot: false,
           down: false
         } as AdminWupin,
         nowwupin: {
           id: 1,
-          name: `商品1`,
+          name: '商品',
           pic: wupinPic,
           classId: 2,
           classOf: {
-            id: 1,
-            name: '商品分类2222',
-            show: true,
-            down: false
+            id: 2,
+            name: '商品分类2222'
           },
           tag: '火爆',
           hotPrice: 9999,
           realPrice: 19999,
           info: 'hhhhhh',
-          ren: '小超市',
+          ren: '宋子桓',
           phone: '17322061610',
+          wechat: 'abcd',
           email: 'songzihuan@song-zh.com',
           location: '广东广州',
           buytotal: 100,
           buydaohuo: 95,
           buygood: 90,
-          buyprice: 999,
-          buypingjia: 20,
+          buyprice: 1000,
+          buypingjia: 10,
           buyjian: 10,
           hot: false,
           down: false
@@ -430,14 +428,15 @@ export function apiAdminGetBuyRecordInfo(id: number, userId: number = 0): Result
           remark: '1234,'
         } as LocationForUser,
         shop: {
-          name: '用户',
+          name: '用户2222',
           phone: '17322061610',
           location: '广东广州',
           wechat: '1234',
           email: '1234',
           remark: '1234,'
         } as LocationForUser
-      } as AdminBuyRecord
+      } as AdminBuyRecord,
+      down: false
     },
     status: 200
   })

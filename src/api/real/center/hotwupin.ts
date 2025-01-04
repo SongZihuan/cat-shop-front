@@ -1,5 +1,6 @@
 import { Result } from '@/utils/request'
 import { Wupin } from '@/store/hotwupin'
+import { Class } from '#/center/class'
 import WupinPic from '@/assets/images/tmp.jpg'
 
 export interface HotWupinLst {
@@ -11,17 +12,19 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
   const wupinLst = [] as Wupin[]
 
   for (let i = 0; i < 50; i++) {
+    const cl = {
+      id: 2,
+      name: '商品分类2'
+    } as Class
+
     wupinLst.push({
       id: i + 1,
       name: '商品' + ' - ' + (i + 1),
       pic: WupinPic,
-      classId: 2,
-      classOf: {
-        id: 2,
-        name: '商品分类2222'
-      },
+      classId: cl.id,
+      classOf: cl,
       tag: '爆卖！',
-      hotPrice: 19999,
+      hotPrice: 9999,
       realPrice: 19999,
       info:
         "<p style='font-size: 20px;'> 贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪，贵在坚持，成在创新：满满充满本事的比亚迪 </p>" +
@@ -49,11 +52,7 @@ export const apiGetHotWupinLst = (): Result<HotWupinLst> => {
       wechat: '12345',
       buytotal: 100,
       buydaohuo: 95,
-      buygood: 90,
-      buyprice: 1000,
-      buypingjia: 10,
-      buyjian: 10,
-      hot: true
+      buygood: 90
     } as Wupin)
   }
   return Promise.resolve({

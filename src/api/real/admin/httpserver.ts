@@ -1,6 +1,11 @@
-import { Success } from '@/utils/request'
+import { Result, Success } from '@/utils/request'
 
-export const apiAdminRestartServer = (passwordHash: string, secret: string): Success => {
+export interface data {
+  waitsec: number
+  success: boolean
+}
+
+export const apiAdminRestartServer = (passwordHash: string, secret: string, waitsec: number): Result<data> => {
   return Promise.resolve({
     data: {
       code: 0,
@@ -8,9 +13,9 @@ export const apiAdminRestartServer = (passwordHash: string, secret: string): Suc
         success: true,
         waitsec: 20
       }
-    },
+    } as unknown as data,
     status: 200
-  })
+  } as Result<data>)
 }
 
 export const apiAdminStopServer = (passwordHash: string, secret: string): Success => {

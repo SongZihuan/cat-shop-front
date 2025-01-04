@@ -1,6 +1,6 @@
+import { Wupin } from '@/store/hotwupin'
 import { Result } from '@/utils/request'
 import wupinPic from '@/assets/images/tmp.jpg'
-import { Wupin } from '@/store/hotwupin'
 import { LocationForUser } from '#/center/pay'
 
 export const BuyRecordStatus = {
@@ -45,24 +45,23 @@ export interface BuyRecord {
   isgood: boolean
   user: LocationForUser
   shop: LocationForUser
-  wupin: Wupin
   nowwupin: Wupin
+  wupin: Wupin
   down: boolean
 }
 
-export type BuyRecordLstByPage = {
-  maxcount: number
+type BuyRecordLst = {
   total: number
   list: BuyRecord[]
 }
 
-export function apiGetBuyRecorde(page: number, pagesize: number, status: number): Result<BuyRecordLstByPage> {
-  if (page <= 0) {
-    return Promise.reject()
+export function apiGetUserBuyRecordLst(offset: number, limit: number): Result<BuyRecordLst> {
+  if (limit > 100 || limit <= 0) {
+    limit = 100
   }
 
-  if (pagesize <= 0 || pagesize > 20) {
-    return Promise.reject()
+  if (offset > 20 || offset <= 0) {
+    offset = 0
   }
 
   // return request({
@@ -70,15 +69,23 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
   //     method: 'get',
   // })
 
-  const maxcount = 100
-  const buyRecordLst = ref([] as BuyRecord[])
-  for (let i = (page - 1) * pagesize; i < maxcount; i++) {
-    if (buyRecordLst.value.length >= pagesize) {
-      break
-    }
+  if (offset > 120) {
+    return Promise.resolve({
+      data: {
+        code: 0,
+        data: {
+          total: 0,
+          list: []
+        }
+      },
+      status: 200
+    })
+  }
 
-    buyRecordLst.value.push({
-      id: page * pagesize + i + 1,
+  const buyRecordLst = [] as BuyRecord[]
+  for (let i = 0; i < limit; i++) {
+    buyRecordLst.push({
+      id: offset + i + 1,
       userId: 1,
       wupinId: 1,
       classId: 2,
@@ -95,15 +102,15 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
       querentuihuotime: 1734024269,
       tuohuotime: 1734024269,
       quxiaotime: 1734024269,
-      status: status,
+      status: 6,
       kuaidi: '顺丰',
       kuaidinum: 'SF1234',
-      backkuaidi: '',
-      backkuaidinum: '',
+      backkuaidi: '中通',
+      backkuaidinum: 'ZT1234',
       isgood: true,
       wupin: {
         id: 1,
-        name: `商品-${page}-${i}`,
+        name: '商品',
         pic: wupinPic,
         classId: 2,
         classOf: {
@@ -121,14 +128,14 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
+        buyprice: 2000,
+        buypingjia: 30,
+        buyjian: 20,
+        hot: false
       },
       nowwupin: {
         id: 1,
-        name: `商品-${page}-${i}`,
+        name: '商品',
         pic: wupinPic,
         classId: 2,
         classOf: {
@@ -146,10 +153,10 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
         buytotal: 100,
         buydaohuo: 95,
         buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
+        buyprice: 2000,
+        buypingjia: 30,
+        buyjian: 20,
+        hot: false
       },
       user: {
         name: '用户',
@@ -175,278 +182,16 @@ export function apiGetBuyRecorde(page: number, pagesize: number, status: number)
     data: {
       code: 0,
       data: {
-        maxcount: maxcount,
-        total: buyRecordLst.value.length,
-        list: buyRecordLst.value
+        total: buyRecordLst.length,
+        list: buyRecordLst
       }
     },
     status: 200
   })
 }
 
-export function apiGetBuyRecordByPage(page: number, pagesize: number, status: number): Result<BuyRecordLstByPage> {
-  if (page <= 0) {
-    return Promise.reject()
-  }
-
-  if (pagesize <= 0 || pagesize > 20) {
-    return Promise.reject()
-  }
-
-  // return request({
-  //     url: '/user/buy/record',
-  //     method: 'get',
-  // })
-
-  const maxcount = 100
-  const buyRecordLst = ref([] as BuyRecord[])
-  for (let i = (page - 1) * pagesize; i < maxcount; i++) {
-    if (buyRecordLst.value.length >= pagesize) {
-      break
-    }
-
-    buyRecordLst.value.push({
-      id: page * pagesize + i + 1,
-      userId: 1,
-      wupinId: 1,
-      classId: 2,
-      num: 2,
-      price: 5000,
-      totalPrice: 9999,
-      time: 1734024269,
-      fukuantime: 1734024269,
-      fahuotime: 1734024269,
-      shouhuotime: 1734024269,
-      pingjiatime: 1734024269,
-      tuihuoshenqingtime: 1734024269,
-      dengjituihuotime: 1734024269,
-      querentuihuotime: 1734024269,
-      tuohuotime: 1734024269,
-      quxiaotime: 1734024269,
-      status: status,
-      kuaidi: '顺丰',
-      kuaidinum: 'SF1234',
-      backkuaidi: '',
-      backkuaidinum: '',
-      isgood: true,
-      wupin: {
-        id: 1,
-        name: `商品-${page}-${i}`,
-        pic: wupinPic,
-        classId: 2,
-        classOf: {
-          id: 2,
-          name: '商品分类2'
-        },
-        tag: '火爆',
-        hotPrice: 9999,
-        realPrice: 19999,
-        info: 'hhhhhh',
-        ren: '小超市',
-        phone: '17322061610',
-        email: 'songzihuan@song-zh.com',
-        location: '广东广州',
-        buytotal: 100,
-        buydaohuo: 95,
-        buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
-      },
-      nowwupin: {
-        id: 1,
-        name: `商品-${page}-${i}`,
-        pic: wupinPic,
-        classId: 2,
-        classOf: {
-          id: 2,
-          name: '商品分类2'
-        },
-        tag: '火爆',
-        hotPrice: 9999,
-        realPrice: 19999,
-        info: 'hhhhhh',
-        ren: '小超市',
-        phone: '17322061610',
-        email: 'songzihuan@song-zh.com',
-        location: '广东广州',
-        buytotal: 100,
-        buydaohuo: 95,
-        buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
-      },
-      user: {
-        name: '用户',
-        phone: '17322061610',
-        location: '广东广州',
-        wechat: '1234',
-        email: '1234',
-        remark: '1234,'
-      },
-      shop: {
-        name: '用户',
-        phone: '17322061610',
-        location: '广东广州',
-        wechat: '1234',
-        email: '1234',
-        remark: '1234,'
-      },
-      down: false
-    })
-  }
-
-  return Promise.resolve({
-    data: {
-      code: 0,
-      data: {
-        maxcount: maxcount,
-        total: buyRecordLst.value.length,
-        list: buyRecordLst.value
-      }
-    },
-    status: 200
-  })
-}
-
-export function apiGetUserBuyRecordByPage(
-  userId: number,
-  page: number,
-  pagesize: number,
-  status: number
-): Result<BuyRecordLstByPage> {
-  if (page <= 0) {
-    return Promise.reject()
-  }
-
-  if (pagesize <= 0 || pagesize > 20) {
-    return Promise.reject()
-  }
-
-  // return request({
-  //     url: '/user/buy/record',
-  //     method: 'get',
-  // })
-
-  const maxcount = 100
-  const buyRecordLst = ref([] as BuyRecord[])
-  for (let i = (page - 1) * pagesize; i < maxcount; i++) {
-    if (buyRecordLst.value.length >= pagesize) {
-      break
-    }
-
-    buyRecordLst.value.push({
-      id: page * pagesize + i + 1,
-      userId: userId,
-      wupinId: 1,
-      classId: 2,
-      num: 2,
-      price: 5000,
-      totalPrice: 9999,
-      time: 1734024269,
-      fukuantime: 1734024269,
-      fahuotime: 1734024269,
-      shouhuotime: 1734024269,
-      pingjiatime: 1734024269,
-      tuihuoshenqingtime: 1734024269,
-      dengjituihuotime: 1734024269,
-      querentuihuotime: 1734024269,
-      tuohuotime: 1734024269,
-      quxiaotime: 1734024269,
-      status: status,
-      kuaidi: '顺丰',
-      kuaidinum: 'SF1234',
-      backkuaidi: '',
-      backkuaidinum: '',
-      isgood: true,
-      wupin: {
-        id: 1,
-        name: `商品-${page}-${i}`,
-        pic: wupinPic,
-        classId: 2,
-        classOf: {
-          id: 2,
-          name: '商品分类2'
-        },
-        tag: '火爆',
-        hotPrice: 9999,
-        realPrice: 19999,
-        info: 'hhhhhh',
-        ren: '小超市',
-        phone: '17322061610',
-        email: 'songzihuan@song-zh.com',
-        location: '广东广州',
-        buytotal: 100,
-        buydaohuo: 95,
-        buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
-      },
-      nowwupin: {
-        id: 1,
-        name: `商品-${page}-${i}`,
-        pic: wupinPic,
-        classId: 2,
-        classOf: {
-          id: 2,
-          name: '商品分类2'
-        },
-        tag: '火爆',
-        hotPrice: 9999,
-        realPrice: 19999,
-        info: 'hhhhhh',
-        ren: '小超市',
-        phone: '17322061610',
-        email: 'songzihuan@song-zh.com',
-        location: '广东广州',
-        buytotal: 100,
-        buydaohuo: 95,
-        buygood: 90,
-        buyprice: 1000,
-        buypingjia: 10,
-        buyjian: 10,
-        hot: true
-      },
-      user: {
-        name: '用户',
-        phone: '17322061610',
-        location: '广东广州',
-        wechat: '1234',
-        email: '1234',
-        remark: '1234,'
-      },
-      shop: {
-        name: '用户',
-        phone: '17322061610',
-        location: '广东广州',
-        wechat: '1234',
-        email: '1234',
-        remark: '1234,'
-      },
-      down: false
-    })
-  }
-
-  return Promise.resolve({
-    data: {
-      code: 0,
-      data: {
-        maxcount: maxcount,
-        total: buyRecordLst.value.length,
-        list: buyRecordLst.value
-      }
-    },
-    status: 200
-  })
-}
-
-export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyRecord> {
-  if (id <= 0 || userId < 0) {
+export function apiGetBuyRecordInfo(id: number): Result<BuyRecord> {
+  if (id <= 0) {
     return Promise.reject()
   }
 
@@ -455,7 +200,7 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
       code: 0,
       data: {
         id: id,
-        userId: userId,
+        userId: 1,
         wupinId: 1,
         classId: 2,
         num: 2,
@@ -484,7 +229,7 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
           classId: 2,
           classOf: {
             id: 2,
-            name: '商品分类2222'
+            name: '商品分类2'
           },
           tag: '火爆',
           hotPrice: 9999,
@@ -499,10 +244,9 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
           buydaohuo: 95,
           buygood: 90,
           buyprice: 1000,
-          buypingjia: 10,
-          buyjian: 10,
-          hot: true,
-          down: false
+          buypingjia: 30,
+          buyjian: 15,
+          hot: false
         } as Wupin,
         nowwupin: {
           id: 1,
@@ -511,7 +255,7 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
           classId: 2,
           classOf: {
             id: 2,
-            name: '商品分类2222'
+            name: '商品分类2'
           },
           tag: '火爆',
           hotPrice: 9999,
@@ -526,10 +270,9 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
           buydaohuo: 95,
           buygood: 90,
           buyprice: 1000,
-          buypingjia: 10,
-          buyjian: 10,
-          hot: true,
-          down: false
+          buypingjia: 30,
+          buyjian: 15,
+          hot: false
         } as Wupin,
         user: {
           name: '用户',
@@ -546,8 +289,143 @@ export function apiGetBuyRecordInfo(id: number, userId: number = 0): Result<BuyR
           wechat: '1234',
           email: '1234',
           remark: '1234,'
-        } as LocationForUser
+        } as LocationForUser,
+        down: false
       } as BuyRecord
+    },
+    status: 200
+  })
+}
+
+type BuyRecordLstByPage = {
+  maxcount: number
+  total: number
+  list: BuyRecord[]
+}
+
+export function apiGetUserBuyRecordByPage(page: number, pagesize: number, status: number): Result<BuyRecordLstByPage> {
+  if (page <= 0) {
+    return Promise.reject()
+  }
+
+  if (pagesize <= 0 || pagesize > 20) {
+    return Promise.reject()
+  }
+
+  // return request({
+  //     url: '/user/buy/record',
+  //     method: 'get',
+  // })
+
+  const maxcount = 100
+  const buyRecordLst = ref([] as BuyRecord[])
+  for (let i = (page - 1) * pagesize; i < maxcount; i++) {
+    if (buyRecordLst.value.length >= pagesize) {
+      break
+    }
+
+    buyRecordLst.value.push({
+      id: page * pagesize + i + 1,
+      userId: 1,
+      wupinId: 1,
+      classId: 2,
+      num: 2,
+      price: 5000,
+      totalPrice: 9999,
+      time: 1734024269,
+      fukuantime: 1734024269,
+      fahuotime: 1734024269,
+      shouhuotime: 1734024269,
+      pingjiatime: 1734024269,
+      tuihuoshenqingtime: 1734024269,
+      dengjituihuotime: 1734024269,
+      querentuihuotime: 1734024269,
+      tuohuotime: 1734024269,
+      quxiaotime: 1734024269,
+      status: status,
+      kuaidi: '顺丰',
+      kuaidinum: 'SF1234',
+      backkuaidi: '',
+      backkuaidinum: '',
+      isgood: true,
+      wupin: {
+        id: 1,
+        name: `商品-${page}-${i}`,
+        pic: wupinPic,
+        classId: 2,
+        classOf: {
+          id: 2,
+          name: '商品分类2'
+        },
+        tag: '火爆',
+        hotPrice: 9999,
+        realPrice: 19999,
+        info: 'hhhhhh',
+        ren: '小超市',
+        phone: '17322061610',
+        email: 'songzihuan@song-zh.com',
+        location: '广东广州',
+        buytotal: 100,
+        buydaohuo: 95,
+        buygood: 90,
+        buyprice: 1000,
+        buypingjia: 30,
+        buyjian: 15,
+        hot: false
+      },
+      nowwupin: {
+        id: 1,
+        name: `商品-${page}-${i}`,
+        pic: wupinPic,
+        classId: 2,
+        classOf: {
+          id: 2,
+          name: '商品分类2'
+        },
+        tag: '火爆',
+        hotPrice: 9999,
+        realPrice: 19999,
+        info: 'hhhhhh',
+        ren: '小超市',
+        phone: '17322061610',
+        email: 'songzihuan@song-zh.com',
+        location: '广东广州',
+        buytotal: 100,
+        buydaohuo: 95,
+        buygood: 90,
+        buyprice: 1000,
+        buypingjia: 30,
+        buyjian: 15,
+        hot: false
+      },
+      user: {
+        name: '用户',
+        phone: '17322061610',
+        location: '广东广州',
+        wechat: '1234',
+        email: '1234',
+        remark: '1234,'
+      },
+      shop: {
+        name: '用户',
+        phone: '17322061610',
+        location: '广东广州',
+        wechat: '1234',
+        email: '1234',
+        remark: '1234,'
+      },
+      down: false
+    })
+  }
+
+  return Promise.resolve({
+    data: {
+      code: 0,
+      data: {
+        maxcount: maxcount,
+        total: buyRecordLst.value.length,
+        list: buyRecordLst.value
+      }
     },
     status: 200
   })

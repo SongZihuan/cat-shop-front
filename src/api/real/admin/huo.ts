@@ -6,8 +6,7 @@ export const apiAdminPostGouWuDaoHuo = (userId: number, buyRecordId: number): Su
     data: {
       code: 0,
       data: {
-        success: true,
-        waitsec: 20
+        success: true
       }
     },
     status: 200
@@ -121,6 +120,18 @@ export const apiAdminPostChangeShop = (userId: number, buyRecordId: number, shop
 }
 
 export const apiAdminPostFaHuoQuXiao = (userId: number, buyRecordId: number): Success => {
+  return Promise.resolve({
+    data: {
+      code: 0,
+      data: {
+        success: true
+      }
+    },
+    status: 200
+  })
+}
+
+export const apiAdminPostFaHuoCheHui = (userId: number, buyRecordId: number): Success => {
   return Promise.resolve({
     data: {
       code: 0,

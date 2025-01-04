@@ -12,17 +12,17 @@ export interface AdminClassData {
 
 export interface AdminClass extends AdminClassID, AdminClassData {}
 
+type AdminClassLst = {
+  total: number
+  list: AdminClass[]
+}
+
 export const AllClass = {
   id: 1,
   name: '全部',
   show: false,
   down: false
 } as AdminClass
-
-type AdminClassLst = {
-  total: number
-  list: AdminClass[]
-}
 
 export interface NewClassData {
   name: string
@@ -69,7 +69,7 @@ export function apiAdminGetClassLst(page: number, pagesize: number): Result<Admi
     classLst.value.push({
       id: page * pagesize + i + 1,
       name: '商品分类2222' + (page * pagesize + i + 1),
-      show: i % 2 == 0,
+      show: Boolean(i % 2 == 0).valueOf(),
       down: false
     })
   }
