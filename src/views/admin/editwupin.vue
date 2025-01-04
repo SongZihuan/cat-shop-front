@@ -6,7 +6,7 @@
   import { AdminWupin, AdminWupinBase, apiAdminGetWupin, apiAdminPostUpdateWupin } from '#/admin/wupin'
   import { AdminClass, AllClass, apiAdminGetClassLst } from '#/admin/class'
   import Editor from '@/components/utils/editor.vue'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -27,9 +27,9 @@
   const wupinId = ref(0)
   const wupin = ref(null as AdminWupin | null)
   const defaultClass = ref({} as AdminClass)
-  const defaultPic = ref("")
+  const defaultPic = ref('')
 
-  const onChangeWupin = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeWupin = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     wupinId.value = Number(to.query?.wupinId).valueOf() || 0
     wupin.value = null
 
@@ -56,7 +56,7 @@
           defaultClass.value = wupin.value.classOf
           onClassLstChange()
 
-          if (typeof wupin.value.hotPrice === "number" && wupin.value.hotPrice !== -1) {
+          if (typeof wupin.value.hotPrice === 'number' && wupin.value.hotPrice !== -1) {
             hotPrice.value = Math.floor(wupin.value.hotPrice / 100)
             hasHotPrice.value = true
           } else {
@@ -85,7 +85,7 @@
   }
 
   onBeforeRouteUpdate(onChangeWupin)
-  onChangeWupin(route, route, ()=>{})
+  onChangeWupin(route, route, () => {})
 
   const classLst = ref([] as AdminClass[])
   const classLstPage = ref(1)
@@ -104,7 +104,7 @@
       }
 
       if (classLst.value.every((item) => item.id !== form.value.classId)) {
-        (form.value as any).classId = undefined
+        ;(form.value as any).classId = undefined
       }
     })
   }
@@ -149,7 +149,7 @@
   })
 
   const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-  const checkClassId = computed(() => form.value.classId)  // 可以为1
+  const checkClassId = computed(() => form.value.classId) // 可以为1
   const checkHotPrice = computed(() => {
     if (!hasHotPrice) {
       return true
@@ -226,6 +226,15 @@
   const pictureUpload = ref()
   const wupinPic = computed(() => pictureUpload.value && pictureUpload.value.pic)
 
+  const showEdit = ref(false)
+  const openEdit = () => {
+    if (!wupin.value) {
+      return
+    }
+
+    showEdit.value = true
+  }
+
   const selectMsg = computed(() => {
     if (defaultClass.value) {
       return `请选择新商品分类，若您不选择将沿用旧类型：${defaultClass.value.name}。`
@@ -288,7 +297,7 @@
         <template #label>
           <el-text>火热价</el-text>
         </template>
-        <el-input-number v-model="hotPrice" :min="0" :precision="2" controls-position="right" style="width: 100%;">
+        <el-input-number v-model="hotPrice" :min="0" :precision="2" controls-position="right" style="width: 100%">
           <template #prefix> ￥ </template>
         </el-input-number>
       </el-form-item>
@@ -296,7 +305,7 @@
         <template #label>
           <el-text>真实价</el-text>
         </template>
-        <el-input-number v-model="realPrice" :min="0" :precision="2" controls-position="right" style="width: 100%;">
+        <el-input-number v-model="realPrice" :min="0" :precision="2" controls-position="right" style="width: 100%">
           <template #prefix> ￥ </template>
         </el-input-number>
       </el-form-item>

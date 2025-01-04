@@ -5,7 +5,7 @@
   import { apiAdminGetBuyRecordByPage, apiAdminGetUserBuyRecordByPage } from '#/admin/buyrecord'
   import pushTo from '@/views/admin/router_push'
   import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const activeModel = ref('1')
   const dataInfo = ref({} as any)
@@ -69,7 +69,7 @@
     }
   }
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
@@ -94,7 +94,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 </script>
 
 <template>

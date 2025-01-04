@@ -3,11 +3,11 @@
   import { isAdmin } from '@/store/admin'
   import { isEmail, isMobile } from '@/utils/str'
   import { AdminWupinBase, apiAdminPostAddWupin } from '#/admin/wupin'
-  import {AdminClass, AllClass, apiAdminGetClassLst} from '#/admin/class'
+  import { AdminClass, AllClass, apiAdminGetClassLst } from '#/admin/class'
   import { Edit } from '@element-plus/icons-vue'
   import { UploadFile } from 'element-plus'
   import Editor from '@/components/utils/editor.vue'
-  import Fileupload from "@/components/utils/fileupload.vue";
+  import Fileupload from '@/components/utils/fileupload.vue'
 
   const router = useRouter()
 
@@ -31,7 +31,7 @@
       classLst.value = [AllClass].concat(res.data.data.list)
 
       if (classLst.value.every((item) => item.id !== form.value.classId)) {
-        (form.value as any).classId = undefined
+        ;(form.value as any).classId = undefined
       }
     })
   }
@@ -39,7 +39,6 @@
 
   const form = ref({
     name: '',
-    pic: '',
     classId: 0,
     tag: '',
     hotPrice: 0,
@@ -59,7 +58,7 @@
   const realPrice = ref(0)
 
   const checkName = computed(() => form.value.name && form.value.name.length > 0 && form.value.name.length <= 10)
-  const checkClassId = computed(() => form.value.classId)  // 可以为1
+  const checkClassId = computed(() => form.value.classId) // 可以为1
   const checkHotPrice = computed(() => {
     if (!hasHotPrice) {
       return true
@@ -68,7 +67,6 @@
     return Number(hotPrice.value).valueOf() >= 0
   })
   const checkRealPrice = computed(() => Number(realPrice.value).valueOf() >= 0)
-
 
   const checkRen = computed(() => form.value.ren && form.value.ren.length > 0 && form.value.ren.length <= 10)
   const checkPhone = computed(() => isMobile(form.value.phone))
@@ -126,7 +124,6 @@
 
           form.value = {
             name: '',
-            pic: '',
             classId: 0,
             tag: '',
             hotPrice: 0,
@@ -216,7 +213,7 @@
         <template #label>
           <el-text>火热价</el-text>
         </template>
-        <el-input-number v-model="hotPrice" :min="0" :precision="2" controls-position="right" style="width: 100%;">
+        <el-input-number v-model="hotPrice" :min="0" :precision="2" controls-position="right" style="width: 100%">
           <template #prefix> ￥ </template>
         </el-input-number>
       </el-form-item>
@@ -224,7 +221,7 @@
         <template #label>
           <el-text>真实价</el-text>
         </template>
-        <el-input-number v-model="realPrice" :min="0" :precision="2" controls-position="right" style="width: 100%;">
+        <el-input-number v-model="realPrice" :min="0" :precision="2" controls-position="right" style="width: 100%">
           <template #prefix> ￥ </template>
         </el-input-number>
       </el-form-item>

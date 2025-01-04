@@ -3,7 +3,7 @@
   import { AdminWupin, apiAdminGetWupinLst } from '#/admin/wupin'
   import { getFacePrice, getRealPrice } from '@/utils/price'
   import pushTo from '@/views/admin/router_push'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const route = useRoute()
   const router = useRouter()
@@ -26,7 +26,7 @@
   const page = ref(querypage.value)
   const pagesize = ref(20)
 
-  const onChange = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChange = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     let nowQueryPage = Number(to.query?.page).valueOf() || 1
     if (nowQueryPage < 1) {
       nowQueryPage = 1
@@ -44,7 +44,7 @@
     next()
   }
   onBeforeRouteUpdate(onChange)
-  onChange(route, route, ()=>{})
+  onChange(route, route, () => {})
 
   const toInfo = (id: number) => {
     pushTo(router, route, '/admin/wupin/info', {
@@ -56,6 +56,10 @@
     pushTo(router, route, '/admin/class/info', {
       classId: id
     })
+  }
+
+  const onChangePage = () => {
+    onChange(route, route, () => {})
   }
 
   const picUrl = ref('')
@@ -85,7 +89,7 @@
       </el-table-column>
       <el-table-column label="查看商品图片">
         <template #default="{ row }">
-          <el-button :disabled="!row.pic" size="small" type="success" @click="showPic(row.pic)" plain>
+          <el-button :disabled="!row.pic" size="small" type="success" plain @click="showPic(row.pic)">
             点击查看
           </el-button>
         </template>
@@ -129,7 +133,7 @@
         layout="prev, pager, next"
         :page-size="pagesize"
         :total="maxcount || 0"
-        @change="onChange"
+        @change="onChangePage"
       />
     </div>
   </el-card>

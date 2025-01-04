@@ -4,7 +4,7 @@
   import { hasPermission, isAdmin, isDeleteUser } from '@/store/admin'
   import pushTo from '@/views/admin/router_push'
   import { isMobile } from '@/utils/str'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -47,7 +47,7 @@
     newPhone: ''
   } as { newPhone: string })
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
@@ -71,7 +71,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 
   const hasChange = computed(() => form.value.newPhone !== user.value?.phone)
   const phoneCheck = computed(() => isMobile(form.value.newPhone))
@@ -89,7 +89,7 @@
             type: 'success',
             message: '更新成功'
           })
-          onChangeUser(route, route, ()=>{})
+          onChangeUser(route, route, () => {})
         },
         () => {
           ElMessage({

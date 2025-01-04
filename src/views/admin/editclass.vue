@@ -3,7 +3,7 @@
   import { isAdmin } from '@/store/admin'
   import { AdminClass, AdminClassData, apiAdminGetClass, apiAdminPostUpdateClass } from '#/admin/class'
   import pushTo from '@/views/admin/router_push'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -24,7 +24,7 @@
   const classId = ref(Number(route.query?.classId).valueOf() || 0)
   const classObj = ref(null as AdminClass | null)
 
-  const onChangeClass = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeClass = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     classId.value = Number(to.query?.classId).valueOf() || 0
     classObj.value = null
 
@@ -49,7 +49,7 @@
   }
 
   onBeforeRouteUpdate(onChangeClass)
-  onChangeClass(route, route, ()=>{})
+  onChangeClass(route, route, () => {})
 
   const form = ref({
     name: '',
@@ -90,7 +90,7 @@
                 type: 'success',
                 message: '更新成功'
               })
-              onChangeClass()
+              onChangeClass(route, route, () => {})
             },
             () => {
               ElMessage({

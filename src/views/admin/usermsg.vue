@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { isAdmin } from '@/store/admin'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
-  import {AdminMsg as AdminMsgType, apiAdminGetMsg, apiAdminGetUserMsg} from '#/admin/msg'
+  import { AdminMsg as AdminMsgType, apiAdminGetMsg, apiAdminGetUserMsg } from '#/admin/msg'
   import AdminMsg from '@/components/admin/adminmsg.vue'
   import pushTo from '@/views/admin/router_push'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -59,7 +59,7 @@
     }
   }
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     let nowQueryPage = Number(to.query?.page).valueOf() || 1
     if (nowQueryPage < 1) {
       nowQueryPage = 1
@@ -90,8 +90,12 @@
     }
   }
 
+  const onChangePage = () => {
+    getData()
+  }
+
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 </script>
 
 <template>
@@ -106,7 +110,7 @@
             layout="prev, pager, next"
             :page-size="pagesize"
             :total="maxcount || 0"
-            @change="onChange"
+            @change="onChangePage"
           />
         </div>
         <div>
@@ -122,7 +126,7 @@
             layout="prev, pager, next"
             :page-size="pagesize"
             :total="maxcount || 0"
-            @change="onChange"
+            @change="onChangePage"
           />
         </div>
       </div>

@@ -4,7 +4,7 @@
   import { isAdmin } from '@/store/admin'
   import { ElMessage } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const route = useRoute()
   const router = useRouter()
@@ -30,7 +30,7 @@
   const adminUserStore = useAdminUserStore()
   const userLst = ref([] as AdminUser[])
 
-  const onChange = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChange = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     let nowQueryPage = Number(to.query?.page).valueOf() || 1
     if (nowQueryPage < 1) {
       nowQueryPage = 1
@@ -48,7 +48,7 @@
     next()
   }
   onBeforeRouteUpdate(onChange)
-  onChange(route, route, ()=>{})
+  onChange(route, route, () => {})
 
   const avatarUrl = ref('')
   const openAvatar = (avatar: string) => {
@@ -65,6 +65,10 @@
     }
 
     avatarUrl.value = avatar
+  }
+
+  const onChangePage = () => {
+    onChange(route, route, () => {})
   }
 
   const toInfo = (id: number) => {
@@ -143,7 +147,7 @@
         layout="prev, pager, next"
         :page-size="pagesize"
         :total="maxcount || 0"
-        @change="onChange"
+        @change="onChangePage"
       />
     </div>
   </el-card>

@@ -9,8 +9,6 @@
   import { MenuItemRegistered } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
   import useUserStore, { UserTypeList } from '@/store/user'
-  import {onBeforeRouteUpdate} from "vue-router";
-  import onAfterRouteQueryUpdate from "@/views/admin/router_watch";
 
   const router = useRouter()
   const route = useRoute()
@@ -65,28 +63,33 @@
     user.value = null
     userPermissions.value = false
 
-    console.log("userId.value", userId.value, route.query)
+    console.log('userId.value', userId.value, route.query)
     if (userId.value) {
-      userAdminStore.getUser(userId.value).then(
-        (res) => {
-          user.value = res as AdminUser
+      userAdminStore
+        .getUser(userId.value)
+        .then(
+          (res) => {
+            user.value = res as AdminUser
 
-          if (user.value.type === 3 && !isRootAdmin()) {
-            userPermissions.value = false
-          } else {
-            userPermissions.value = true
-          }
+            if (user.value.type === 3 && !isRootAdmin()) {
+              userPermissions.value = false
+            } else {
+              userPermissions.value = true
+            }
 
-          if (user.value.status === 3 && !isRootAdmin()) {
+            if (user.value.status === 3 && !isRootAdmin()) {
+              user.value = null
+              userPermissions.value = false
+            }
+          },
+          () => {
             user.value = null
             userPermissions.value = false
           }
-        },
-        () => {
-          user.value = null
-          userPermissions.value = false
-        }
-      ).finally(() => { console.log("user.value", user.value) })
+        )
+        .finally(() => {
+          console.log('user.value', user.value)
+        })
     } else {
       user.value = null
       userPermissions.value = false
@@ -104,7 +107,7 @@
       apiAdminGetWupin(wupinId.value).then(
         (res) => {
           wupin.value = res.data.data as AdminWupin
-          console.log("get", wupin.value)
+          console.log('get', wupin.value)
         },
         () => {
           wupin.value = null
@@ -157,12 +160,15 @@
     }
   }
 
-  watch(() => route.query, () => {
-    onChangeUser()
-    onChangeClass()
-    onChangeWupin()
-    onChangeRecord()
-  })
+  watch(
+    () => route.query,
+    () => {
+      onChangeUser()
+      onChangeClass()
+      onChangeWupin()
+      onChangeRecord()
+    }
+  )
   onChangeUser()
   onChangeClass()
   onChangeWupin()

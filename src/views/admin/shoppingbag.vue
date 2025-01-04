@@ -5,7 +5,7 @@
   import { AdminShopRecord, apiAdminGetUserShoppingRecord } from '#/admin/shoppingbag'
   import pushTo from '@/views/admin/router_push'
   import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -35,13 +35,13 @@
 
   const getData = () => {
     user.value &&
-    apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {
-      maxcount.value = res.data.data.maxcount
-      shoppingbagLst.value = res.data.data.list
-    })
+      apiAdminGetUserShoppingRecord(userId.value, page.value, pagesize.value).then((res) => {
+        maxcount.value = res.data.data.maxcount
+        shoppingbagLst.value = res.data.data.list
+      })
   }
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     let nowQueryPage = Number(to.query?.page).valueOf() || 1
     if (nowQueryPage < 1) {
       nowQueryPage = 1
@@ -75,8 +75,12 @@
     pushTo(router, route, '/admin/user/list')
   }
 
+  const onChangePage = () => {
+    getData()
+  }
+
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 </script>
 
 <template>
@@ -92,13 +96,13 @@
               layout="prev, pager, next"
               :page-size="pagesize"
               :total="maxcount || 0"
-              @change="onChange"
+              @change="onChangePage"
             />
           </div>
           <div style="width: 100%; display: flex; justify-content: center">
             <div style="width: 100%">
               <div v-for="(item, index) in shoppingbagLst" :key="index" class="record_box">
-                <AdminShoppingbag :record="item" @reload="onChange"></AdminShoppingbag>
+                <AdminShoppingbag :record="item" @reload="onChangePage"></AdminShoppingbag>
               </div>
             </div>
           </div>
@@ -110,7 +114,7 @@
               layout="prev, pager, next"
               :page-size="pagesize"
               :total="maxcount || 0"
-              @change="onChange"
+              @change="onChangePage"
             />
           </div>
         </div>

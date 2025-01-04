@@ -5,7 +5,7 @@
   import { ElMessage, genFileId, UploadFile, type UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
   import { hasPermission, isAdmin } from '@/store/admin'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -28,7 +28,7 @@
   const userId = ref(Number(route.query?.userId).valueOf() || 0)
   const user = ref(null as AdminUser | null)
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
 
@@ -48,7 +48,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 
   if (userId.value) {
     userAdminStore.getUser(userId.value).then(

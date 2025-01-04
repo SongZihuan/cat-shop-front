@@ -3,7 +3,7 @@
   import { apiAdminGetXieyi } from '#/admin/xieyi'
   import pushTo from '@/views/admin/router_push'
   import Showhtml from '@/components/utils/showhtml.vue'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -19,13 +19,13 @@
 
   const xieyi = ref('')
 
-  const getXieyi = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const getXieyi = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     apiAdminGetXieyi().then((res) => {
       xieyi.value = res.data.data.xieyi
     })
   }
   onBeforeRouteUpdate(getXieyi)
-  getXieyi(route, route, ()=>{})
+  getXieyi(route, route, () => {})
 
   const toEdit = () => {
     pushTo(router, route, '/admin/xieyi/edit')

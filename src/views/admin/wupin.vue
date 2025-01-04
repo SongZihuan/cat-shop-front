@@ -8,7 +8,7 @@
   import pushTo from '@/views/admin/router_push'
   import Showhtml from '@/components/utils/showhtml.vue'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
   const router = useRouter()
   const route = useRoute()
 
@@ -42,7 +42,7 @@
 
   const userAdminStore = useAdminUserStore()
 
-  const getData = (to:RouteLocationNormalized) => {
+  const getData = (to: RouteLocationNormalized) => {
     recordId.value = Number(to.query?.recordId).valueOf() || 0
     wupinId.value = Number(to.query?.wupinId).valueOf() || 0
 
@@ -182,7 +182,7 @@
     }
   }
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     userId.value = Number(to.query?.userId).valueOf() || 0
 
     user.value = null
@@ -212,7 +212,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 
   const headerCustomer = ref<HTMLElement>()
   const headerHeight = ref('0')
@@ -328,18 +328,21 @@
             <div class="wupin_buy_total_box">
               <el-text class="wupin_buy_total_text">
                 商品分类：{{
-                  wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-                      ? wupin.classOf.name
-                      : '暂无分类'
+                  wupin.classOf &&
+                  wupin.classOf.id !== 1 &&
+                  wupin.classOf.id !== 0 &&
+                  wupin.classId === wupin.classOf.id
+                    ? wupin.classOf.name
+                    : '暂无分类'
                 }}
               </el-text>
             </div>
 
             <div
-                v-if="
-              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-            "
-                class="wupin_buy_total_box"
+              v-if="
+                wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
+              "
+              class="wupin_buy_total_box"
             >
               <el-text class="wupin_buy_total_text">
                 商品分类是否展示：{{ wupin.classOf.show ? '展示' : '隐藏' }}
@@ -347,10 +350,10 @@
             </div>
 
             <div
-                v-if="
-              wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
-            "
-                class="wupin_buy_total_box"
+              v-if="
+                wupin.classOf && wupin.classOf.id !== 1 && wupin.classOf.id !== 0 && wupin.classId === wupin.classOf.id
+              "
+              class="wupin_buy_total_box"
             >
               <el-text class="wupin_buy_total_text">
                 商品分了是否下架：{{ wupin.classOf.down ? '下架' : '销售中' }}
@@ -361,7 +364,8 @@
 
             <div class="wupin_buy_total_box" style="margin-top: 0">
               <el-text class="wupin_buy_total_text">
-                热销价格： {{ wupin.hotPrice && wupin.hotPrice >= 0 ? '￥' + (wupin.hotPrice / 100).toFixed(2) : '暂无' }}
+                热销价格：
+                {{ wupin.hotPrice && wupin.hotPrice >= 0 ? '￥' + (wupin.hotPrice / 100).toFixed(2) : '暂无' }}
               </el-text>
             </div>
 
@@ -372,9 +376,9 @@
             </div>
 
             <div
-                v-if="wupin.hotPrice && wupin.hotPrice > wupin.realPrice"
-                class="wupin_buy_total_box"
-                style="margin-top: 0"
+              v-if="wupin.hotPrice && wupin.hotPrice > wupin.realPrice"
+              class="wupin_buy_total_box"
+              style="margin-top: 0"
             >
               <el-text class="wupin_buy_total_text"> 热销价格异常：热销价格比实际价格昂贵。 </el-text>
             </div>
@@ -421,7 +425,9 @@
             </div>
 
             <div class="wupin_buy_total_box">
-              <el-text class="wupin_buy_total_text"> 总消费金额： ￥{{ (totalAllUserPrice / 100).toFixed(2) }} </el-text>
+              <el-text class="wupin_buy_total_text">
+                总消费金额： ￥{{ (totalAllUserPrice / 100).toFixed(2) }}
+              </el-text>
             </div>
 
             <div class="wupin_buy_total_box">

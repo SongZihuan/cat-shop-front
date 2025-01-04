@@ -2,7 +2,7 @@
   import { ElMessage, ElMessageBox } from 'element-plus'
   import useAdminUserStore from '@/store/admin/user'
   import { isRootAdmin } from '@/store/admin'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -74,13 +74,13 @@
       .finally(() => reset())
   }
 
-  const onChange = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChange = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     reset()
     next()
   }
 
   onBeforeRouteUpdate(onChange)
-  onChange(route, route, ()=>{})
+  onChange(route, route, () => {})
 </script>
 
 <template>

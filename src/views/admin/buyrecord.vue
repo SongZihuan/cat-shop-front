@@ -4,7 +4,7 @@
   import { isAdmin } from '@/store/admin'
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
   import pushTo from '@/views/admin/router_push'
-  import {RouteLocationNormalized} from "vue-router";
+  import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()
   const route = useRoute()
@@ -34,7 +34,7 @@
     }
   }
 
-  const onChangeRecord = (to:RouteLocationNormalized) => {
+  const onChangeRecord = (to: RouteLocationNormalized) => {
     recordId.value = Number(to.query?.recordId).valueOf() || 0
 
     if (!isall.value && (!userId.value || !user.value || user.value.id !== userId.value)) {
@@ -67,7 +67,7 @@
     }
   }
 
-  const onChangeUser = (to:RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
+  const onChangeUser = (to: RouteLocationNormalized, from: RouteLocationNormalized, next: Function) => {
     userId.value = Number(to.query?.userId).valueOf() || 0
     user.value = null
     record.value = null
@@ -93,7 +93,7 @@
   }
 
   onBeforeRouteUpdate(onChangeUser)
-  onChangeUser(route, route, ()=>{})
+  onChangeUser(route, route, () => {})
 
   const reload = () => {
     recordId.value &&
