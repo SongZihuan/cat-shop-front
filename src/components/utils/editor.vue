@@ -101,7 +101,6 @@
   defineExpose({
     height
   })
-
 </script>
 
 <template>

@@ -21,7 +21,6 @@ declare module '@vue/runtime-core' {
     Buyrecord: typeof import('./src/components/center/buyrecord.vue')['default']
     Classitem: typeof import('./src/components/shop/classitem.vue')['default']
     Classlist: typeof import('./src/components/shop/classlist.vue')['default']
-    Dialogshowxieyi: typeof import('./src/components/utils/dialogshowxieyi.vue')['default']
     Editor: typeof import('./src/components/utils/editor.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -81,7 +80,6 @@ declare module '@vue/runtime-core' {
     Wechat: typeof import('./src/components/system/wechat.vue')['default']
     Wupinitem: typeof import('./src/components/shop/wupinitem.vue')['default']
     Wupinlist: typeof import('./src/components/shop/wupinlist.vue')['default']
-    Xieyi: typeof import('./src/components/utils/xieyi.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

@@ -3,8 +3,8 @@
   import { apiAdminGetXieyi } from '#/admin/xieyi'
   import pushTo from '@/views/admin/router_push'
   import { RouteLocationNormalized } from 'vue-router'
-  import Showyonghuxieyi from "@/components/utils/shouyonghuxieyi.vue";
-  import {ElMessage} from "element-plus";
+  import Showyonghuxieyi from '@/components/utils/shouyonghuxieyi.vue'
+  import { ElMessage } from 'element-plus'
 
   const router = useRouter()
   const route = useRoute()
@@ -50,7 +50,6 @@
       })
     }
   }
-
 </script>
 
 <template>

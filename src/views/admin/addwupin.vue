@@ -275,7 +275,7 @@
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 100%; justify-content: center">
-      <el-button size="large" type="success" :disabled="!allCheck" @click="add" plain > 添加 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" plain @click="add"> 添加 </el-button>
     </div>
     <div style="width: 100%; margin-top: 5px">
       <div v-if="!checkName" class="tip_box" style="display: flex; justify-content: center">
@@ -317,7 +317,7 @@
       </div>
     </template>
     <div class="editor_box">
-      <Editor v-model="form.info" placeholder="请输入介绍信息..." type='admin-wupin'></Editor>
+      <Editor v-model="form.info" placeholder="请输入介绍信息..." type="admin-wupin"></Editor>
     </div>
     <template #footer>
       <div class="dialog-footer">

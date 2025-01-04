@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import useUserStore, { isLogin, hasLoad } from '@/store/user'
-  import {ElMessage, ElMessageBox} from 'element-plus'
-  import useConfigStore from "@/store/config";
+  import { ElMessage, ElMessageBox } from 'element-plus'
+  import useConfigStore from '@/store/config'
 
   const configStore = useConfigStore()
   const userStore = useUserStore()
@@ -53,16 +53,16 @@
         cancelButtonText: '暂不退出',
         type: 'warning'
       })
-          .then(() => {
-            return userStore.logout()
+        .then(() => {
+          return userStore.logout()
+        })
+        .then(() => {
+          ElMessage({
+            type: 'success',
+            message: '账号退出成功'
           })
-          .then(() => {
-            ElMessage({
-              type: 'success',
-              message: '账号退出成功'
-            })
-            toNewLogin()
-          })
+          toNewLogin()
+        })
     }
   }
 </script>

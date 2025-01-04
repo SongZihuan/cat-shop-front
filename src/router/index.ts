@@ -466,7 +466,7 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '查看用户协议',
           xauth: true,
-          admin: true,
+          admin: true
         }
       },
       {

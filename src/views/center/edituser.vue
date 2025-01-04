@@ -157,7 +157,7 @@
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
       <el-button-group>
-        <el-button type="success" size="large" :disabled="!allCheck" @click="update" plain> 更新 </el-button>
+        <el-button type="success" size="large" :disabled="!allCheck" plain @click="update"> 更新 </el-button>
         <el-button type="primary" size="large" @click="goHome"> 返回 </el-button>
       </el-button-group>
     </div>

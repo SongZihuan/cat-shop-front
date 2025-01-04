@@ -1,42 +1,41 @@
 <script setup lang="ts">
-import Showhtml from "@/components/utils/showhtml.vue";
+  import Showhtml from '@/components/utils/showhtml.vue'
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  preview: {
-    type: Boolean,
-    required: false,
-    default: false
-  },
-  footer: {
-    type: Boolean,
-    required: false,
-    default: false,
+  const props = defineProps({
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    preview: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
+    footer: {
+      type: Boolean,
+      required: false,
+      default: false
+    }
+  })
+
+  const title = computed(() => props.title)
+  const content = computed(() => props.content)
+  const hasFooter = computed(() => props.footer)
+  const preview = computed(() => props.footer || props.preview)
+
+  const emits = defineEmits(['confirm'])
+
+  const onOk = () => {
+    emits('confirm', true)
   }
-})
 
-const title = computed(() => props.title)
-const content = computed(() => props.content)
-const hasFooter = computed(() => props.footer)
-const preview = computed(() => props.footer || props.preview)
-
-const emits = defineEmits(['confirm'])
-
-const onOk = () => {
-  emits('confirm', true)
-}
-
-const onNotOk = () => {
-  emits('confirm', false)
-}
-
+  const onNotOk = () => {
+    emits('confirm', false)
+  }
 </script>
 
 <template>
@@ -63,12 +62,8 @@ const onNotOk = () => {
     <template v-else-if="!preview" #footer>
       <div class="footer_box">
         <el-button-group>
-          <el-button size="large" type="success" plain @click="onOk">
-            同意
-          </el-button>
-          <el-button size="large" type="warning" plain @click="onNotOk">
-            拒绝
-          </el-button>
+          <el-button size="large" type="success" plain @click="onOk"> 同意 </el-button>
+          <el-button size="large" type="warning" plain @click="onNotOk"> 拒绝 </el-button>
         </el-button-group>
       </div>
     </template>
