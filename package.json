@@ -5,9 +5,17 @@
   "type": "module",
   "scripts": {
     "lint": "eslint --ext .ts,.vue --fix src",
-    "dev": "node beforerun.mjs && vite",
-    "build": "node beforerun.mjs --mode production && npm run lint && vue-tsc && vite build --mode production",
-    "preview": "node beforerun.mjs --mode production && vite preview --mode production"
+    
+    "dev": "npm run dev-simulation",
+    "dev-simulation": "node beforerun.mjs && vite --mode production-simulation",
+    "dev-real": "node beforerun.mjs && vite --mode production-real",
+
+    "build-simulation": "node beforerun.mjs --mode production-simulation && npm run lint && vue-tsc && vite build --mode production-simulation",
+    "build-real": "node beforerun.mjs --mode production-real && npm run lint && vue-tsc && vite build --mode production-real",
+    "build": "npm run build-simulation && npm run build-real",
+
+    "preview-simulation": "node beforerun.mjs --mode roduction-simulation && vite preview --mode roduction-simulation",
+    "preview-real": "node beforerun.mjs --mode roduction-real && vite preview --mode roduction-real"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

@@ -11,8 +11,6 @@ node_modules
 dist
 dist-ssr
 dist-*
-dist-development
-dist-production
 *.local
 
 # Editor directories and files
