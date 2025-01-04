@@ -5,6 +5,7 @@
   import useConfigStore from '@/store/config'
   import { ElMessage } from 'element-plus'
   import Showhtml from '@/components/utils/showhtml.vue'
+  import Showyonghuxieyi from "@/components/utils/shouyonghuxieyi.vue";
 
   const configStore = useConfigStore()
   const userStore = useUserStore()
@@ -92,21 +93,16 @@
     )
   }
 
+
   const accept = ref(false)
-  const acceptModel = ref(false)
+  const xieyiVisibility = ref()
 
   const openXieyi = () => {
-    acceptModel.value = true
+    xieyiVisibility.value && xieyiVisibility.value.open()
   }
 
-  const acceptXieyi = () => {
-    acceptModel.value = false
-    accept.value = true
-  }
-
-  const notAcceptXieyi = () => {
-    acceptModel.value = false
-    accept.value = false
+  const userConfirm = (res: boolean) => {
+    accept.value = res
   }
 </script>
 
@@ -171,28 +167,7 @@
   </el-card>
   <div v-else></div>
 
-  <el-dialog v-model="acceptModel" style="width: 50vw; height: 70vh">
-    <template #title>
-      <div style="display: flex; justify-content: center; height: 10vh">
-        <el-text style="font-size: 0.8vw; font-weight: bold"> 用户协议 </el-text>
-      </div>
-    </template>
-
-    <el-scrollbar height="50vh">
-      <div class="info_box">
-        <Showhtml :content="configStore.xieyi"></Showhtml>
-      </div>
-    </el-scrollbar>
-
-    <template #footer>
-      <div style="display: flex; justify-content: right">
-        <el-button-group>
-          <el-button type="info" size="large" @click="notAcceptXieyi"> 不同意 </el-button>
-          <el-button type="success" size="large" @click="acceptXieyi"> 同意 </el-button>
-        </el-button-group>
-      </div>
-    </template>
-  </el-dialog>
+  <Showyonghuxieyi ref="xieyiVisibility" @confirm="userConfirm"></Showyonghuxieyi>
 </template>
 
 <style scoped lang="scss">

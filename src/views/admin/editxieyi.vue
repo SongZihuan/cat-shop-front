@@ -60,7 +60,7 @@
     <!-- eslint-enable vue/v-on-event-hyphenation -->
     <template #footer>
       <div class="footer_box">
-        <el-button size="large" type="success" @click="updateXieYi"> 更新 </el-button>
+        <el-button size="large" type="success" @click="updateXieYi" plain plain> 更新 </el-button>
       </div>
     </template>
   </el-card>

@@ -57,9 +57,6 @@
     }
   }
 
-  onBeforeUnmount(() => {
-    editorRef.value && editorRef.value.destroy()
-  })
   const editorMode = ref('default')
 
   const handleEditCreated = (editor) => {
@@ -81,10 +78,34 @@
       emits('update:modelValue', content.value)
     }
   )
+
+  const editorBoxDiv = ref(null as HTMLElement | null)
+  const height = ref(0)
+
+  const resizeObserver = new ResizeObserver((entries) => {
+    entries.forEach((entry) => {
+      height.value = entry.contentRect.height + 5
+    })
+  })
+
+  onMounted(() => {
+    if (editorBoxDiv.value) {
+      resizeObserver.observe(editorBoxDiv.value)
+    }
+  })
+
+  onBeforeUnmount(() => {
+    editorRef.value && editorRef.value.destroy()
+  })
+
+  defineExpose({
+    height
+  })
+
 </script>
 
 <template>
-  <div id="editorBox">
+  <div id="editorBox" ref="editorBoxDiv">
     <WangToolbar
       style="border-bottom: 1px solid #ccc"
       :editor="editorRef"
@@ -109,6 +130,6 @@
     border-width: 1px;
     border-color: black;
     width: min(98%, 50vw);
-    min-height: calc(#{var(--custom-height)} * 0.6);
+    height: calc(#{var(--custom-height)} * 0.6);
   }
 </style>

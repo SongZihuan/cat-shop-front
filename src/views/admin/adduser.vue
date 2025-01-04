@@ -155,7 +155,7 @@
       </el-form-item>
     </el-form>
     <div style="display: flex; width: 15vw; justify-content: center">
-      <el-button size="large" type="success" :disabled="!allCheck" @click="update"> 添加 </el-button>
+      <el-button size="large" type="success" :disabled="!allCheck" @click="update" plain > 添加 </el-button>
     </div>
     <div style="width: 15vw; margin-top: 5px">
       <div v-if="!checkStatus" class="tip_box" style="display: flex; justify-content: center">

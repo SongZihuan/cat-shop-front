@@ -70,7 +70,7 @@
   }
 
   const toNewLogin = () => {
-    if (route.meta.xauth && route.meta.xauth === true && !isLogin()) {
+    if (route.meta.xauth && route.meta.xauth === true) {
       router.push({
         path: '/user/shop/login',
         query: {

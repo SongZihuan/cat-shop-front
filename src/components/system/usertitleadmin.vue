@@ -1,10 +1,13 @@
 <script setup lang="ts">
   import useUserStore, { isLogin, hasLoad } from '@/store/user'
-  import { ElMessage } from 'element-plus'
+  import {ElMessage, ElMessageBox} from 'element-plus'
+  import useConfigStore from "@/store/config";
 
+  const configStore = useConfigStore()
   const userStore = useUserStore()
 
   const router = useRouter()
+  const route = useRoute()
 
   const toHome = () => {
     router.push({
@@ -30,6 +33,37 @@
     router.push({
       path: '/admin/user/list'
     })
+  }
+
+  const toNewLogin = () => {
+    if (route.meta.xauth && route.meta.xauth === true) {
+      router.push({
+        path: '/user/shop/login',
+        query: {
+          redirect: encodeURIComponent(route.fullPath)
+        }
+      })
+    }
+  }
+
+  const logout = () => {
+    if (isLogin()) {
+      ElMessageBox.confirm(`是否确认退出${configStore.config?.name}账号？`, '温馨提示', {
+        confirmButtonText: '确认退出',
+        cancelButtonText: '暂不退出',
+        type: 'warning'
+      })
+          .then(() => {
+            return userStore.logout()
+          })
+          .then(() => {
+            ElMessage({
+              type: 'success',
+              message: '账号退出成功'
+            })
+            toNewLogin()
+          })
+    }
   }
 </script>
 
@@ -58,7 +92,7 @@
             <el-dropdown-item v-if="userStore.user.type !== 1" @click="toAdmin"
               ><el-text>管理后台</el-text></el-dropdown-item
             >
-            <el-dropdown-item><el-text>退出登录</el-text></el-dropdown-item>
+            <el-dropdown-item @click="logout"><el-text>退出登录</el-text></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

@@ -95,6 +95,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'center',
+        component: () => import('@/views/user/center.vue'),
         children: [
           {
             path: '',
@@ -163,6 +164,7 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/back.vue'),
     meta: {
       title: '后台',
+      xauth: true,
       admin: true
     },
     children: [
@@ -187,6 +189,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/userlst.vue'),
         meta: {
           title: '用户列表',
+          xauth: true,
           admin: true
         }
       },
@@ -195,6 +198,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/user.vue'),
         meta: {
           title: '用户详情',
+          xauth: true,
           admin: true
         }
       },
@@ -207,6 +211,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/edituser.vue'),
         meta: {
           title: '编辑用户',
+          xauth: true,
           admin: true
         }
       },
@@ -215,6 +220,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/editpassword.vue'),
         meta: {
           title: '编辑用户密码',
+          xauth: true,
           admin: true
         }
       },
@@ -223,6 +229,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/editphone.vue'),
         meta: {
           title: '编辑用户手机号',
+          xauth: true,
           admin: true
         }
       },
@@ -231,6 +238,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/usermsg.vue'),
         meta: {
           title: '查看用户留言',
+          xauth: true,
           admin: true,
           msgisall: false
         }
@@ -244,6 +252,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
           title: '用户购物记录',
+          xauth: true,
           admin: true,
           recordisall: false
         }
@@ -253,6 +262,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecord.vue'),
         meta: {
           title: '用户订单详情',
+          xauth: true,
           admin: true,
           recordisall: false
         }
@@ -266,6 +276,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '商品售卖详情',
+          xauth: true,
           admin: true,
           wupinmode: 'sale',
           wupinfrom: 'user'
@@ -276,6 +287,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '用户订单档案商品详情',
+          xauth: true,
           admin: true,
           wupinmode: 'lock',
           wupinfrom: 'user'
@@ -290,6 +302,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/shoppingbag.vue'),
         meta: {
           title: '用户购物车列表',
+          xauth: true,
           admin: true
         }
       },
@@ -302,6 +315,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/adduser.vue'),
         meta: {
           title: '添加用户',
+          xauth: true,
           admin: true
         }
       },
@@ -310,6 +324,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/usermsg.vue'),
         meta: {
           title: '全部用户留言',
+          xauth: true,
           admin: true,
           msgisall: true
         }
@@ -323,6 +338,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/classlst.vue'),
         meta: {
           title: '商品分类列表',
+          xauth: true,
           admin: true
         }
       },
@@ -331,6 +347,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/class.vue'),
         meta: {
           title: '商品分类列表',
+          xauth: true,
           admin: true
         }
       },
@@ -339,6 +356,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/editclass.vue'),
         meta: {
           title: '商品分类列表',
+          xauth: true,
           admin: true
         }
       },
@@ -347,6 +365,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/addclass.vue'),
         meta: {
           title: '商品分类列表',
+          xauth: true,
           admin: true
         }
       },
@@ -359,6 +378,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupinlst.vue'),
         meta: {
           title: '商品列表',
+          xauth: true,
           admin: true
         }
       },
@@ -367,6 +387,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '商品详情',
+          xauth: true,
           admin: true,
           wupinfrom: 'wupin'
         }
@@ -376,6 +397,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/editwupin.vue'),
         meta: {
           title: '商品编辑',
+          xauth: true,
           admin: true
         }
       },
@@ -384,6 +406,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/addwupin.vue'),
         meta: {
           title: '商品添加',
+          xauth: true,
           admin: true
         }
       },
@@ -396,6 +419,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecordlst.vue'),
         meta: {
           title: '总订单列表',
+          xauth: true,
           admin: true,
           recordisall: true
         }
@@ -405,6 +429,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/buyrecord.vue'),
         meta: {
           title: '订单详情',
+          xauth: true,
           admin: true,
           recordisall: true
         }
@@ -414,6 +439,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '商品售卖详情',
+          xauth: true,
           admin: true,
           wupinmode: 'sale',
           wupinfrom: 'record'
@@ -424,6 +450,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/wupin.vue'),
         meta: {
           title: '用户订单档案商品详情',
+          xauth: true,
           admin: true,
           wupinmode: 'lock',
           wupinfrom: 'record'
@@ -438,7 +465,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/xieyi.vue'),
         meta: {
           title: '查看用户协议',
-          rootAdmin: true
+          xauth: true,
+          admin: true,
         }
       },
       {
@@ -446,6 +474,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/editxieyi.vue'),
         meta: {
           title: '编辑用户协议',
+          xauth: true,
+          admin: true,
           rootAdmin: true
         }
       },
@@ -458,6 +488,8 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/configlst.vue'),
         meta: {
           title: '配置项列表',
+          xauth: true,
+          admin: true,
           rootAdmin: true
         }
       },
@@ -470,6 +502,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/stophttpserver.vue'),
         meta: {
           title: '服务prize',
+          xauth: true,
           admin: true
         }
       },
@@ -478,6 +511,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/admin/restarthttpserver.vue'),
         meta: {
           title: '服务prize',
+          xauth: true,
           admin: true
         }
       }
