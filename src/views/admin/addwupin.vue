@@ -1,13 +1,10 @@
 <script setup lang="ts">
-  import { ElMessage, ElMessageBox, genFileId, type UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import { isAdmin } from '@/store/admin'
   import { isEmail, isMobile } from '@/utils/str'
   import { AdminWupinBase, apiAdminPostAddWupin } from '#/admin/wupin'
   import { AdminClass, AllClass, apiAdminGetClassLst } from '#/admin/class'
-  import { Edit } from '@element-plus/icons-vue'
-  import { UploadFile } from 'element-plus'
   import Editor from '@/components/utils/editor.vue'
-  import Fileupload from '@/components/utils/fileupload.vue'
 
   const router = useRouter()
 

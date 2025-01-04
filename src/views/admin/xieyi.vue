@@ -24,6 +24,7 @@
     apiAdminGetXieyi().then((res) => {
       xieyi.value = res.data.data.xieyi
     })
+    next()
   }
   onBeforeRouteUpdate(getXieyi)
   getXieyi(route, route, () => {})

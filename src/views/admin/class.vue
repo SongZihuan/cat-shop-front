@@ -1,13 +1,6 @@
 <script setup lang="ts">
   import pushTo from '@/views/admin/router_push'
-  import {
-    AdminClass,
-    apiAdminGetClass,
-    apiAdminPostChangeClassDown,
-    apiAdminPostChangeClassName,
-    apiAdminPostChangeClassShow
-  } from '#/admin/class'
-  import { ElMessage, ElMessageBox } from 'element-plus'
+  import { AdminClass, apiAdminGetClass } from '#/admin/class'
   import { RouteLocationNormalized } from 'vue-router'
 
   const route = useRoute()

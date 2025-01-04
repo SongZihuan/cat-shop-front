@@ -4,7 +4,6 @@
   import useAdminUserStore, { AdminUser } from '@/store/admin/user'
   import { AdminShopRecord, apiAdminGetUserShoppingRecord } from '#/admin/shoppingbag'
   import pushTo from '@/views/admin/router_push'
-  import AdminBuyRecord from '@/components/admin/adminbuyrecord.vue'
   import { RouteLocationNormalized } from 'vue-router'
 
   const router = useRouter()

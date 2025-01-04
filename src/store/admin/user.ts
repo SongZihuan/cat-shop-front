@@ -12,7 +12,6 @@ import {
 } from '#/admin/user'
 import { sha256 } from '@/utils/encrypt'
 import { apiAdminRestartServer, apiAdminStopServer } from '#/admin/httpserver'
-import { ElMessage } from 'element-plus'
 
 export const AdminUserType = {
   1: '普通用户'

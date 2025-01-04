@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ElMessage, ElMessageBox, genFileId, type UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
   import { isAdmin } from '@/store/admin'
   import { isEmail, isMobile } from '@/utils/str'

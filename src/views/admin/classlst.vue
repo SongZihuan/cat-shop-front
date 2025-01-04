@@ -1,13 +1,6 @@
 <script setup lang="ts">
-  import { ElMessage, ElMessageBox } from 'element-plus'
   import { isAdmin } from '@/store/admin'
-  import {
-    AdminClass,
-    apiAdminGetClassLst,
-    apiAdminPostChangeClassDown,
-    apiAdminPostChangeClassName,
-    apiAdminPostChangeClassShow
-  } from '#/admin/class'
+  import { AdminClass, apiAdminGetClassLst } from '#/admin/class'
   import pushTo from '@/views/admin/router_push'
   import { RouteLocationNormalized } from 'vue-router'
 

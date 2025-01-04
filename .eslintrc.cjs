@@ -30,7 +30,7 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     // typeScript (https://typescript-eslint.io/rules)
-    '@typescript-eslint/no-unused-vars': 'off', // 禁止定义未使用的变量
+    '@typescript-eslint/no-unused-vars': 'warn', // 禁止定义未使用的变量
     '@typescript-eslint/no-inferrable-types': 'off', // 可以轻松推断的显式类型可能会增加不必要的冗长
     '@typescript-eslint/no-namespace': 'off', // 禁止使用自定义 TypeScript 模块和命名空间。
     '@typescript-eslint/no-explicit-any': 'off', // 禁止使用 any 类型
@@ -51,7 +51,7 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'no-undef': 'off',
     'prettier/prettier': 'warn',
-    'no-unused-vars': 'off',
+    'no-unused-vars': 'warn',
     // 禁用debugger
     'no-debugger': 'warn',
     // 禁止出现重复的 case 标签
@@ -162,5 +162,14 @@ module.exports = {
     defineEmits: 'readonly',
     defineExpose: 'readonly',
     withDefaults: 'readonly'
-  }
+  },
+  overrides: [
+    {
+      files: ['src/api/**/*'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off', // 禁止定义未使用的变量
+        'no-unused-vars': 'off',
+      },
+    }
+  ]
 }

@@ -88,6 +88,7 @@
     } else {
       toBack()
     }
+    next()
   }
 
   const onChangePage = () => {

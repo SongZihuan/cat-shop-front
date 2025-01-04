@@ -31,7 +31,7 @@ VITE_HASH # 对于资源文件（例如图片）在build的时候，是否在文
 VITE_VISUALIZE # 是否在构建时生成构建分析报告（HTML交互式报告）。具体作用见后文。
 VITE_API_BASE_URL # API请求前缀。具体作用见后文。
 VITE_PROXY_TARGET # 代理目标。具体作用见后文。
-VITE_ASSETS_BASE # 资源文件打包路径的前缀，默认为：/
+VITE_ASSETS_BASE # 资源文件打包路径的前缀，默认为：./
 VITE_SIMULATION # 模拟api。具体作用见后文。
 ```
 

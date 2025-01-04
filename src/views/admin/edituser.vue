@@ -5,7 +5,6 @@
     AdminUserBase,
     AdminUserType,
     RootAdminUserStatus,
-    RootAdminUserType,
     AdminUserStatus,
     RootAdminUserTypeWithoutRoot
   } from '@/store/admin/user'

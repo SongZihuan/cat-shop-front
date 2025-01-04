@@ -95,7 +95,7 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       svgLoader(),
       visualizerPlugin
     ],
-    base: VITE_ASSETS_BASE || '/', // 设置打包路径
+    base: VITE_ASSETS_BASE || './', // 设置打包路径
     server: {
       host: '0.0.0.0',
       proxy: {
@@ -124,10 +124,12 @@ export default ({ mode }: ConfigEnv): UserConfig => {
       }
     },
     build: {
+      target: 'es2015',
       outDir: `dist-${mode}`,
       // 压缩代码
       minify: 'terser', // 'terser' 相对较慢，但大多数情况下构建后的文件体积更小。'esbuild' 最小化混淆更快但构建后的文件相对更大。
       // 合并小文件
+      assetsDir: 'assets',
       rollupOptions: {
         output: output
       },

@@ -3,8 +3,6 @@
   import { isMobile } from '@/utils/str'
   import { redirect } from '@/router'
   import useConfigStore from '@/store/config'
-  import { ElMessage } from 'element-plus'
-  import Showhtml from '@/components/utils/showhtml.vue'
   import Showyonghuxieyi from '@/components/utils/shouyonghuxieyi.vue'
 
   const configStore = useConfigStore()

@@ -2,7 +2,6 @@
   import { apiAdminPostAddToShoppingBag, AdminShopRecord } from '#/admin/shoppingbag'
   import { formatDate } from '@/utils/time'
   import { getFacePrice, getRealPrice, getTotalPrice } from '@/utils/price'
-  import { ElNotification } from 'element-plus'
   import { ElMessage } from 'element-plus'
   import pushTo from '@/views/admin/router_push'
 

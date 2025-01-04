@@ -1,12 +1,6 @@
 <script setup lang="ts">
   import { ElMessage, ElMessageBox } from 'element-plus'
-  import useAdminUserStore, {
-    AdminUserStatus,
-    AdminUserType,
-    RootAdminUserStatus,
-    RootAdminUserType,
-    RootAdminUserTypeWithoutRoot
-  } from '@/store/admin/user'
+  import useAdminUserStore, { AdminUserStatus, AdminUserType, RootAdminUserTypeWithoutRoot } from '@/store/admin/user'
   import { isAdmin, isRootAdmin } from '@/store/admin'
   import { isEmail, isMobile } from '@/utils/str'
   import { NewUserData } from '#/admin/user'
