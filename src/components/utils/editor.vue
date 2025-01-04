@@ -23,7 +23,7 @@
     }
   })
 
-  const emit = defineEmits(['update:modelValue'])
+  const emits = defineEmits(['update:modelValue'])
 
   const editorRef = shallowRef()
   const toolbarConfig: Partial<IToolbarConfig> = {}
@@ -78,7 +78,7 @@
   watch(
     () => content.value,
     () => {
-      emit('update:modelValue', content.value)
+      emits('update:modelValue', content.value)
     }
   )
 </script>

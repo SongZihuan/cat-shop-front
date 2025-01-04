@@ -17,7 +17,6 @@ export interface AdminWupinWithDown {
 
 export interface AdminWupinBase extends AdminHotWupin, AdminWupinWithDown {
   name: string
-  pic: string
   classId: number
   tag?: string
   hotPrice?: number
@@ -30,11 +29,15 @@ export interface AdminWupinBase extends AdminHotWupin, AdminWupinWithDown {
   location: string
 }
 
+export interface AdminPicForWupin {
+  pic: string
+}
+
 export interface AdminClassForWupin {
   classOf: AdminClass
 }
 
-export interface AdminWupinWithInfo extends AdminWupinBase, AdminClassForWupin {
+export interface AdminWupinWithInfo extends AdminWupinBase, AdminPicForWupin, AdminClassForWupin {
   buytotal: number
   buydaohuo: number
   buygood: number
