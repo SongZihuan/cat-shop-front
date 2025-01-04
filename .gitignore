@@ -26,3 +26,4 @@ dist-*
 *.bak
 
 tsconfig.json
+vite.config.ts.timestamp-*
