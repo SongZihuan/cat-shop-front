@@ -1,7 +1,7 @@
 # 猫猫超市前端
 包括：前台（用户端）和后台（管理员端）
 
-后端：[github.com/SuperH-0630/cat-shop-backend](https://github.com/SuperH-0630/cat-shop-backend)
+后端：[github.com/SongZihuan/cat-shop-backend](https://github.com/SongZihuan/cat-shop-backend)
 
 技术栈：node.js + TypeScript + Vite + Vue 3 + Vue Router 4 + Axios + Pinia + Element Plus
 
