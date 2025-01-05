@@ -6,7 +6,7 @@
   "scripts": {
     "init": "node pnpm-check.mjs && npx pnpm install && npx pnpm lint",
     "lint": "eslint --ext .ts,.vue --fix src",
-    
+
     "dev": "node pnpm-check.mjs && npx pnpm run dev-simulation",
     "dev-simulation": "node pnpm-check.mjs && node beforerun.mjs && vite --mode production-simulation",
     "dev-real": "node pnpm-check.mjs && node beforerun.mjs && vite --mode production-real",
@@ -54,7 +54,6 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.11.0",
-    "mockjs": "^1.1.0",
     "postcss": "^8.4.49",
     "postcss-focus": "^7.0.0",
     "postcss-px-to-viewport-8-plugin": "^1.2.5",
