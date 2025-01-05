@@ -4,19 +4,21 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "init": "node pnpm-check.mjs && npx pnpm install && npx pnpm lint",
-    "lint": "eslint --ext .ts,.vue --fix src",
+    "init:ts": "node beforerun.mjs --mode development-simulation",
+    "lint": "eslint --ext .js,.mjs,.cjs,.ts,.vue --fix .",
+    "lint:debug": "eslint --ext .js,.mjs,.cjs,.ts,.vue --debug --fix .",
+    "init": "node pnpm-check.mjs && npx pnpm install && npx pnpm run init:ts && npx pnpm lint",
 
     "dev": "node pnpm-check.mjs && npx pnpm run dev-simulation",
-    "dev-simulation": "node pnpm-check.mjs && node beforerun.mjs && vite --mode production-simulation",
-    "dev-real": "node pnpm-check.mjs && node beforerun.mjs && vite --mode production-real",
+    "dev-simulation": "node pnpm-check.mjs && node beforerun.mjs --mode development-simulation && vite --mode development-simulation",
+    "dev-real": "node pnpm-check.mjs && node beforerun.mjs --mode development-real && vite --mode development-real",
 
     "build-simulation": "node pnpm-check.mjs && node beforerun.mjs --mode production-simulation && npx pnpm run lint && vue-tsc && vite build --mode production-simulation",
     "build-real": "node pnpm-check.mjs && node beforerun.mjs --mode production-real && npx pnpm run lint && vue-tsc && vite build --mode production-real",
     "build": "node pnpm-check.mjs && npx pnpm run build-simulation && npx pnpm run build-real",
 
-    "preview-simulation": "node pnpm-check.mjs && node beforerun.mjs --mode roduction-simulation && vite preview --mode roduction-simulation",
-    "preview-real": "node pnpm-check.mjs &&  beforerun.mjs --mode roduction-real && vite preview --mode roduction-real"
+    "preview-simulation": "node pnpm-check.mjs && node beforerun.mjs --mode production-simulation && vite preview --mode production-simulation",
+    "preview-real": "node pnpm-check.mjs && beforerun.mjs --mode production-real && vite preview --mode production-real"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

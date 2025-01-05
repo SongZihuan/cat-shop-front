@@ -65,7 +65,7 @@ module.exports = {
     // 禁止在 return、throw、continue 和 break 语句之后出现不可达代码
     'no-unreachable': 'warn',
     // 强制所有控制语句使用一致的括号风格
-    'curly': 'warn',
+    curly: 'warn',
     // 要求 switch 语句中有 default 分支
     'default-case': 'warn',
     // 强制尽可能地使用点号
@@ -105,7 +105,7 @@ module.exports = {
     // 强制使用骆驼拼写法命名约定
     // camelcase: 'warn',
     // 强制使用一致的缩进
-    'indent': 'off',
+    indent: 'off',
     // 强制在 JSX 属性中一致地使用双引号或单引号
     // 'jsx-quotes': 'warn',
     // 强制可嵌套的块的最大深度4
@@ -129,7 +129,7 @@ module.exports = {
     // 禁止出现多行空行
     'no-multiple-empty-lines': 'warn',
     // 禁止出现;
-    'semi': ['warn', 'never'],
+    semi: ['warn', 'never'],
     // 强制在块之前使用一致的空格
     'space-before-blocks': 'warn',
     // 强制在 function的左括号之前使用一致的空格
@@ -168,8 +168,8 @@ module.exports = {
       files: ['src/api/**/*'],
       rules: {
         '@typescript-eslint/no-unused-vars': 'off', // 禁止定义未使用的变量
-        'no-unused-vars': 'off',
-      },
+        'no-unused-vars': 'off'
+      }
     }
   ]
 }
