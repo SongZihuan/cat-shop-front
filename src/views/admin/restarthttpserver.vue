@@ -33,7 +33,7 @@
     }
   }
 
-  const waitsecCheck = computed(() => form.value.waitsec >= 10 && form.value.waitsec <= 100)
+  const waitsecCheck = computed(() => form.value.waitsec >= 10 && form.value.waitsec <= 60)
   const passwordCheck = computed(() => form.value.password.length >= 8)
   const secretCheck = computed(() => form.value.secret.length >= 8)
   const allCheck = computed(() => waitsecCheck.value && passwordCheck.value && secretCheck.value)
@@ -102,7 +102,7 @@
         <template #label>
           <el-text>重启等待</el-text>
         </template>
-        <el-input-number v-model="form.waitsec" :min="10" :max="100">
+        <el-input-number v-model="form.waitsec" :precision="0" :min="10" :max="60">
           <template #suffix>
             <span> 秒 </span>
           </template>
@@ -120,8 +120,7 @@
         <el-alert title="密钥长度必须大于8！！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
       <div v-if="!waitsecCheck" class="tip_box" style="display: flex; justify-content: center">
-        <el-alert title="重启等待时间只能在10-100秒以内！" :closable="false" type="warning" center show-icon>
-        </el-alert>
+        <el-alert title="重启等待时间只能在10-60秒以内！" :closable="false" type="warning" center show-icon> </el-alert>
       </div>
     </div>
   </el-card>

@@ -209,6 +209,7 @@
             :max="99"
             size="large"
             class="buy_item"
+            :precision="0"
             @click="onClickBag"
           >
             <template #suffix>

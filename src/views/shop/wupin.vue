@@ -368,7 +368,7 @@
 
           <div v-if="mode !== recordmode" class="buy_box">
             <div style="display: flex; justify-content: right">
-              <el-input-number v-model="num" :min="0" :max="99" size="large" class="buy_item">
+              <el-input-number v-model="num" :precision="0" :min="0" :max="99" size="large" class="buy_item">
                 <template #suffix>
                   <span> 件 </span>
                 </template>
