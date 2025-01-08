@@ -306,7 +306,7 @@
   )
 
   const startTuiHuo = () => {
-    if (!record.value || [5, 6].every((i) => i != record.value.status)) {
+    if (!record.value || [3, 5, 6].every((i) => i != record.value.status)) {
       return
     }
 
@@ -598,7 +598,7 @@
         <el-button v-if="safe && record.status === 4" type="success" @click="confirmDaohuo"> 确认收货 </el-button>
         <el-button v-if="safe && record.status === 5" type="success" @click="giveGood"> 给个好评 </el-button>
         <el-button v-if="safe && record.status === 5" type="info" @click="giveNotGood"> 不予置评 </el-button>
-        <el-button v-if="safe && [5, 6].some((i) => i == record.status)" type="danger" @click="startTuiHuo">
+        <el-button v-if="safe && [3, 5, 6].some((i) => i == record.status)" type="danger" @click="startTuiHuo">
           申请退货
         </el-button>
         <el-button v-if="safe && record.status === 8" type="success" @click="startTuiHuoDengJi">

@@ -4,7 +4,7 @@ import wupinPic from '@/assets/images/tmp.jpg'
 import { LocationForUser } from '#/center/pay'
 
 export const BuyRecordStatus = {
-  1: '已下单，支付代确认',
+  1: '已下单，等待支付和确认',
   2: '已下单，支付失败',
   3: '待发货',
   4: '已发货',
