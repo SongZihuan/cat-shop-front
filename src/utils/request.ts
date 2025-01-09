@@ -15,8 +15,8 @@ service.interceptors.request.use(
   (config): any => {
     const headers = {
       ...config.headers,
-      'Content-Type': 'application/form-data',
-      Accept: 'application/json'
+      'Content-Type': 'application/form-data; charset=utf-8',
+      Accept: 'application/json; charset=utf-8'
     }
 
     const xtoken = getXtoken()
