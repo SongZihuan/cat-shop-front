@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "init:ts": "node beforerun.mjs --mode development-simulation",
-    "lint": "eslint --ext .js,.mjs,.cjs,.ts,.vue --fix .",
-    "lint:debug": "eslint --ext .js,.mjs,.cjs,.ts,.vue --debug --fix .",
+    "init:ts": "node pnpm-check.mjs node beforerun.mjs --mode development-simulation",
+    "lint": "node pnpm-check.mjs eslint --ext .js,.mjs,.cjs,.ts,.vue --fix .",
+    "lint:debug": "node pnpm-check.mjs eslint --ext .js,.mjs,.cjs,.ts,.vue --debug --fix .",
     "init": "node pnpm-check.mjs && npx pnpm install && npx pnpm run init:ts && npx pnpm lint",
     "dev": "node pnpm-check.mjs && npx pnpm run dev-simulation",
     "dev-simulation": "node pnpm-check.mjs && node beforerun.mjs --mode development-simulation && vite --mode development-simulation",
